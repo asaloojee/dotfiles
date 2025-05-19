@@ -60,7 +60,7 @@
         pkgs.yazi
         pkgs.jq
         # pkgs.sketchybar
-        # pkgs.sketchybar-app-font
+            # pkgs.sketchybar-app-font
         pkgs.home-manager
         pkgs.stow
         pkgs.gitleaks
@@ -95,6 +95,8 @@
           "blender"
           "font-sf-pro"
           "sf-symbols"
+          "font-hack-nerd-font"
+          "font-sketchybar-app-font"
         ];
 
         taps = [

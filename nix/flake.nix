@@ -10,10 +10,7 @@
     alejandra.inputs.nixpkgs.follows = "nixpkgs";
     # nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    # Home Manager
-    # home-manager.url = "github:nix-community/home-manager/release-24.05";
-    # home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
-  };
+ };
 
   outputs = inputs @ {
     self,
@@ -21,7 +18,6 @@
     nixpkgs,
     nix-homebrew,
     alejandra,
-    # home-manager,
     # ...
   }: let
     # add-unstable-packages = final: _prev: {
@@ -61,7 +57,6 @@
         pkgs.jq
         # pkgs.sketchybar
             # pkgs.sketchybar-app-font
-        pkgs.home-manager
         pkgs.stow
         pkgs.gitleaks
       ];
@@ -191,17 +186,7 @@
             user = "asaloojee";
           };
         }
-        # home-manager.darwinModules.home-manager
-        # {
-        # `home-manager config`
-        # home-manager.useGlobalPkgs = true;
-        # home-manager.useUserPackages = true;
-        # home-manager.users.asaloojee = import ./home.nix;
-        # }
       ];
     };
-
-    # Expose the package set, including overlays (?)
-    # darwinPackages = self.darwinConfigurations."mac".pkgs;
   };
 }

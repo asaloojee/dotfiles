@@ -24,12 +24,12 @@
     # home-manager,
     # ...
   }: let
-      # add-unstable-packages = final: _prev: {
-      # unstable = import inputs.nixpkgs-unstable {
-      # system = "aarch64-darwin";
-      # };
-      # };
-      # username = "asaloojee";
+    # add-unstable-packages = final: _prev: {
+    # unstable = import inputs.nixpkgs-unstable {
+    # system = "aarch64-darwin";
+    # };
+    # };
+    # username = "asaloojee";
     configuration = {
       pkgs,
       config,
@@ -59,17 +59,17 @@
         pkgs.tree
         pkgs.yazi
         pkgs.jq
-            # pkgs.sketchybar
-            # pkgs.sketchybar-app-font
+        # pkgs.sketchybar
+        # pkgs.sketchybar-app-font
         pkgs.home-manager
         pkgs.stow
         pkgs.gitleaks
       ];
 
-          # users.users.asaloojee = {
-            # name = username;
-          # home = "/Users/asaloojee";
-          # };
+      # users.users.asaloojee = {
+      # name = username;
+      # home = "/Users/asaloojee";
+      # };
 
       homebrew = {
         enable = true;
@@ -81,6 +81,7 @@
           "zinit"
           "eza"
           "zsh-syntax-highlighting"
+          "sketchybar"
         ];
         casks = [
           "zen"
@@ -95,6 +96,11 @@
           "font-sf-pro"
           "sf-symbols"
         ];
+
+        taps = [
+          "felixkratz/formulae"
+        ];
+
         masApps = {
           "Yoink" = 457622435;
           "PDFgear" = 6469021132;
@@ -183,17 +189,17 @@
             user = "asaloojee";
           };
         }
-          # home-manager.darwinModules.home-manager
-          # {
-          # `home-manager config`
-          # home-manager.useGlobalPkgs = true;
-          # home-manager.useUserPackages = true;
-          # home-manager.users.asaloojee = import ./home.nix;
-          # }
+        # home-manager.darwinModules.home-manager
+        # {
+        # `home-manager config`
+        # home-manager.useGlobalPkgs = true;
+        # home-manager.useUserPackages = true;
+        # home-manager.users.asaloojee = import ./home.nix;
+        # }
       ];
     };
 
     # Expose the package set, including overlays (?)
-      # darwinPackages = self.darwinConfigurations."mac".pkgs;
+    # darwinPackages = self.darwinConfigurations."mac".pkgs;
   };
 }

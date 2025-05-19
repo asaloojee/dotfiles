@@ -9,8 +9,7 @@
     alejandra.url = "github:kamadorueda/alejandra/4.0.0";
     alejandra.inputs.nixpkgs.follows = "nixpkgs";
     # nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-
- };
+  };
 
   outputs = inputs @ {
     self,
@@ -57,10 +56,11 @@
         pkgs.yazi
         pkgs.jq
         # pkgs.sketchybar
-            # pkgs.sketchybar-app-font
+        # pkgs.sketchybar-app-font
         pkgs.stow
         pkgs.gitleaks
         # pkgs.wezterm
+        pkgs.ice-bar
       ];
 
       # users.users.asaloojee = {
@@ -78,7 +78,7 @@
           "zinit"
           "eza"
           "zsh-syntax-highlighting"
-              # "sketchybar"
+          # "sketchybar"
         ];
         casks = [
           "zen"
@@ -96,9 +96,9 @@
           "font-sketchybar-app-font"
         ];
 
-            #taps = [
-            #"felixkratz/formulae"
-            #];
+        #taps = [
+        #"felixkratz/formulae"
+        #];
 
         masApps = {
           "Yoink" = 457622435;

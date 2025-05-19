@@ -32,6 +32,7 @@
       ...
     }: {
       nixpkgs.config.allowUnfree = true;
+      nix.settings.warn-dirty = false;
 
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
@@ -59,6 +60,7 @@
             # pkgs.sketchybar-app-font
         pkgs.stow
         pkgs.gitleaks
+        # pkgs.wezterm
       ];
 
       # users.users.asaloojee = {
@@ -76,7 +78,7 @@
           "zinit"
           "eza"
           "zsh-syntax-highlighting"
-          "sketchybar"
+              # "sketchybar"
         ];
         casks = [
           "zen"
@@ -94,9 +96,9 @@
           "font-sketchybar-app-font"
         ];
 
-        taps = [
-          "felixkratz/formulae"
-        ];
+            #taps = [
+            #"felixkratz/formulae"
+            #];
 
         masApps = {
           "Yoink" = 457622435;

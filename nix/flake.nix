@@ -60,7 +60,6 @@
         pkgs.stow
         pkgs.gitleaks
         # pkgs.wezterm
-        pkgs.ice-bar
       ];
 
       # users.users.asaloojee = {

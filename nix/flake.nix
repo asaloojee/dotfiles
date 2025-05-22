@@ -55,17 +55,10 @@
         pkgs.tree
         pkgs.yazi
         pkgs.jq
-        # pkgs.sketchybar
-        # pkgs.sketchybar-app-font
         pkgs.stow
         pkgs.gitleaks
         # pkgs.wezterm
       ];
-
-      # users.users.asaloojee = {
-      # name = username;
-      # home = "/Users/asaloojee";
-      # };
 
       homebrew = {
         enable = true;

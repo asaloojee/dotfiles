@@ -36,31 +36,31 @@
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
       environment.systemPackages = [
-        pkgs.neovim
-        pkgs.tmux
+        pkgs.alejandra
+        pkgs.bat
+        pkgs.eza
+        pkgs.firefox-devedition
+        pkgs.fish
+        pkgs.gitleaks
+        pkgs.gitui
+        pkgs.jq
+        pkgs.jetbrains.webstorm
         pkgs.mkalias
+        pkgs.neofetch
+        pkgs.neovim
         pkgs.obsidian
         pkgs.raycast
-        pkgs.telegram-desktop
-        pkgs.spotify
-        pkgs.zoxide
-        pkgs.slack
-        pkgs.discord
-        pkgs.neofetch
-        pkgs.firefox-devedition
-        pkgs.jetbrains.webstorm
         pkgs.ripgrep
-        pkgs.alejandra
-        pkgs.tree
-        pkgs.yazi
-        pkgs.jq
+        pkgs.slack
+        pkgs.spotify
         pkgs.stow
-        pkgs.gitleaks
-        pkgs.uutils-coreutils
-        pkgs.fish
         pkgs.starship
-        pkgs.eza
-        pkgs.bat
+        pkgs.tmux
+        pkgs.tree
+        pkgs.telegram-desktop
+        pkgs.uutils-coreutils
+        pkgs.yazi
+        pkgs.zoxide
       ];
 
       homebrew = {

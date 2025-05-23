@@ -28,4 +28,8 @@ function y
     rm -f -- "$tmp"
 end
 
+# Zoxide initialization for Fish shell
+zoxide init fish | source
+alias cd="z"
+
 starship init fish | source

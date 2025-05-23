@@ -8,10 +8,6 @@ set -gx PATH $PATH /cloud-sql-proxy
 # nix path?
 set -gx PATH $PATH /nix/var/nix/profiles/default/bin/
 
-function fish_command_not_found
-    echo -e "\033[31mCommand not found: $argv\033[0m"
-end
-
 alias ls="eza --icons=always"
 
 # yazi setup

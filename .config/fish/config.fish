@@ -10,6 +10,9 @@ set -gx PATH $PATH /nix/var/nix/profiles/default/bin/
 
 alias ls="eza --icons=always"
 
+# uutils-coreutils - WIP
+# alias pwd="/run/current-system/sw/bin/uutils-pwd"
+
 # yazi setup
 export EDITOR="nvim"
 

@@ -38,7 +38,6 @@
       environment.systemPackages = [
         pkgs.neovim
         pkgs.tmux
-        pkgs.alacritty
         pkgs.mkalias
         pkgs.obsidian
         pkgs.raycast
@@ -57,7 +56,6 @@
         pkgs.jq
         pkgs.stow
         pkgs.gitleaks
-        # pkgs.wezterm
       ];
 
       homebrew = {
@@ -86,6 +84,7 @@
           "sf-symbols"
           "font-hack-nerd-font"
           "font-sketchybar-app-font"
+          "ghostty"
         ];
 
         #taps = [

@@ -56,6 +56,8 @@
         pkgs.jq
         pkgs.stow
         pkgs.gitleaks
+        pkgs.uutils-coreutils
+        pkgs.fish
       ];
 
       homebrew = {

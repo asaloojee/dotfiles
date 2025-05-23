@@ -58,6 +58,7 @@
         pkgs.gitleaks
         pkgs.uutils-coreutils
         pkgs.fish
+        pkgs.starship
       ];
 
       homebrew = {

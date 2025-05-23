@@ -1,0 +1,64 @@
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$git_metrics\
+$fill\
+$nodejs\
+$cmd_duration $jobs $time\
+$line_break\
+$character"""
+
+[nodejs]
+format = "[$symbol($version )]($style)"
+
+[fill]
+symbol = " "
+
+[directory]
+style = "#b685f7"
+read_only = " "
+truncation_length = 4
+truncate_to_repo = false
+
+[character]
+success_symbol = "[❯](#7861bf)"
+error_symbol = "[❯](red)"
+vicmd_symbol = "[❮](green)"
+
+[git_branch]
+symbol = " "
+format = "[$symbol$branch]($style) "
+style = "#828282"
+
+[jobs]
+symbol = ""
+style = "bold red"
+number_threshold = 1
+format = "[$symbol]($style)"
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = "cyan"
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+style = "#828282"
+
+[git_metrics]
+disabled = false
+
+[cmd_duration]
+format = "[$duration]($style)"
+style = "yellow"
+
+[memory_usage]
+symbol = " "
+
+[rust]
+symbol = " "
+
+

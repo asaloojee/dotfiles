@@ -59,6 +59,8 @@
         pkgs.uutils-coreutils
         pkgs.fish
         pkgs.starship
+        pkgs.eza
+        pkgs.bat
       ];
 
       homebrew = {

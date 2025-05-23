@@ -10,7 +10,7 @@ background-blur = true
 macos-titlebar-style = tabs
 macos-titlebar-proxy-icon = hidden
 
-shell-integration = zsh
+shell-integration = fish 
 
 window-padding-x = 12
 window-padding-y = 0,12

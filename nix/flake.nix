@@ -38,12 +38,13 @@
       environment.systemPackages = [
         pkgs.alejandra
         pkgs.bat
+        pkgs.discord
         pkgs.eza
         pkgs.firefox-devedition
         pkgs.fish
+        pkgs.git
         pkgs.gitleaks
         pkgs.gitui
-        pkgs.jq
         pkgs.jetbrains.webstorm
         pkgs.mkalias
         pkgs.neofetch
@@ -67,12 +68,8 @@
         enable = true;
         brews = [
           "mas"
-          "git"
           "oh-my-posh"
-          "zsh-autosuggestions"
-          "zinit"
           "eza"
-          "zsh-syntax-highlighting"
           # "sketchybar"
         ];
         casks = [

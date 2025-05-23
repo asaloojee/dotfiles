@@ -28,4 +28,6 @@ end
 zoxide init fish | source
 alias cd="z"
 
+set fish_greeting ""
+
 starship init fish | source

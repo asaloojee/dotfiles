@@ -69,7 +69,7 @@
         brews = [
           "mas"
           "oh-my-posh"
-          "eza"
+              # "eza"
         ];
         casks = [
           "zen"

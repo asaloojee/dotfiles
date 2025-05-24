@@ -45,7 +45,7 @@
         pkgs.git
         pkgs.gitleaks
         pkgs.gitui
-            # pkgs.jetbrains.webstorm
+        pkgs.jetbrains.webstorm
         pkgs.mkalias
         pkgs.neofetch
         pkgs.neovim

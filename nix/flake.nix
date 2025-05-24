@@ -45,7 +45,7 @@
         pkgs.git
         pkgs.gitleaks
         pkgs.gitui
-        pkgs.jetbrains.webstorm
+            # pkgs.jetbrains.webstorm
         pkgs.mkalias
         pkgs.neofetch
         pkgs.neovim
@@ -70,7 +70,6 @@
           "mas"
           "oh-my-posh"
           "eza"
-          # "sketchybar"
         ];
         casks = [
           "zen"
@@ -85,13 +84,8 @@
           "font-sf-pro"
           "sf-symbols"
           "font-hack-nerd-font"
-          "font-sketchybar-app-font"
           "ghostty"
         ];
-
-        #taps = [
-        #"felixkratz/formulae"
-        #];
 
         masApps = {
           "Yoink" = 457622435;
@@ -101,6 +95,8 @@
         onActivation.autoUpdate = true;
         onActivation.upgrade = true;
       };
+
+      services.sketchybar.enable = false;
 
       fonts.packages = [
         pkgs.nerd-fonts.jetbrains-mono

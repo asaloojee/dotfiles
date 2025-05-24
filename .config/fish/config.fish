@@ -31,6 +31,11 @@ end
 zoxide init fish | source
 alias cd="z"
 
+# fish greeting
 set fish_greeting ""
+
+# set locale
+set -x LC_ALL en_CA.UTF-8
+set -x LANG en_CA.UTF-8
 
 starship init fish | source

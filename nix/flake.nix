@@ -40,6 +40,7 @@
         pkgs.bat
         pkgs.discord
         pkgs.eza
+        pkgs.fastfetch
         pkgs.firefox-devedition
         pkgs.fish
         pkgs.git

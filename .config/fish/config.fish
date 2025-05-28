@@ -9,6 +9,7 @@ set -gx PATH $PATH /cloud-sql-proxy
 set -gx PATH $PATH /nix/var/nix/profiles/default/bin/
 
 alias ls="eza --icons=always"
+alias g="gitui"
 
 # uutils-coreutils - WIP
 # alias pwd="/run/current-system/sw/bin/uutils-pwd"

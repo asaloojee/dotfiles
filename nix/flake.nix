@@ -54,7 +54,7 @@
         pkgs.raycast
         pkgs.ripgrep
         pkgs.slack
-        pkgs.spotify
+            # pkgs.spotify
         pkgs.stow
         pkgs.starship
         pkgs.tmux

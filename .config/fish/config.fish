@@ -40,8 +40,10 @@ set -x LC_ALL en_CA.UTF-8
 set -x LANG en_CA.UTF-8
 
 # style commands
-set fish_color_command "#66cc67" --bold
-set fish_color_error "#ce4c2b" --bold
+set fish_color_command "#74c976" --bold
+set fish_color_error "#cc6147" --bold
 set fish_color_autosuggestion "#7b7c7b"
+set fish_color_param "#c1bbf9" 
+set fish_color_operator "#c1bbf9"
 
 starship init fish | source

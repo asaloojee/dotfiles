@@ -47,6 +47,7 @@
         pkgs.git
         pkgs.gitleaks
         pkgs.gitui
+        pkgs.hidden-bar
         pkgs.jetbrains.webstorm
         pkgs.mkalias
         pkgs.neofetch

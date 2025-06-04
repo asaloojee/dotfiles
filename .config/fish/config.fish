@@ -39,4 +39,9 @@ set fish_greeting ""
 set -x LC_ALL en_CA.UTF-8
 set -x LANG en_CA.UTF-8
 
+# style commands
+set fish_color_command "#66cc67" --bold
+set fish_color_error "#ce4c2b" --bold
+set fish_color_autosuggestion "#7b7c7b"
+
 starship init fish | source

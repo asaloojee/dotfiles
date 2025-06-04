@@ -19,13 +19,13 @@ format = "[$symbol($version )]($style)"
 symbol = " "
 
 [directory]
-style = "#937cf9"
+style = "#90a5f9"
 read_only = " "
 truncation_length = 4
 truncate_to_repo = false
 
 [character]
-success_symbol = "[❯](#864dc6)"
+success_symbol = "[❯](#937cf9)"
 error_symbol = "[❯](red)"
 vicmd_symbol = "[❮](green)"
 

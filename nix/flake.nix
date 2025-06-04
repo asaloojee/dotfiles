@@ -36,6 +36,7 @@
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
       environment.systemPackages = [
+        pkgs.aerospace
         pkgs.alejandra
         pkgs.bat
         pkgs.discord

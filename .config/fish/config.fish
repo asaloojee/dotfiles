@@ -43,7 +43,7 @@ set -x LANG en_CA.UTF-8
 set fish_color_command "#74c976" --bold
 set fish_color_error "#cc6147" --bold
 set fish_color_autosuggestion "#7b7c7b"
-set fish_color_param "#c8caf7" 
-set fish_color_operator "#c8caf7"
+set fish_color_param "#c3c4f4" 
+set fish_color_operator "#c3c4f4"
 
 starship init fish | source

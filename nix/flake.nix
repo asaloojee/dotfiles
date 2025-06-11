@@ -85,6 +85,7 @@
           "zoom"
           "blender"
           "font-sf-pro"
+          "font-sf-mono"
           "sf-symbols"
           "font-hack-nerd-font"
           "ghostty"

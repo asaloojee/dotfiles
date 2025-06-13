@@ -48,7 +48,7 @@
         pkgs.gitleaks
         pkgs.gitui
         pkgs.hidden-bar
-        pkgs.jetbrains.webstorm
+        pkgs.jetbrains-toolbox
         pkgs.mkalias
         pkgs.neofetch
         pkgs.neovim
@@ -56,7 +56,6 @@
         pkgs.raycast
         pkgs.ripgrep
         pkgs.slack
-            # pkgs.spotify
         pkgs.stow
         pkgs.starship
         pkgs.tmux

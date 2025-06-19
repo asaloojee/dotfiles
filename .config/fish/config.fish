@@ -8,6 +8,9 @@ set -gx PATH $PATH /cloud-sql-proxy
 # nix path?
 set -gx PATH $PATH /nix/var/nix/profiles/default/bin/
 
+# rust path
+set -gx PATH $PATH /Users/asaloojee/.cargo/bin
+
 alias ls="eza --icons=always"
 alias g="gitui"
 
@@ -27,6 +30,18 @@ function y
     
     rm -f -- "$tmp"
 end
+
+function lcd
+    # Run lstr and capture the selected path
+    set -l selected_dir (lstr interactive -g --icons)
+
+    # If the user selected a path (and didn't just quit), `cd` into it
+    # Check if the selection is a directory
+    if test -n "$selected_dir" -a -d "$selected_dir"
+        cd "$selected_dir"
+    end
+end
+
 
 # Zoxide initialization for Fish shell
 zoxide init fish | source

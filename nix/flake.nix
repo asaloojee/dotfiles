@@ -55,6 +55,7 @@
         pkgs.obsidian
         pkgs.raycast
         pkgs.ripgrep
+        pkgs.rustup
         pkgs.slack
         pkgs.stow
         pkgs.starship

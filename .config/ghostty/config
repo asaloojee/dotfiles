@@ -1,8 +1,8 @@
-font-family = MesloLGL Nerd Font
-font-style = regular 
-font-size = 18 
+font-family = "Iosevka Nerd Font Mono" 
+font-style = "Medium" 
+font-size = 22 
 cursor-style = block
-window-title-font-family = MesloLGL Nerd Font
+window-title-font-family = "Iosevka Nerd Font Mono"
 
 background-opacity = 0.7
 background-blur = true

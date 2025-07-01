@@ -19,4 +19,4 @@ mouse-hide-while-typing = true
 macos-secure-input-indication = false 
 macos-auto-secure-input = true
 
-theme = tokyonight 
+theme = catppuccin-frappe 

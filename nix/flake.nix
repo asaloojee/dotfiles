@@ -39,6 +39,7 @@
         pkgs.aerospace
         pkgs.alejandra
         pkgs.bat
+        pkgs.code-cursor
         pkgs.discord
         pkgs.eza
         pkgs.fastfetch

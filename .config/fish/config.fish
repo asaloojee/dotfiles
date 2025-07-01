@@ -4,6 +4,7 @@ set -gx STARSHIP_CONFIG ~/.config/starship/starship.toml
 
 # cloud-sql-proxy path
 set -gx PATH $PATH /cloud-sql-proxy
+set -gx PATH $HOME/google-cloud-sdk/bin $PATH
 
 # nix path?
 set -gx PATH $PATH /nix/var/nix/profiles/default/bin/

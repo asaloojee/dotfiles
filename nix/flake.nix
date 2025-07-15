@@ -45,6 +45,7 @@
         pkgs.fastfetch
         pkgs.firefox-devedition
         pkgs.fish
+        pkgs.flameshot
         pkgs.git
         pkgs.gitleaks
         pkgs.gitui
@@ -110,6 +111,7 @@
         pkgs.nerd-fonts.iosevka
         pkgs.maple-mono.truetype
         pkgs.maple-mono.NF-unhinted
+        pkgs.fira
       ];
 
       system.activationScripts.applications.text = let

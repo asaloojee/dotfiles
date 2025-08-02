@@ -45,7 +45,6 @@
         pkgs.fastfetch
         pkgs.firefox-devedition
         pkgs.fish
-        pkgs.flameshot
         pkgs.git
         pkgs.gitleaks
         pkgs.gitui
@@ -59,6 +58,7 @@
         pkgs.ripgrep
         pkgs.rustup
         pkgs.slack
+        pkgs.spotify
         pkgs.stow
         pkgs.starship
         pkgs.tmux
@@ -66,6 +66,7 @@
         pkgs.telegram-desktop
         pkgs.uutils-coreutils
         pkgs.yazi
+        pkgs.zoom-us
         pkgs.zoxide
       ];
 
@@ -84,17 +85,18 @@
           "proton-drive"
           "protonvpn"
           "proton-pass"
-          "zoom"
-          "blender"
+              # "blender"
           "font-sf-pro"
           "font-sf-mono"
           "sf-symbols"
           "font-hack-nerd-font"
+          "font-playfair"
+          "font-martel"
           "ghostty"
         ];
 
         masApps = {
-          "Yoink" = 457622435;
+              # "Yoink" = 457622435;
           "PDFgear" = 6469021132;
         };
         onActivation.cleanup = "zap";

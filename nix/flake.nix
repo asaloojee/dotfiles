@@ -39,11 +39,10 @@
         pkgs.aerospace
         pkgs.alejandra
         pkgs.bat
+        pkgs.brave
         pkgs.code-cursor
-        pkgs.discord
         pkgs.eza
         pkgs.fastfetch
-        pkgs.firefox-devedition
         pkgs.fish
         pkgs.git
         pkgs.gitleaks
@@ -93,6 +92,9 @@
           "font-playfair"
           "font-martel"
           "ghostty"
+          "libreoffice"
+          "discord"
+          "adobe-creative-cloud"
         ];
 
         masApps = {
@@ -114,6 +116,9 @@
         pkgs.maple-mono.truetype
         pkgs.maple-mono.NF-unhinted
         pkgs.fira
+        pkgs.iosevka-comfy.comfy
+        pkgs.iosevka-comfy.comfy-duo
+        pkgs.noto-fonts
       ];
 
       system.activationScripts.applications.text = let

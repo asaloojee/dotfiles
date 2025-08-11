@@ -140,10 +140,10 @@ r = ['flatten-workspace-tree', 'mode main'] # reset layout
 f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
 backspace = ['close-all-windows-but-current', 'mode main']
 
-alt-ctrl-cmd-shift-h = ['join-with left', 'mode main']
-alt-ctrl-cmd-shift-j = ['join-with down', 'mode main']
-alt-ctrl-cmd-shift-k = ['join-with up', 'mode main']
-alt-ctrl-cmd-shift-l = ['join-with right', 'mode main']
+alt-shift-h = ['join-with left', 'mode service']
+alt-shift-j = ['join-with down', 'mode service']
+alt-shift-k = ['join-with up', 'mode service']
+alt-shift-l = ['join-with right', 'mode service']
 
 [[on-window-detected]]
 if.app-id = 'com.figma.Desktop'
@@ -158,7 +158,7 @@ if.app-id = 'com.apple.Music'
 run = ["layout floating", "move-node-to-workspace 1"]
 
 [[on-window-detected]]
-if.app-id = 'org.nixos.firefoxdeveloperedition'
+if.app-id = 'com.brave.Browser'
 run = "move-node-to-workspace 2"
 
 [[on-window-detected]]
@@ -199,4 +199,8 @@ run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
 if.app-id = 'ch.protonmail.desktop'
+run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
 run = 'move-node-to-workspace 1'

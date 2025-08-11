@@ -61,3 +61,4 @@ set fish_color_param "#a5c6f7"
 set fish_color_operator "#a5c6f7"
 
 starship init fish | source
+fish_add_path $HOME/.local/bin

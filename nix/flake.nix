@@ -83,7 +83,6 @@
           "proton-drive"
           "protonvpn"
           "proton-pass"
-              # "blender"
           "font-sf-pro"
           "font-sf-mono"
           "sf-symbols"

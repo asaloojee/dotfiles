@@ -1,5 +1,7 @@
 .git
+.gitignore
 scripts
 /gcloud
 /github-copilot
 /raycast
+/jgit

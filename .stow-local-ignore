@@ -7,6 +7,6 @@ scripts
 /jgit
 
 # Ignore all git repositories and git-related files
-**/.git
-**/.gitignore
-**/.gitmodules
+\.git
+\.gitignore
+\.gitmodules

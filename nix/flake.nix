@@ -40,6 +40,7 @@
         pkgs.alejandra
         pkgs.bat
         pkgs.brave
+        pkgs.claude-code
         pkgs.code-cursor
         pkgs.eza
         pkgs.fastfetch

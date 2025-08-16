@@ -40,6 +40,7 @@
         pkgs.alejandra
         pkgs.bat
         pkgs.brave
+        pkgs.bun
         pkgs.claude-code
         pkgs.code-cursor
         pkgs.eza

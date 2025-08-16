@@ -19,12 +19,6 @@
     alejandra,
     # ...
   }: let
-    # add-unstable-packages = final: _prev: {
-    # unstable = import inputs.nixpkgs-unstable {
-    # system = "aarch64-darwin";
-    # };
-    # };
-    # username = "asaloojee";
     configuration = {
       pkgs,
       config,

@@ -39,8 +39,10 @@
         pkgs.code-cursor
         pkgs.eza
         pkgs.fastfetch
+        pkgs.fd
         pkgs.fish
         pkgs.git
+        pkgs.gh
         pkgs.gitleaks
         pkgs.gitui
         pkgs.hidden-bar

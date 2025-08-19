@@ -1,6 +1,6 @@
 font-family = "MesloLGL Nerd Font" 
 font-style = "Regular" 
-font-size = 20 
+font-size = 18
 cursor-style = block
 window-title-font-family = "MesloLGL Nerd Font Mono"
 
@@ -13,7 +13,7 @@ macos-titlebar-proxy-icon = hidden
 shell-integration = fish 
 
 window-padding-x = 16
-window-padding-y = 0
+window-padding-y = 0,8
 macos-window-shadow = false
 mouse-hide-while-typing = true
 macos-secure-input-indication = false 

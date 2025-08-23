@@ -3,18 +3,49 @@ return {
   opts = {
     servers = {
       cssls = {
-        on_attach = function(client, bufnr)
-          -- Disable hover capability to prevent documentation popup
-          client.server_capabilities.hoverProvider = false
-          client.server_capabilities.signatureHelpProvider = false
-        end,
         settings = {
           css = {
-            hover = {
-              documentation = false,
-              references = false,
+            validate = true,
+            lint = {
+              unknownAtRules = "ignore"
             },
+            hover = {
+              documentation = true,
+              references = true,
+            },
+            completion = {
+              completePropertyWithSemicolon = true,
+              triggerPropertyValueCompletion = true
+            }
           },
+          scss = {
+            validate = true,
+            lint = {
+              unknownAtRules = "ignore"
+            },
+            hover = {
+              documentation = true,
+              references = true,
+            },
+            completion = {
+              completePropertyWithSemicolon = true,
+              triggerPropertyValueCompletion = true
+            }
+          },
+          less = {
+            validate = true,
+            lint = {
+              unknownAtRules = "ignore"
+            },
+            hover = {
+              documentation = true,
+              references = true,
+            },
+            completion = {
+              completePropertyWithSemicolon = true,
+              triggerPropertyValueCompletion = true
+            }
+          }
         },
         filetypes = { "css", "scss", "less", "html", "javascript", "javascriptreact", "typescript", "typescriptreact" },
       },

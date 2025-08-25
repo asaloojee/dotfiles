@@ -22,12 +22,12 @@ alias g="gitui"
 export EDITOR="nvim"
 
 function y
-	set tmp (mktemp -t "yazi-cwd.XXXXXX")
-	yazi $argv --cwd-file="$tmp"
-	if read -z cwd < "$tmp"; and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-		builtin cd -- "$cwd"
-	end
-	rm -f -- "$tmp"
+    set tmp (mktemp -t "yazi-cwd.XXXXXX")
+    yazi $argv --cwd-file="$tmp"
+    if read -z cwd <"$tmp"; and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+        builtin cd -- "$cwd"
+    end
+    rm -f -- "$tmp"
 end
 
 function lcd
@@ -41,10 +41,14 @@ function lcd
     end
 end
 
-
 # Zoxide initialization for Fish shell
 zoxide init fish | source
 alias cd="z"
+
+# git-commit function alias
+function gc
+    $HOME/.local/bin/git-commit.fish $argv
+end
 
 # fish greeting
 set fish_greeting ""
@@ -57,7 +61,7 @@ set -x LANG en_CA.UTF-8
 set fish_color_command "#74c976" --bold
 set fish_color_error "#cc6147" --bold
 set fish_color_autosuggestion "#7b7c7b"
-set fish_color_param "#a5c6f7" 
+set fish_color_param "#a5c6f7"
 set fish_color_operator "#a5c6f7"
 
 starship init fish | source

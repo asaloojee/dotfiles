@@ -51,7 +51,6 @@
         pkgs.neofetch
         pkgs.neovim
         pkgs.obsidian
-        pkgs.opencode
         pkgs.raycast
         pkgs.ripgrep
         pkgs.rustup

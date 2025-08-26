@@ -49,6 +49,16 @@ return {
         },
         filetypes = { "css", "scss", "less", "html", "javascript", "javascriptreact", "typescript", "typescriptreact" },
       },
+      cssmodules_ls = {
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        settings = {
+          camelCase = "dashes",
+          linkToOriginalDefinition = true,
+        },
+        init_options = {
+          camelCase = "dashes",
+        },
+      },
       tailwindcss = {
         filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact" },
         settings = {
@@ -76,7 +86,14 @@ return {
               includeInlayPropertyDeclarationTypeHints = true,
               includeInlayFunctionLikeReturnTypeHints = true,
               includeInlayEnumMemberValueHints = true,
-            }
+            },
+            preferences = {
+              importModuleSpecifier = "relative",
+              includePackageJsonAutoImports = "auto",
+            },
+            suggest = {
+              autoImports = true,
+            },
           },
           javascript = {
             inlayHints = {
@@ -87,7 +104,14 @@ return {
               includeInlayPropertyDeclarationTypeHints = true,
               includeInlayFunctionLikeReturnTypeHints = true,
               includeInlayEnumMemberValueHints = true,
-            }
+            },
+            preferences = {
+              importModuleSpecifier = "relative",
+              includePackageJsonAutoImports = "auto",
+            },
+            suggest = {
+              autoImports = true,
+            },
           }
         }
       },

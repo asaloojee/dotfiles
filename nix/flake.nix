@@ -51,6 +51,7 @@
         pkgs.neofetch
         pkgs.neovim
         pkgs.obsidian
+        pkgs.opencode
         pkgs.raycast
         pkgs.ripgrep
         pkgs.rustup
@@ -88,7 +89,7 @@
           "font-playfair"
           "font-martel"
           "ghostty"
-          "libreoffice"
+          # "libreoffice"
           "discord"
           "adobe-creative-cloud"
         ];

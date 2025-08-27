@@ -14,6 +14,7 @@ return {
         javascriptreact = { "string", "template_string" },
         typescriptreact = { "string", "template_string" },
         css = { "string" },
+        astro = { "string", "template_string" },
       },
       disable_filetype = { "TelescopePrompt", "spectre_panel" },
       fast_wrap = {

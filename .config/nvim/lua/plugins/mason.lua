@@ -7,6 +7,7 @@ return {
       "cssmodules-language-server",
       "tailwindcss-language-server",
       "typescript-language-server",
+      "astro-language-server",
     },
   },
 }

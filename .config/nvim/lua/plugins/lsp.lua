@@ -47,7 +47,7 @@ return {
             }
           }
         },
-        filetypes = { "css", "scss", "less", "html", "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        filetypes = { "css", "scss", "less", "html", "javascript", "javascriptreact", "typescript", "typescriptreact", "astro" },
       },
       cssmodules_ls = {
         filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
@@ -60,7 +60,7 @@ return {
         },
       },
       tailwindcss = {
-        filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescript", "typescriptreact", "astro" },
         settings = {
           tailwindCSS = {
             experimental = {
@@ -72,6 +72,14 @@ return {
                 "tw\\(.*?\\)`([^`]*)",
               },
             },
+          },
+        },
+      },
+      astro = {
+        filetypes = { "astro" },
+        init_options = {
+          typescript = {
+            tsdk = vim.fn.getcwd() .. "/node_modules/typescript/lib",
           },
         },
       },

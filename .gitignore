@@ -3,3 +3,6 @@
 **/.DS_Store
 
 .config/tmux/plugins/
+
+.stow-local-ignore
+.zshrc

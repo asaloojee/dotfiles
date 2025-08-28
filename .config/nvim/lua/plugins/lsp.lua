@@ -47,7 +47,7 @@ return {
             }
           }
         },
-        filetypes = { "css", "scss", "less", "html", "javascript", "javascriptreact", "typescript", "typescriptreact", "astro" },
+        filetypes = { "css", "scss", "less", "html", "javascript", "javascriptreact", "typescript", "typescriptreact" },
       },
       cssmodules_ls = {
         filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },

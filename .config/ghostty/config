@@ -20,3 +20,4 @@ macos-secure-input-indication = false
 macos-auto-secure-input = true
 
 theme = tokyonight 
+keybind = shift+enter=text:\n

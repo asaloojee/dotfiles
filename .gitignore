@@ -4,5 +4,6 @@
 
 .config/tmux/plugins/
 
-.stow-local-ignore
-.zshrc
+# Auto-generated lockfiles
+**/lazy-lock.json
+**/flake.lock

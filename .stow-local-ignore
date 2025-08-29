@@ -1,15 +1,6 @@
-.git
-.gitignore
-scripts
-/gcloud
-/github-copilot
-/raycast
-/jgit
-
 # Ignore all git repositories and git-related files
 \.git
 \.gitignore
-\.gitmodules
 
 # Ignore all .DS_Store files
 \.DS_Store

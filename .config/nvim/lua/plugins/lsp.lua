@@ -83,7 +83,7 @@ return {
           },
         },
       },
-      tsserver = {
+      ts_ls = {
         settings = {
           typescript = {
             inlayHints = {
@@ -122,6 +122,17 @@ return {
             },
           }
         }
+      },
+      html = {
+        filetypes = { "html", "astro" },
+      },
+      jsonls = {
+        filetypes = { "json", "jsonc" },
+        settings = {
+          json = {
+            validate = { enable = true },
+          },
+        },
       },
     },
   },

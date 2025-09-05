@@ -20,6 +20,8 @@ vim.opt.smarttab = true
 vim.opt.showmatch = true
 vim.opt.matchtime = 2
 
--- Better folding for code blocks
-vim.opt.foldmethod = "indent"
+-- Better folding with treesitter
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevelstart = 99
+vim.opt.foldtext = ""

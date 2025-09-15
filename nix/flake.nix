@@ -74,7 +74,6 @@
           "oh-my-posh"
         ];
         casks = [
-          "zen"
           "signal"
           "figma"
           "proton-mail"

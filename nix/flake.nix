@@ -41,8 +41,8 @@
         pkgs.fastfetch
         pkgs.fd
         pkgs.fish
-        pkgs.git
         pkgs.gh
+        pkgs.git
         pkgs.gitleaks
         pkgs.gitui
         pkgs.hidden-bar
@@ -56,11 +56,11 @@
         pkgs.rustup
         pkgs.slack
         pkgs.spotify
-        pkgs.stow
         pkgs.starship
+        pkgs.stow
+        pkgs.telegram-desktop
         pkgs.tmux
         pkgs.tree
-        pkgs.telegram-desktop
         pkgs.uutils-coreutils
         pkgs.yazi
         pkgs.zoom-us
@@ -74,22 +74,23 @@
           "oh-my-posh"
         ];
         casks = [
-          "signal"
+          "adobe-creative-cloud"
+          "claude"
+          "discord"
           "figma"
-          "proton-mail"
-          "proton-drive"
-          "protonvpn"
-          "proton-pass"
-          "font-sf-pro"
-          "font-sf-mono"
-          "sf-symbols"
           "font-hack-nerd-font"
-          "font-playfair"
           "font-martel"
+          "font-playfair"
+          "font-sf-mono"
+          "font-sf-pro"
           "ghostty"
           # "libreoffice"
-          "discord"
-          "adobe-creative-cloud"
+          "proton-drive"
+          "proton-mail"
+          "proton-pass"
+          "protonvpn"
+          "sf-symbols"
+          "signal"
         ];
 
         masApps = {
@@ -104,15 +105,15 @@
       services.sketchybar.enable = false;
 
       fonts.packages = [
-        pkgs.nerd-fonts.jetbrains-mono
-        pkgs.nerd-fonts.meslo-lg
-        pkgs.nerd-fonts.monaspace
-        pkgs.nerd-fonts.iosevka
-        pkgs.maple-mono.truetype
-        pkgs.maple-mono.NF-unhinted
         pkgs.fira
         pkgs.iosevka-comfy.comfy
         pkgs.iosevka-comfy.comfy-duo
+        pkgs.maple-mono.NF-unhinted
+        pkgs.maple-mono.truetype
+        pkgs.nerd-fonts.iosevka
+        pkgs.nerd-fonts.jetbrains-mono
+        pkgs.nerd-fonts.meslo-lg
+        pkgs.nerd-fonts.monaspace
         pkgs.noto-fonts
       ];
 

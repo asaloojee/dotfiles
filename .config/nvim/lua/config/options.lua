@@ -25,3 +25,7 @@ vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevelstart = 99
 vim.opt.foldtext = ""
+
+-- Line number settings - use normal line numbers instead of relative
+vim.opt.number = true
+vim.opt.relativenumber = false

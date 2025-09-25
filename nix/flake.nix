@@ -46,7 +46,6 @@
         pkgs.gitleaks
         pkgs.gitui
         pkgs.hidden-bar
-        pkgs.jetbrains-toolbox
         pkgs.mkalias
         pkgs.neofetch
         pkgs.neovim
@@ -71,7 +70,6 @@
         enable = true;
         brews = [
           "mas"
-          "oh-my-posh"
         ];
         casks = [
           "adobe-creative-cloud"
@@ -84,13 +82,13 @@
           "font-sf-mono"
           "font-sf-pro"
           "ghostty"
-          # "libreoffice"
           "proton-drive"
           "proton-mail"
           "proton-pass"
           "protonvpn"
           "sf-symbols"
           "signal"
+          "tailscale"
         ];
 
         masApps = {

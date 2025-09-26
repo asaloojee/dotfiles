@@ -55,7 +55,6 @@
         pkgs.ripgrep
         pkgs.rustup
         pkgs.slack
-        pkgs.spotify
         pkgs.starship
         pkgs.stow
         pkgs.telegram-desktop
@@ -160,6 +159,19 @@
 
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
+      
+      # Automatic garbage collection - keeps rollback safety
+      nix.gc = {
+        automatic = true;
+        interval = { Hour = 3; Minute = 15; };
+        options = "--delete-older-than 14d";
+      };
+      
+      # Optimize store automatically
+      nix.optimise = {
+        automatic = true;
+        interval = { Hour = 4; Minute = 0; };
+      };
 
       # Set Git commit hash for darwin-version.
       system.configurationRevision = self.rev or self.dirtyRev or null;

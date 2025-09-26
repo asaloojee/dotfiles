@@ -2,6 +2,9 @@
 set -gx PATH $PATH /run/current-system/sw/bin
 set -gx STARSHIP_CONFIG ~/.config/starship/starship.toml
 
+# homebrew path for Apple Silicon
+set -gx PATH /opt/homebrew/bin /opt/homebrew/sbin $PATH
+
 set -gx PATH $HOME/google-cloud-sdk/bin $PATH
 
 # nix path?

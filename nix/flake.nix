@@ -45,6 +45,7 @@
         pkgs.git
         pkgs.gitleaks
         pkgs.gitui
+        pkgs.go
         pkgs.hidden-bar
         pkgs.mkalias
         pkgs.neofetch
@@ -70,6 +71,7 @@
         enable = true;
         brews = [
           "mas"
+          "tailscale"
         ];
         casks = [
           "adobe-creative-cloud"
@@ -88,7 +90,7 @@
           "protonvpn"
           "sf-symbols"
           "signal"
-          "tailscale"
+          # "tailscale"
         ];
 
         masApps = {

@@ -6,9 +6,8 @@
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
-    alejandra.url = "github:kamadorueda/alejandra/4.0.0";
+    alejandra.url = "github:kamadorueda/alejandra";
     alejandra.inputs.nixpkgs.follows = "nixpkgs";
-    # nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
   outputs = inputs @ {
@@ -48,7 +47,6 @@
         pkgs.go
         pkgs.hidden-bar
         pkgs.mkalias
-        pkgs.neofetch
         pkgs.neovim
         pkgs.obsidian
         pkgs.raycast
@@ -89,7 +87,6 @@
           "protonvpn"
           "sf-symbols"
           "signal"
-          # "tailscale"
         ];
 
         masApps = {
@@ -163,14 +160,14 @@
       # Automatic garbage collection - keeps rollback safety
       nix.gc = {
         automatic = true;
-        interval = { Hour = 3; Minute = 15; };
-        options = "--delete-older-than 14d";
+        interval = { Weekday = 1; Hour = 3; Minute = 0; }; # Weekly on Monday
+        options = "--delete-older-than 30d";
       };
       
-      # Optimize store automatically
+      # Optimize store automatically  
       nix.optimise = {
         automatic = true;
-        interval = { Hour = 4; Minute = 0; };
+        interval = { Weekday = 1; Hour = 4; Minute = 0; }; # Weekly on Monday
       };
 
       # Set Git commit hash for darwin-version.

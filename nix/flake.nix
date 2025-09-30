@@ -34,7 +34,6 @@
         pkgs.bat
         pkgs.brave
         pkgs.bun
-        pkgs.claude-code
         pkgs.code-cursor
         pkgs.eza
         pkgs.fastfetch
@@ -73,6 +72,7 @@
         casks = [
           "adobe-creative-cloud"
           "claude"
+          "claude-code"
           "discord"
           "figma"
           "font-hack-nerd-font"

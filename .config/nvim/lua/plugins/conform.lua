@@ -18,5 +18,10 @@ return {
       markdown = { "prettier" },
       lua = { "stylua" },
     },
+    formatters = {
+      prettier = {
+        prepend_args = { "--single-quote" },
+      },
+    },
   },
 }

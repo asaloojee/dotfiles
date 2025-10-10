@@ -56,6 +56,7 @@
         pkgs.stow
         pkgs.telegram-desktop
         pkgs.tmux
+        pkgs.tmuxinator
         pkgs.tree
         pkgs.uutils-coreutils
         pkgs.yazi

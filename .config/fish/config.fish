@@ -15,6 +15,7 @@ set -gx PATH $PATH /Users/asaloojee/.cargo/bin
 
 alias ls="eza --icons=always"
 alias g="gitui"
+alias mux="tmuxinator"
 
 # uutils-coreutils - WIP
 # alias pwd="/run/current-system/sw/bin/uutils-pwd"

@@ -1,0 +1,13 @@
+# Tmuxinator configuration for TypeScript course
+# Start with: tmuxinator start ts-course (or: mux start ts-course)
+
+name: ts-course
+root: ~/Projects/courses/typescript-course
+
+windows:
+  - editor:
+      panes:
+        - nvim
+  - terminal:
+      panes:
+        - # Empty pane for general commands

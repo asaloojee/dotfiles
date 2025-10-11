@@ -28,9 +28,9 @@ truncate_to_repo = false
 
 
 [character]
-success_symbol = "[](#2ac3de)"
-error_symbol = "[](#f7768e)"
-vicmd_symbol = "[](#9ece6a)"
+success_symbol = "[󰅂](#2ac3de)"
+error_symbol = "[󰅂](#f7768e)"
+vicmd_symbol = "[󰅂](#9ece6a)"
 
 [git_branch]
 symbol = " "

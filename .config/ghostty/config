@@ -15,7 +15,7 @@ macos-titlebar-proxy-icon = hidden
 
 shell-integration = fish 
 
-window-padding-x = 16
+window-padding-x = 12
 window-padding-y = 0,8
 macos-window-shadow = false
 mouse-hide-while-typing = true

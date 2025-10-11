@@ -41,7 +41,7 @@ return {
           },
           {
             "fileformat",
-            symbols = { unix = "" },
+            symbols = { unix = "" },
             padding = { left = 1, right = 1 },
             color = { gui = "bold" },
           },

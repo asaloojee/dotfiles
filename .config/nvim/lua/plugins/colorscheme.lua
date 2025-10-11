@@ -13,8 +13,8 @@ return {
       style = "night",
       styles = {
         comments = { italic = true },
-        keywords = { italic = true },
-        functions = {},
+        keywords = { italic = true, bold = true },
+        functions = { bold = true },
         variables = {},
       },
     },

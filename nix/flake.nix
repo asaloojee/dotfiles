@@ -33,7 +33,7 @@
         pkgs.alejandra
         pkgs.bat
         pkgs.brave
-        pkgs.bun
+        # pkgs.bun
         pkgs.code-cursor
         pkgs.eza
         pkgs.fastfetch
@@ -66,7 +66,11 @@
 
       homebrew = {
         enable = true;
+        taps = [
+          "oven-sh/bun"
+        ];
         brews = [
+          "bun"
           "mas"
           "tailscale"
         ];

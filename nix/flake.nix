@@ -86,7 +86,6 @@
           "font-sf-mono"
           "font-sf-pro"
           "ghostty"
-          "handbrake"
           "proton-drive"
           "proton-mail"
           "proton-pass"

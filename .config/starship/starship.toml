@@ -46,8 +46,8 @@ format = "[$symbol]($style)"
 [git_status]
 format = '([\[$all_status$ahead_behind\]]($style) )'
 style = "#7aa2f7"
-ahead = ""
-behind = ""
+ahead = "󰶣"
+behind = "󰶡"
 
 [git_state]
 format = '\([$state( $progress_current/$progress_total)]($style)\) '

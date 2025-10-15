@@ -83,45 +83,19 @@ return {
           },
         },
       },
-      ts_ls = {
+      vtsls = {
         settings = {
           typescript = {
             inlayHints = {
-              includeInlayParameterNameHints = 'all',
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayVariableTypeHints = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayEnumMemberValueHints = true,
-            },
-            preferences = {
-              importModuleSpecifier = "relative",
-              includePackageJsonAutoImports = "auto",
-            },
-            suggest = {
-              autoImports = true,
+              parameterNames = { enabled = "none" },
+              parameterTypes = { enabled = false },
+              variableTypes = { enabled = false },
+              propertyDeclarationTypes = { enabled = false },
+              functionLikeReturnTypes = { enabled = false },
+              enumMemberValues = { enabled = false },
             },
           },
-          javascript = {
-            inlayHints = {
-              includeInlayParameterNameHints = 'all',
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayVariableTypeHints = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayEnumMemberValueHints = true,
-            },
-            preferences = {
-              importModuleSpecifier = "relative",
-              includePackageJsonAutoImports = "auto",
-            },
-            suggest = {
-              autoImports = true,
-            },
-          }
-        }
+        },
       },
       html = {
         filetypes = { "html", "astro" },

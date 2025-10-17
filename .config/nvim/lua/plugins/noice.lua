@@ -7,7 +7,18 @@ return {
     messages = {
       enabled = false, -- Disable noice messages, use native vim messages
     },
+    views = {
+      mini = {
+        position = {
+          row = -2, -- Move up one line from bottom (default is -1)
+          col = "100%",
+        },
+      },
+    },
     lsp = {
+      progress = {
+        enabled = true,
+      },
       signature = {
         auto_open = false,
       },

@@ -7,3 +7,6 @@
 # Auto-generated lockfiles
 **/lazy-lock.json
 **/flake.lock
+
+# Claude Code directories
+**/.claude/

@@ -16,6 +16,7 @@ return {
       jsonc = { "prettier" },
       yaml = { "prettier" },
       markdown = { "prettier" },
+      astro = { "prettier" },
       lua = { "stylua" },
     },
     formatters = {

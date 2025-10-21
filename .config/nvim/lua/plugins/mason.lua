@@ -1,17 +1,21 @@
 return {
-  "mason-org/mason.nvim",
-  opts = {
-    ensure_installed = {
-      "prettier",
-      "stylua",
-      "css-lsp",
-      "cssmodules-language-server",
-      "tailwindcss-language-server",
-      "typescript-language-server",
-      "astro-language-server",
-      "html-lsp",
-      "json-lsp",
+  {
+    "mason-org/mason.nvim",
+    cmd = { "Mason", "MasonInstall", "MasonUpdate" },
+    config = function(_, opts)
+      require("mason").setup(opts)
+    end,
+  },
+  {
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    opts = require("configs.mason"),
+    dependencies = { "mason-org/mason.nvim" },
+    cmd = {
+      "MasonToolsInstall",
+      "MasonToolsInstallSync",
+      "MasonToolsUpdate",
+      "MasonToolsUpdateSync",
+      "MasonToolsClean",
     },
   },
 }
-

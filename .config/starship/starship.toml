@@ -21,19 +21,19 @@ symbol = " "
 
 [directory]
 style = "#bb9af7"
-read_only = " "
+read_only = "󱌃"
 home_symbol = "󰜥"
 truncation_length = 3
 truncate_to_repo = false
 
 
 [character]
-success_symbol = "[󰅂](#2ac3de)"
-error_symbol = "[󰅂](#f7768e)"
-vicmd_symbol = "[󰅂](#9ece6a)"
+success_symbol = "[](#2ac3de)"
+error_symbol = "[](#f7768e)"
+vicmd_symbol = "[](#9ece6a)"
 
 [git_branch]
-symbol = " "
+symbol = ""
 format = "[$symbol$branch]($style) "
 style = "#565f89"
 
@@ -46,8 +46,20 @@ format = "[$symbol]($style)"
 [git_status]
 format = '([\[$all_status$ahead_behind\]]($style) )'
 style = "#7aa2f7"
-ahead = "󱦲"
-behind = "󱦳"
+
+# Git remote status
+ahead = ""      # Commits ahead of remote
+behind = ""     # Commits behind remote
+diverged = ""    # Branch has diverged from remote
+
+# Working directory status
+conflicted = ""  # Merge conflicts
+deleted = ""     # Deleted files
+renamed = ""     # Renamed files
+modified = ""    # Modified files
+staged = ""      # Staged changes (added to index)
+untracked = ""   # Untracked files
+stashed = ""     # Stashed changes
 
 [git_state]
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
@@ -67,3 +79,6 @@ symbol = "󰍛 "
 
 [rust]
 symbol = " "
+
+[bun]
+symbol = ""

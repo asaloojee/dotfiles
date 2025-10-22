@@ -11,6 +11,44 @@ return {
         -- other configuration options
       end
 
+      -- Configure diagnostics with icons and virtual text
+      vim.diagnostic.config({
+        virtual_text = {
+          spacing = 4,
+          source = "if_many",
+          -- prefix = "●",
+        },
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = " ", -- Add your error icon
+            [vim.diagnostic.severity.WARN] = " ", -- Add your warning icon
+            [vim.diagnostic.severity.INFO] = " ", -- Add your info icon
+            [vim.diagnostic.severity.HINT] = " ", -- Add your hint icon
+          },
+        },
+        underline = true,
+        update_in_insert = false,
+        severity_sort = true,
+        float = {
+          border = "rounded",
+          source = "if_many",
+        },
+      })
+
+      -- Hide all diagnostics in insert mode
+      vim.api.nvim_create_autocmd("InsertEnter", {
+        callback = function()
+          vim.diagnostic.hide()
+        end,
+      })
+
+      -- Show all diagnostics when leaving insert mode
+      vim.api.nvim_create_autocmd("InsertLeave", {
+        callback = function()
+          vim.diagnostic.show()
+        end,
+      })
+
       -- CSS Language Server
       lspconfig.cssls.setup({
         on_attach = on_attach,
@@ -19,7 +57,7 @@ return {
           css = {
             validate = true,
             lint = {
-              unknownAtRules = "ignore"
+              unknownAtRules = "ignore",
             },
             hover = {
               documentation = true,
@@ -27,13 +65,13 @@ return {
             },
             completion = {
               completePropertyWithSemicolon = true,
-              triggerPropertyValueCompletion = true
-            }
+              triggerPropertyValueCompletion = true,
+            },
           },
           scss = {
             validate = true,
             lint = {
-              unknownAtRules = "ignore"
+              unknownAtRules = "ignore",
             },
             hover = {
               documentation = true,
@@ -41,13 +79,13 @@ return {
             },
             completion = {
               completePropertyWithSemicolon = true,
-              triggerPropertyValueCompletion = true
-            }
+              triggerPropertyValueCompletion = true,
+            },
           },
           less = {
             validate = true,
             lint = {
-              unknownAtRules = "ignore"
+              unknownAtRules = "ignore",
             },
             hover = {
               documentation = true,
@@ -55,11 +93,11 @@ return {
             },
             completion = {
               completePropertyWithSemicolon = true,
-              triggerPropertyValueCompletion = true
-            }
-          }
+              triggerPropertyValueCompletion = true,
+            },
+          },
         },
-        filetypes = { 'css', 'scss', 'less' },
+        filetypes = { "css", "scss", "less" },
       })
 
       -- CSS Modules Language Server
@@ -134,10 +172,10 @@ return {
         settings = {
           Lua = {
             runtime = {
-              version = 'LuaJIT',
+              version = "LuaJIT",
             },
             diagnostics = {
-              globals = { 'vim' },
+              globals = { "vim" },
             },
             workspace = {
               checkThirdParty = false,

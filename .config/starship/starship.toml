@@ -13,7 +13,7 @@ $line_break\
 $character"""
 
 [nodejs]
-symbol = ""
+symbol = " "
 format = "[$symbol($version )]($style)"
 
 [fill]
@@ -21,8 +21,8 @@ symbol = " "
 
 [directory]
 style = "#bb9af7"
-read_only = "󱌃"
-home_symbol = "󰜥"
+read_only = "󱌃 "
+home_symbol = "󰜥 "
 truncation_length = 3
 truncate_to_repo = false
 
@@ -33,12 +33,12 @@ error_symbol = "[](#f7768e)"
 vicmd_symbol = "[](#9ece6a)"
 
 [git_branch]
-symbol = ""
+symbol = " "
 format = "[$symbol$branch]($style) "
-style = "#565f89"
+style = "bold #565f89"
 
 [jobs]
-symbol = ""
+symbol = " "
 style = "bold #f7768e"
 number_threshold = 1
 format = "[$symbol]($style)"
@@ -81,4 +81,4 @@ symbol = "󰍛 "
 symbol = " "
 
 [bun]
-symbol = ""
+symbol = " "

@@ -20,22 +20,21 @@ format = "[$symbol($version )]($style)"
 symbol = " "
 
 [directory]
-style = "#bb9af7"
+style = "#7aa2f7"
 read_only = "󱌃 "
 home_symbol = "󰜥 "
 truncation_length = 3
 truncate_to_repo = false
 
-
 [character]
-success_symbol = "[](#2ac3de)"
+format = "$symbol "
+success_symbol = "[](#bb9af7)"
 error_symbol = "[](#f7768e)"
-vicmd_symbol = "[](#9ece6a)"
 
 [git_branch]
 symbol = " "
 format = "[$symbol$branch]($style) "
-style = "bold #565f89"
+style = "#565f89"
 
 [jobs]
 symbol = " "
@@ -45,7 +44,7 @@ format = "[$symbol]($style)"
 
 [git_status]
 format = '([\[$all_status$ahead_behind\]]($style) )'
-style = "#7aa2f7"
+style = "#565f89"
 
 # Git remote status
 ahead = ""      # Commits ahead of remote

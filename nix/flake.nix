@@ -35,6 +35,7 @@
         pkgs.brave
         # pkgs.bun
         pkgs.code-cursor
+        pkgs.docker
         pkgs.eza
         pkgs.fastfetch
         pkgs.fd

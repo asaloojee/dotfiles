@@ -21,7 +21,7 @@ symbol = " "
 
 [directory]
 style = "#7aa2f7"
-read_only = "󱌃 "
+read_only = " 󱌃"
 home_symbol = "󰜥 "
 truncation_length = 3
 truncate_to_repo = false

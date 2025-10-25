@@ -1,28 +1,31 @@
-# config for path and starship
-set -gx PATH $PATH /run/current-system/sw/bin
+# Fish greeting
+set fish_greeting ""
+
+# Locale settings
+set -gx LC_ALL en_CA.UTF-8
+set -gx LANG en_CA.UTF-8
+
+# Editor
+set -gx EDITOR nvim
+
+# Starship configuration
 set -gx STARSHIP_CONFIG ~/.config/starship/starship.toml
 
-# homebrew path for Apple Silicon
-set -gx PATH /opt/homebrew/bin /opt/homebrew/sbin $PATH
+# PATH management - fish_add_path handles duplicates automatically
+fish_add_path /opt/homebrew/bin
+fish_add_path /opt/homebrew/sbin
+fish_add_path $HOME/google-cloud-sdk/bin
+fish_add_path $HOME/.local/bin
+fish_add_path $HOME/.cargo/bin
+fish_add_path /nix/var/nix/profiles/default/bin
+fish_add_path /run/current-system/sw/bin
 
-set -gx PATH $HOME/google-cloud-sdk/bin $PATH
-
-# nix path?
-set -gx PATH $PATH /nix/var/nix/profiles/default/bin/
-
-# rust path
-set -gx PATH $PATH /Users/asaloojee/.cargo/bin
-
+# Aliases
 alias ls="eza --icons=always"
 alias g="gitui"
 alias mux="tmuxinator"
 
-# uutils-coreutils - WIP
-# alias pwd="/run/current-system/sw/bin/uutils-pwd"
-
-# yazi setup
-export EDITOR="nvim"
-
+# Yazi file manager with directory changing
 function y
     set tmp (mktemp -t "yazi-cwd.XXXXXX")
     yazi $argv --cwd-file="$tmp"
@@ -32,39 +35,22 @@ function y
     rm -f -- "$tmp"
 end
 
+# Interactive directory navigation with lstr
 function lcd
-    # Run lstr and capture the selected path
     set -l selected_dir (lstr interactive -g --icons)
-
-    # If the user selected a path (and didn't just quit), `cd` into it
-    # Check if the selection is a directory
     if test -n "$selected_dir" -a -d "$selected_dir"
         cd "$selected_dir"
     end
 end
 
-# Zoxide initialization for Fish shell
-zoxide init fish | source
-alias cd="z"
-
-# git-commit function alias
+# Git commit helper
 function gc
     $HOME/.local/bin/git-commit.fish $argv
 end
 
-# fish greeting
-set fish_greeting ""
+# Zoxide (smarter cd)
+zoxide init fish | source
+alias cd="z"
 
-# set locale
-set -x LC_ALL en_CA.UTF-8
-set -x LANG en_CA.UTF-8
-
-# style commands
-set fish_color_command "#9ece6a" --bold
-set fish_color_error "#f7768e" --bold
-set fish_color_autosuggestion "#7b7c7b"
-set fish_color_param "#a5c6f7"
-set fish_color_operator "#a5c6f7"
-
+# Initialize Starship prompt
 starship init fish | source
-fish_add_path $HOME/.local/bin

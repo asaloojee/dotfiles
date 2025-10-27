@@ -33,9 +33,7 @@
         pkgs.alejandra
         pkgs.bat
         pkgs.brave
-        # pkgs.bun
         pkgs.code-cursor
-        pkgs.docker
         pkgs.eza
         pkgs.fastfetch
         pkgs.fd
@@ -61,7 +59,6 @@
         pkgs.tree
         pkgs.uutils-coreutils
         pkgs.yazi
-        pkgs.zoom-us
         pkgs.zoxide
       ];
 
@@ -72,6 +69,7 @@
         ];
         brews = [
           "bun"
+          "composer"
           "mas"
           "tailscale"
         ];
@@ -80,6 +78,7 @@
           "claude"
           "claude-code"
           "discord"
+          "docker-desktop"
           "figma"
           "font-hack-nerd-font"
           "font-martel"
@@ -93,6 +92,7 @@
           "protonvpn"
           "sf-symbols"
           "signal"
+          "zoom"
         ];
 
         masApps = {
@@ -137,6 +137,10 @@
           echo "copying $src" >&2
           ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
           done
+
+          # Clean up broken symlinks
+          echo "cleaning up broken symlinks..." >&2
+          find "/Applications/Nix Apps" -type l ! -exec test -e {} \; -delete
         '';
 
       system.primaryUser = "asaloojee";

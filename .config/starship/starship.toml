@@ -43,7 +43,7 @@ number_threshold = 1
 format = "[$symbol]($style)"
 
 [git_status]
-format = '([\[$all_status$ahead_behind\]]($style))'
+format = '([\[$all_status$ahead_behind\]]($style) )'
 style = "#565f89"
 
 # Git remote status

@@ -1,0 +1,13 @@
+# Tmuxinator configuration for pre-script-web
+# Start with: tmuxinator start pre-script-web (or: mux start pre-script-web)
+
+name: pre-script-web
+root: ~/Dev/pre-script-web
+
+windows:
+  - editor:
+      panes:
+        - nvim
+#  - terminal:
+#      panes:
+#        -  # Empty pane for general commands

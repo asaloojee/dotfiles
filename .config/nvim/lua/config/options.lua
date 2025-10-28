@@ -3,6 +3,10 @@
 -- Add any additional options here
 vim.g.lazyvim_prettier_needs_config = false
 
+-- Disable LazyVim's automatic root detection
+-- This ensures nvim stays in the directory where you opened it
+vim.g.root_spec = { "cwd" }
+
 -- Enhanced indentation and formatting for JS/TS/JSX/TSX/CSS
 vim.opt.autoindent = true
 vim.opt.smartindent = true

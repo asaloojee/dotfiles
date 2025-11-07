@@ -6,8 +6,10 @@ root: ~/Dev/pre-script-web
 
 windows:
   - editor:
+      root: ~/Dev/pre-script-web/pre-script-wp/ps-theme-bricks/src/
       panes:
-        - nvim
-#  - terminal:
-#      panes:
-#        -  # Empty pane for general commands
+        -  # Empty pane in ps-theme-bricks src directory
+  - page-mount:
+      root: ~/Dev/pre-script-web/pre-script-wp/static-pages/src/pages/
+      panes:
+        -  # Empty pane in pages directory

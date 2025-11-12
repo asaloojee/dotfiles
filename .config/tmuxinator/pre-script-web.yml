@@ -6,10 +6,18 @@ root: ~/Dev/pre-script-web
 
 windows:
   - editor:
-      root: ~/Dev/pre-script-web/pre-script-wp/ps-theme-bricks/src/
+      root: ~/Dev/pre-script-web/pre-script-wp/static-pages/src/pages/
       panes:
         -  # Empty pane in ps-theme-bricks src directory
   - page-mount:
       root: ~/Dev/pre-script-web/pre-script-wp/static-pages/src/pages/
       panes:
-        -  # Empty pane in pages directory
+        -  # Serve page for local development
+  - wp-env:
+      root: ~/Dev/pre-script-web/pre-script-wp/ps-theme-bricks/src/
+      panes:
+        - wp-env start
+  - api:
+      root: ~/Dev/pre-script-api-serverless/
+      panes:
+        -  # Empty pane

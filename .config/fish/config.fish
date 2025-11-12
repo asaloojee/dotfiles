@@ -53,5 +53,8 @@ end
 zoxide init fish | source
 alias cd="z"
 
+# Set NODE_ENV to development for local development
+set -gx NODE_ENV development
+
 # Initialize Starship prompt
 starship init fish | source

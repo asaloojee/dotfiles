@@ -25,6 +25,7 @@ alias ls="eza --icons=always"
 alias g="gitui"
 alias mux="tmuxinator"
 alias rebuild="sudo darwin-rebuild switch --flake ~/dotfiles/nix#mac"
+alias n="nvim"
 
 # Yazi file manager with directory changing
 function y

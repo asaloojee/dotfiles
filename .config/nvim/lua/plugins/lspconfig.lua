@@ -21,9 +21,9 @@ return {
         signs = {
           text = {
             [vim.diagnostic.severity.ERROR] = " ", -- Add your error icon
-            [vim.diagnostic.severity.WARN] = " ", -- Add your warning icon
+            [vim.diagnostic.severity.WARN] = " ", -- Add your warning icon
             [vim.diagnostic.severity.INFO] = " ", -- Add your info icon
-            [vim.diagnostic.severity.HINT] = " ", -- Add your hint icon
+            [vim.diagnostic.severity.HINT] = " ", -- Add your hint icon
           },
         },
         underline = true,

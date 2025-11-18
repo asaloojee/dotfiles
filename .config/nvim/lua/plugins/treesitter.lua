@@ -12,6 +12,7 @@ return {
         "javascript",
         "astro",
         "html",
+        "http",
         "json",
         "lua",
         "markdown",

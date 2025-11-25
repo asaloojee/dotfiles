@@ -21,7 +21,10 @@ return {
     },
     formatters = {
       prettier = {
-        prepend_args = { "--single-quote" },
+        prepend_args = { "--single-quote", "--print-width", "100" },
+      },
+      stylua = {
+        prepend_args = { "--column-width", "100" },
       },
     },
   },

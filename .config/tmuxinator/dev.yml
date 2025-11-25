@@ -1,0 +1,16 @@
+# tmuxinator configuration for dev project
+# Start with: tmuxinator start dev (or: mux start dev)
+
+name: dev
+root: ~/Dev
+
+windows:
+  - editor:
+      panes:
+        -  # Empty pane for nvim - cd into needed directory
+  - terminal:
+      panes:
+        -  # Empty pane for general commands
+  - claude:
+      panes:
+        -  # Empty pane for claude

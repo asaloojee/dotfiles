@@ -10,12 +10,6 @@ return {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     opts = require("configs.mason"),
     dependencies = { "mason-org/mason.nvim" },
-    cmd = {
-      "MasonToolsInstall",
-      "MasonToolsInstallSync",
-      "MasonToolsUpdate",
-      "MasonToolsUpdateSync",
-      "MasonToolsClean",
-    },
+    event = "VeryLazy",
   },
 }

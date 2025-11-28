@@ -131,6 +131,13 @@ return {
         on_attach = on_attach,
         capabilities = capabilities,
         filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        root_dir = function(fname)
+          -- Don't attach to .astro files - let Astro LSP handle them
+          if fname:match("%.astro$") then
+            return nil
+          end
+          return lspconfig.util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")(fname)
+        end,
         settings = {
           typescript = {
             inlayHints = {
@@ -185,6 +192,23 @@ return {
             },
             telemetry = {
               enable = false,
+            },
+          },
+        },
+      })
+
+      -- Python Language Server (Pyright)
+      lspconfig.pyright.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { "python" },
+        settings = {
+          python = {
+            analysis = {
+              autoSearchPaths = true,
+              diagnosticMode = "workspace",
+              useLibraryCodeForTypes = true,
+              typeCheckingMode = "basic",
             },
           },
         },

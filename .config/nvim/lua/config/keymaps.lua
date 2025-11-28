@@ -6,3 +6,6 @@
 vim.keymap.set({ "n", "v" }, "<leader>cf", function()
   require("conform").format({ lsp_fallback = true })
 end, { desc = "Format buffer" })
+
+-- Terminal mode: Use Esc to exit terminal mode
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })

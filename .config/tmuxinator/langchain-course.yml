@@ -2,7 +2,7 @@
 # Start with: tmuxinator start dev (or: mux start dev)
 
 name: langchain-course
-root: ~/Dev/courses/langchain/
+root: ~/Dev/courses/langchain-course/
 
 windows:
   - editor:

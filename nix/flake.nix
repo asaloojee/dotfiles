@@ -58,6 +58,7 @@
         pkgs.tmuxinator
         pkgs.tree
         pkgs.uutils-coreutils
+        pkgs.uv
         pkgs.yazi
         pkgs.zoxide
       ];

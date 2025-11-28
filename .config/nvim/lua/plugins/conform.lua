@@ -1,6 +1,9 @@
 return {
   "stevearc/conform.nvim",
   opts = {
+    default_format_opts = {
+      lsp_format = "fallback",
+    },
     formatters_by_ft = {
       javascript = { "prettier" },
       typescript = { "prettier" },
@@ -16,8 +19,9 @@ return {
       jsonc = { "prettier" },
       yaml = { "prettier" },
       markdown = { "prettier" },
-      astro = { "prettier" },
+      astro = { lsp_format = "prefer" },
       lua = { "stylua" },
+      python = { "ruff_format" },
     },
     formatters = {
       prettier = {

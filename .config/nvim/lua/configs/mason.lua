@@ -3,6 +3,7 @@ return {
     -- Formatters
     "prettier",
     "stylua",
+    "ruff",
 
     -- LSP Servers
     "css-lsp",
@@ -12,5 +13,6 @@ return {
     "html-lsp",
     "json-lsp",
     "lua-language-server",
+    "pyright",
   },
 }

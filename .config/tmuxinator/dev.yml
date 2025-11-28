@@ -8,9 +8,9 @@ windows:
   - editor:
       panes:
         -  # Empty pane for nvim - cd into needed directory
-  - terminal:
+  - claude:
       panes:
         -  # Empty pane for general commands
-  - claude:
+  - terminal:
       panes:
         -  # Empty pane for claude

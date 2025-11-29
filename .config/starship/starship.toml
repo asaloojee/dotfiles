@@ -53,12 +53,12 @@ diverged = ""    # Branch has diverged from remote
 
 # Working directory status
 conflicted = ""  # Merge conflicts
-deleted = ""     # Deleted files
+deleted = "x"     # Deleted files
 renamed = ""     # Renamed files
-modified = ""    # Modified files
-staged = ""      # Staged changes (added to index)
-untracked = ""   # Untracked files
-stashed = ""     # Stashed changes
+modified = "!"    # Modified files
+staged = "+"      # Staged changes (added to index)
+untracked = "?"   # Untracked files
+stashed = "$"     # Stashed changes
 
 [git_state]
 format = '\([$state( $progress_current/$progress_total)]($style)\) '

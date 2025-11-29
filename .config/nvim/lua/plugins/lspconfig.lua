@@ -202,8 +202,14 @@ return {
         on_attach = on_attach,
         capabilities = capabilities,
         filetypes = { "python" },
+        root_dir = function(fname)
+          return lspconfig.util.root_pattern("pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git")(
+            fname
+          )
+        end,
         settings = {
           python = {
+            pythonPath = vim.fn.exepath("python3") or vim.fn.exepath("python"),
             analysis = {
               autoSearchPaths = true,
               diagnosticMode = "workspace",
@@ -212,6 +218,12 @@ return {
             },
           },
         },
+        before_init = function(_, config)
+          local venv_path = vim.fn.getcwd() .. "/.venv"
+          if vim.fn.isdirectory(venv_path) == 1 then
+            config.settings.python.pythonPath = venv_path .. "/bin/python"
+          end
+        end,
       })
     end,
   },

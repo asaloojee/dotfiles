@@ -60,7 +60,7 @@
         pkgs.uutils-coreutils
         pkgs.uv
         pkgs.yazi
-# pkgs.zed-editor
+        # pkgs.zed-editor
         pkgs.zoxide
       ];
 
@@ -88,6 +88,7 @@
           "font-sf-mono"
           "font-sf-pro"
           "ghostty"
+          # "ollama"
           "proton-drive"
           "proton-mail"
           "proton-pass"

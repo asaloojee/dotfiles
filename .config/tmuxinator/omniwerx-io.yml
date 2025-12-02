@@ -1,0 +1,16 @@
+# tmuxinator configuration for omniwerx-io project
+# Start with: tmuxinator start omniwerx-io (or: mux start omniwerx-io)
+
+name: omniwerx-io
+root: ~/Dev/omniwerx-io/
+
+windows:
+  - editor:
+      panes:
+        -  # Empty pane for nvim - cd into needed directory
+  - claude:
+      panes:
+        -  # Empty pane for general commands
+  - terminal:
+      panes:
+        -  # Empty pane for claude

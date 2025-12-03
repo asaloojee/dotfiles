@@ -33,7 +33,7 @@
         pkgs.alejandra
         pkgs.bat
         pkgs.brave
-        pkgs.code-cursor
+        # pkgs.code-cursor
         pkgs.eza
         pkgs.fastfetch
         pkgs.fd
@@ -60,7 +60,7 @@
         pkgs.uutils-coreutils
         pkgs.uv
         pkgs.yazi
-        # pkgs.zed-editor
+        pkgs.zed-editor
         pkgs.zoxide
       ];
 

@@ -16,9 +16,29 @@
   },
   "ui_font_size": 16,
   "buffer_font_size": 16,
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "buffer_font_features": {
+    "calt": false,
+    "dlig": false,
+    "liga": false
+  },
   "theme": {
     "mode": "system",
     "light": "One Light",
     "dark": "Tokyo Night"
+  },
+  "terminal": {
+    "font_family": "JetBrainsMono Nerd Font",
+    "font_size": 18,
+    "font_features": {
+      "calt": false,
+      "dlig": false,
+      "liga": false
+    },
+    "shell": {
+      "program": "fish"
+    },
+    "blinking": "terminal_controlled",
+    "working_directory": "first_project_directory"
   }
 }

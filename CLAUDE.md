@@ -11,6 +11,7 @@ This is a **Nix Darwin-based dotfiles repository** for macOS (Apple Silicon) tha
 ### Primary System Management
 
 **Rebuild entire system:**
+
 ```bash
 darwin-rebuild switch --flake ~/dotfiles/nix#mac
 # Or use the alias:
@@ -18,6 +19,7 @@ rebuild
 ```
 
 This single command:
+
 - Installs/updates all Nix packages
 - Manages Homebrew packages and casks
 - Applies macOS system settings
@@ -28,6 +30,7 @@ This single command:
 ### Dotfile Management
 
 Dotfiles are symlinked using GNU Stow:
+
 ```bash
 cd ~/dotfiles
 stow .  # Creates symlinks in home directory
@@ -40,6 +43,7 @@ Stow configuration in `.stow-local-ignore` excludes `.git`, `.gitignore`, and `.
 ### Hybrid Package Management
 
 **Nix packages** (defined in `nix/flake.nix`):
+
 - CLI development tools (neovim, tmux, git, gh, gitui, gitleaks)
 - Language toolchains (go, rustup, uv for Python)
 - Shell utilities (fish, zsh, bat, eza, fd, ripgrep, zoxide, yazi, starship)
@@ -47,6 +51,7 @@ Stow configuration in `.stow-local-ignore` excludes `.git`, `.gitignore`, and `.
 - Fonts (JetBrains Mono, Iosevka, Maple Mono, Meslo LG, Monaspace - all Nerd Font variants)
 
 **Homebrew** (managed via Nix Darwin):
+
 - Development tools (bun, composer, tailscale, docker-desktop, claude, claude-code)
 - GUI applications (figma, ghostty, adobe-creative-cloud, proton suite, signal, zoom)
 - Mac App Store apps (PDFgear via mas)
@@ -82,6 +87,7 @@ Stow configuration in `.stow-local-ignore` excludes `.git`, `.gitignore`, and `.
 **Config:** `.config/fish/config.fish`
 
 **Key aliases and functions:**
+
 - `rebuild` → `darwin-rebuild switch --flake ~/dotfiles/nix#mac`
 - `cd` → `z` (zoxide smart directory jumping)
 - `ls` → `eza` (modern ls replacement)
@@ -91,6 +97,7 @@ Stow configuration in `.stow-local-ignore` excludes `.git`, `.gitignore`, and `.
 - `y` → `yazi` (file manager with directory tracking)
 
 **Features:**
+
 - Starship prompt integration
 - Git wrapper enforces commands run from repo root
 - PATH includes Nix, Homebrew, Cargo, Google Cloud SDK
@@ -100,6 +107,7 @@ Stow configuration in `.stow-local-ignore` excludes `.git`, `.gitignore`, and `.
 **Config:** `.zshrc`
 
 **Features:**
+
 - Zinit plugin manager
 - oh-my-posh prompt (alternative to Starship)
 - zsh-syntax-highlighting with custom colors
@@ -112,6 +120,7 @@ Stow configuration in `.stow-local-ignore` excludes `.git`, `.gitignore`, and `.
 **See `.config/nvim/CLAUDE.md` for comprehensive Neovim documentation.**
 
 Quick reference:
+
 - LazyVim-based configuration
 - LSP servers: vtsls (TS/JS), astro, css, html, json, lua, pyright
 - Formatters: prettier (100 char, single quotes), stylua, ruff
@@ -122,6 +131,7 @@ Quick reference:
 - Root detection disabled (stays in opened directory)
 
 **Plugin management:**
+
 ```bash
 :Lazy sync       # Update all plugins
 :Mason           # Manage LSP servers and formatters
@@ -132,6 +142,7 @@ Quick reference:
 **Config:** `.config/tmux/tmux.conf`
 
 **Key settings:**
+
 - Prefix: `Ctrl+Space` (not Ctrl+B)
 - Vi mode enabled
 - Tokyo Night theme
@@ -140,6 +151,7 @@ Quick reference:
 - Vim-tmux navigation integration
 
 **Plugin management:**
+
 ```bash
 # Install/update plugins: Ctrl+Space + I
 ```
@@ -151,6 +163,7 @@ Quick reference:
 **Config directory:** `.config/tmuxinator/`
 
 **Available sessions:**
+
 - `dev.yml` - General development (3 windows: editor, claude, terminal)
 - `omniwerx-io.yml` - Omniwerx project workspace
 - `pre-script-web.yml` - Pre-script web project
@@ -158,6 +171,7 @@ Quick reference:
 - `ts-course.yml` - TypeScript course
 
 **Usage:**
+
 ```bash
 mux start dev              # Start session
 mux list                   # List available sessions
@@ -169,6 +183,7 @@ mux edit dev               # Edit session config
 **Config:** `.config/ghostty/config`
 
 **Settings:**
+
 - Font: JetBrainsMono Nerd Font, size 18
 - Theme: tokyonight
 - Background: 90% opacity with blur
@@ -182,12 +197,14 @@ mux edit dev               # Edit session config
 **Config:** `.config/aerospace/aerospace.toml`
 
 **Features:**
+
 - i3/sway-like tiling for macOS
 - Keybindings: `Alt+Ctrl+Cmd` prefix
 - 5 workspaces with app auto-assignment
 - Gaps: 8px inner and outer
 
 **Workspace assignments:**
+
 - 1: Brave, Proton Mail
 - 2: Safari, Claude (todesktop)
 - 3: Figma
@@ -199,13 +216,16 @@ mux edit dev               # Edit session config
 ## macOS System Settings (via Nix)
 
 **Dock:**
+
 - Auto-hide enabled, static apps only, 16px tile size
 
 **Finder:**
+
 - Path bar and all extensions shown
 - Column view, new windows open in Documents
 
 **System:**
+
 - Dark mode forced
 - Fast key repeat (2)
 - Guest account disabled
@@ -213,6 +233,7 @@ mux edit dev               # Edit session config
 - Auto macOS updates enabled
 
 **Maintenance:**
+
 - Garbage collection: Weekly Monday 3am (keep 30 days)
 - Store optimization: Weekly Monday 4am
 
@@ -240,11 +261,13 @@ mux edit dev               # Edit session config
 ### Updating the System
 
 **Update all packages and rebuild:**
+
 ```bash
 rebuild
 ```
 
 **Update specific components:**
+
 ```bash
 # Neovim plugins
 :Lazy sync
@@ -258,6 +281,7 @@ rebuild
 ```
 
 **Update flake dependencies:**
+
 ```bash
 cd ~/dotfiles/nix
 nix flake update
@@ -267,11 +291,13 @@ darwin-rebuild switch --flake .#mac
 ### Adding New Packages
 
 **Nix packages:**
+
 1. Edit `nix/flake.nix`
 2. Add package to `environment.systemPackages`
 3. Run `rebuild`
 
 **Homebrew packages:**
+
 1. Edit `nix/flake.nix`
 2. Add to `homebrew.brews`, `homebrew.casks`, or `homebrew.masApps`
 3. Run `rebuild`
@@ -283,6 +309,7 @@ darwin-rebuild switch --flake .#mac
 3. Start session: `mux start <project-name>`
 
 Typical layout (see `dev.yml` for reference):
+
 ```yaml
 windows:
   - editor:
@@ -329,6 +356,7 @@ windows:
 ### Declarative System State
 
 The entire system configuration is declarative in `nix/flake.nix`. Changes are:
+
 1. Edit flake configuration
 2. Run `rebuild`
 3. System atomically transitions to new state
@@ -341,6 +369,7 @@ Each tool has dedicated config directory under `.config/`. Neovim plugins split 
 ### Theme Consistency
 
 Tokyo Night theme across:
+
 - Terminal (Ghostty)
 - Neovim
 - Tmux
@@ -362,7 +391,8 @@ The Fish shell has a custom git wrapper that enforces running git commands from 
 
 **IMPORTANT:** Claude Code uses Zsh, not Fish. The `cd` command is aliased to `zoxide` (`__zoxide_z`) in `.zshrc`, but Claude Code's shell snapshots don't capture all zoxide internals, causing `cd` to fail.
 
-**Solution:** Always use `builtin cd` instead of `cd` in bash commands:
+**Solution:** Always use `builtin cd` instead of `cd` in bash commands only when Claude Code executes commands:
+
 ```bash
 # Correct
 builtin cd /path/to/dir && command
@@ -374,6 +404,7 @@ cd /path/to/dir && command
 ### Root Directory Behavior (Neovim)
 
 Neovim stays in the directory where it was opened rather than jumping to project roots:
+
 ```lua
 vim.g.root_spec = { "cwd" }
 ```
@@ -435,10 +466,12 @@ stow .
 ### Removed Apps Still Opening Files (Launch Services Issue)
 
 If you remove an app from Nix (like Cursor or VS Code) but it still opens when you double-click files, it's because:
+
 1. Old Nix Darwin generations still reference the app (keeping it in `/nix/store/`)
 2. macOS Launch Services database has stale file associations
 
 **Fix:**
+
 ```bash
 # Delete old system generations
 sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system

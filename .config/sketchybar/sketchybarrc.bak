@@ -10,15 +10,14 @@ export HIGHLIGHT=0xffbb9af7
 export RED=0xfff7768e
 export GREEN=0xff9ece6a
 export YELLOW=0xffe0af68
-export PURPLE=0xff9d7cd8
 
 # General bar appearance
 sketchybar --bar \
   height=36 \
   position=top \
   sticky=on \
-  padding_left=8 \
-  padding_right=8 \
+  padding_left=12 \
+  padding_right=12 \
   color=$BG_PRIMARY \
   shadow=off \
   blur_radius=30 \
@@ -32,7 +31,7 @@ sketchybar --default \
   icon.color=$FG_PRIMARY \
   icon.padding_left=4 \
   icon.padding_right=4 \
-  label.font="JetBrainsMono Nerd Font:Medium:14.0" \
+  label.font="JetBrainsMono Nerd Font:Medium:13.0" \
   label.color=$FG_PRIMARY \
   label.padding_left=4 \
   label.padding_right=4 \
@@ -52,7 +51,7 @@ for i in {1..5}; do
     icon.highlight_color=$ACCENT \
     icon.padding_left=8 \
     icon.padding_right=8 \
-    label.font="JetBrainsMono Nerd Font:Medium:10.0" \
+    label.font="JetBrainsMono Nerd Font:Medium:13.0" \
     label.drawing=off \
     background.color=$BG_SECONDARY \
     background.border_color=$BG_SECONDARY \
@@ -69,69 +68,26 @@ done
 sketchybar --add item clock right \
   --set clock \
   update_freq=10 \
-  icon.font="SF Pro:Semibold:14.0" \
-  icon=􀧞 \
-  icon.color=$PURPLE \
-  icon.padding_left=8 \
-  icon.padding_right=4 \
+  icon= \
+  icon.color=$ACCENT \
+  icon.padding_left=10 \
+  icon.padding_right=10 \
   background.color=$BG_SECONDARY \
-  background.padding_left=4 \
-  background.padding_right=4 \
-  label.padding_right=8 \
+  background.padding_left=6 \
+  background.padding_right=6 \
   script="$HOME/.config/sketchybar/plugins/clock.sh"
-
-# WiFi
-# sketchybar --add item wifi right \
-#   --set wifi \
-#   update_freq=10 \
-#   icon.font="SF Pro:Semibold:16.0" \
-#   icon.color=$GREEN \
-#   icon.padding_left=12 \
-#   icon.padding_right=8 \
-#   background.color=$BG_SECONDARY \
-#   background.padding_left=4 \
-#   background.padding_right=4 \
-#   label.padding_right=12 \
-#   script="$HOME/.config/sketchybar/plugins/wifi.sh"
-
-# CPU
-sketchybar --add item cpu right \
-  --set cpu \
-  update_freq=5 \
-  icon.font="SF Pro:Semibold:16.0" \
-  icon.padding_left=8 \
-  icon.padding_right=4 \
-  label.padding_right=8 \
-  background.color=$BG_SECONDARY \
-  background.padding_left=4 \
-  background.padding_right=4 \
-  script="$HOME/.config/sketchybar/plugins/cpu.sh"
-
-# Memory
-sketchybar --add item memory right \
-  --set memory \
-  update_freq=5 \
-  icon.font="SF Pro:Semibold:16.0" \
-  icon.padding_left=8 \
-  icon.padding_right=4 \
-  label.padding_right=8 \
-  background.color=$BG_SECONDARY \
-  background.padding_left=4 \
-  background.padding_right=4 \
-  script="$HOME/.config/sketchybar/plugins/memory.sh"
 
 # Battery
 sketchybar --add item battery right \
   --set battery \
   update_freq=120 \
-  icon.font="SF Pro:Semibold:16.0" \
+  icon= \
   icon.color=$GREEN \
-  icon.padding_left=12 \
-  icon.padding_right=8 \
+  icon.padding_left=10 \
+  icon.padding_right=10 \
   background.color=$BG_SECONDARY \
-  background.padding_left=4 \
-  background.padding_right=4 \
-  label.padding_right=12 \
+  background.padding_left=6 \
+  background.padding_right=6 \
   script="$HOME/.config/sketchybar/plugins/battery.sh" \
   --subscribe battery system_woke power_source_change
 

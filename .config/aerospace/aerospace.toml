@@ -14,6 +14,12 @@ after-login-command = []
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = []
 
+# Notify SketchyBar when workspace changes
+exec-on-workspace-change = [
+  '/bin/bash', '-c',
+  '/run/current-system/sw/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE'
+]
+
 # Start AeroSpace at login
 start-at-login = true 
 
@@ -56,8 +62,8 @@ on-focus-changed = "move-mouse window-lazy-center"
 inner.horizontal = 8  
 inner.vertical =   8
 outer.left =       8
-outer.bottom =     8
-outer.top =        8
+outer.bottom =     4
+outer.top =        12
 outer.right =      8 
 
 # 'main' binding mode declaration

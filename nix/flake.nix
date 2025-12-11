@@ -44,6 +44,7 @@
         pkgs.gitui
         pkgs.go
         pkgs.hidden-bar
+        pkgs.jq
         pkgs.mkalias
         pkgs.neovim
         pkgs.obsidian

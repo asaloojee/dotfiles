@@ -387,20 +387,6 @@ Consistent aliases across Fish and Zsh. Tool wrappers (git, yazi) enhance functi
 
 The Fish shell has a custom git wrapper that enforces running git commands from the repository root. This prevents accidentally running git commands in subdirectories.
 
-### Shell Usage (Claude Code)
-
-**IMPORTANT:** Claude Code uses Zsh, not Fish. The `cd` command is aliased to `zoxide` (`__zoxide_z`) in `.zshrc`, but Claude Code's shell snapshots don't capture all zoxide internals, causing `cd` to fail.
-
-**Solution:** Always use `builtin cd` instead of `cd` in bash commands only when Claude Code executes commands:
-
-```bash
-# Correct
-builtin cd /path/to/dir && command
-
-# Incorrect - will fail
-cd /path/to/dir && command
-```
-
 ### Root Directory Behavior (Neovim)
 
 Neovim stays in the directory where it was opened rather than jumping to project roots:

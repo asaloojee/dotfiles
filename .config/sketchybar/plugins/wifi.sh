@@ -1,23 +1,21 @@
 #!/bin/bash
 
 # WiFi status with SF Symbols icons
-# Get WiFi network name using networksetup (more reliable)
-WIFI_DEVICE=$(networksetup -listallhardwareports | awk '/Wi-Fi|AirPort/{getline; print $2}')
-SSID=$(networksetup -getairportnetwork "$WIFI_DEVICE" | awk -F': ' '{print $2}')
+# Uses system_profiler for reliable WiFi info on modern macOS
 
-if [ "$SSID" = "You are not associated with an AirPort network." ] || [ -z "$SSID" ]; then
-  # No WiFi connection
-  ICON="􀙈"  # wifi.slash
-  LABEL="Disconnected"
+# Check if WiFi interface (en0) is connected by checking for IP address
+WIFI_IP=$(ifconfig en0 2>/dev/null | grep "inet " | awk '{print $2}')
+
+if [ -z "$WIFI_IP" ]; then
+  # No WiFi connection (no IP address)
+  ICON="􀙈"         # wifi.slash
   COLOR=0xfff7768e # Red
 else
-  # Connected - show SSID
-  ICON="􀙇"  # wifi
-  LABEL="$SSID"
-  COLOR=0xff9ece6a # Green
+  # WiFi is connected
+  ICON="􀙇"         # wifi
+  COLOR=0xffc0caf5 # foreground primary
 fi
 
 sketchybar --set wifi \
   icon="$ICON" \
-  label="$LABEL" \
   icon.color="$COLOR"

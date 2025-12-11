@@ -1,60 +1,102 @@
 #!/bin/bash
 
-source "$CONFIG_DIR/colors.sh"
+# Tokyo Night color scheme to match your theme
+export BG_PRIMARY=0xff1a1b26
+export BG_SECONDARY=0xff24283b
+export FG_PRIMARY=0xffc0caf5
+export FG_SECONDARY=0xffa9b1d6
+export ACCENT=0xff7aa2f7
+export HIGHLIGHT=0xffbb9af7
+export RED=0xfff7768e
+export GREEN=0xff9ece6a
+export YELLOW=0xffe0af68
 
-# This is a demo config to showcase some of the most important commands.
-# It is meant to be changed and configured, as it is intentionally kept sparse.
-# For a (much) more advanced configuration example see my dotfiles:
-# https://github.com/FelixKratz/dotfiles
+# General bar appearance
+sketchybar --bar \
+  height=32 \
+  position=top \
+  sticky=on \
+  padding_left=10 \
+  padding_right=10 \
+  color=$BG_PRIMARY \
+  shadow=off \
+  blur_radius=30 \
+  margin=0 \
+  y_offset=0
 
-PLUGIN_DIR="$CONFIG_DIR/plugins"
-ITEM_DIR="$CONFIG_DIR/items"
+# Default item settings
+sketchybar --default \
+  updates=when_shown \
+  icon.font="JetBrainsMono Nerd Font:Bold:14.0" \
+  icon.color=$FG_PRIMARY \
+  icon.padding_left=4 \
+  icon.padding_right=4 \
+  label.font="JetBrainsMono Nerd Font:Medium:13.0" \
+  label.color=$FG_PRIMARY \
+  label.padding_left=4 \
+  label.padding_right=4 \
+  background.padding_left=4 \
+  background.padding_right=4 \
+  background.height=24 \
+  background.corner_radius=6
 
-##### Bar Appearance #####
-# Configuring the general appearance of the bar.
-# These are only some of the options available. For all options see:
-# https://felixkratz.github.io/SketchyBar/config/bar
-# If you are looking for other colors, see the color picker:
-# https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
+# Left side - AeroSpace workspaces
+for i in {1..5}; do
+  sketchybar --add item space.$i left \
+    --set space.$i \
+      icon=$i \
+      icon.highlight_color=$ACCENT \
+      background.color=$BG_SECONDARY \
+      background.drawing=on \
+      label.drawing=off \
+      script="$HOME/.config/sketchybar/plugins/aerospace.sh $i" \
+    --subscribe space.$i aerospace_workspace_change
+done
 
-sketchybar --bar position=top \
-                height=36 \
-                blur_radius=30 \ 
-                color=$BAR_COLOR
+# Separator
+sketchybar --add item separator_left left \
+  --set separator_left \
+    icon="" \
+    icon.font="JetBrainsMono Nerd Font:Regular:16.0" \
+    background.drawing=off \
+    label.drawing=off \
+    icon.color=$FG_SECONDARY
 
-##### Changing Defaults #####
-# We now change some default values, which are applied to all further items.
-# For a full list of all available item properties see:
-# https://felixkratz.github.io/SketchyBar/config/items
+# Front app
+sketchybar --add item front_app left \
+  --set front_app \
+    icon.drawing=off \
+    background.color=$BG_SECONDARY \
+    script="$HOME/.config/sketchybar/plugins/front_app.sh" \
+  --subscribe front_app front_app_switched
 
-default=(
-  padding_left=5
-  padding_right=5
-  icon.font="SF Pro:Semibold:14.0"
-  label.font="JetBrainsMono Nerd Font:Semibold:14.0"
-  icon.color=$WHITE
-  label.color=$WHITE
-  icon.padding_left=8
-  icon.padding_right=4
-  label.padding_left=8
-  label.padding_right=8
-  background.color=$ITEM_BG_COLOR
-  background.corner_radius=4
-  background.height=24
-)
-sketchybar --default "${default[@]}"
+# Right side - System info
+# Clock
+sketchybar --add item clock right \
+  --set clock \
+    update_freq=10 \
+    icon= \
+    icon.color=$ACCENT \
+    background.color=$BG_SECONDARY \
+    script="$HOME/.config/sketchybar/plugins/clock.sh"
 
-# Left Side Items
-source $ITEM_DIR/spaces.sh
-source $ITEM_DIR/front_app.sh
+# Battery
+sketchybar --add item battery right \
+  --set battery \
+    update_freq=120 \
+    icon.color=$GREEN \
+    background.color=$BG_SECONDARY \
+    script="$HOME/.config/sketchybar/plugins/battery.sh" \
+  --subscribe battery system_woke power_source_change
 
-# Right Side of Notch Items
-# source $ITEM_DIR/media.sh
+# Volume
+sketchybar --add item volume right \
+  --set volume \
+    icon= \
+    icon.color=$YELLOW \
+    background.color=$BG_SECONDARY \
+    script="$HOME/.config/sketchybar/plugins/volume.sh" \
+  --subscribe volume volume_change
 
-# Right Side Items
-source $ITEM_DIR/calendar.sh
-source $ITEM_DIR/battery.sh
-# source $ITEM_DIR/cpu.sh
-
-##### Force all scripts to run the first time (never do this in a script) #####
+# Finalize
 sketchybar --update

@@ -26,6 +26,7 @@ alias g="gitui"
 alias mux="tmuxinator"
 alias rebuild="sudo darwin-rebuild switch --flake ~/dotfiles/nix#mac"
 alias n="nvim"
+alias cc="claude"
 
 # Yazi file manager with directory changing
 function y
@@ -51,7 +52,7 @@ function gc
 end
 
 # Jump to git repository root
-function g-root
+function gr
     set -l root (command git rev-parse --show-toplevel 2>/dev/null)
     if test -n "$root"
         builtin cd "$root"
@@ -79,7 +80,7 @@ fish_add_path $BUN_INSTALL/bin
 # Use Bun as the default Node.js runtime
 # Bun is highly compatible with Node.js and much faster
 alias node="bun"
-alias node-real="command node"  # Access real Node.js if needed
+alias node-real="command node" # Access real Node.js if needed
 
 # Bun shell completions (enable tab completion)
 if test -f "$BUN_INSTALL/_bun"

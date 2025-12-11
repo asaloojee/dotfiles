@@ -45,27 +45,71 @@ sketchybar --default \
 sketchybar --add event aerospace_workspace_change
 
 for i in {1..5}; do
-  sketchybar --add item space.$i left \
-    --set space.$i \
-    icon=$i \
-    icon.font="sketchybar-app-font:Regular:16.0" \
-    icon.highlight_color=$ACCENT \
-    icon.padding_left=8 \
-    icon.padding_right=8 \
-    label.font="JetBrainsMono Nerd Font:Medium:10.0" \
+  # Create three items per workspace: number, icon, and name
+  # Workspace number
+  sketchybar --add item space.$i.number left \
+    --set space.$i.number \
+    icon="$i" \
+    icon.font="JetBrainsMono Nerd Font:Bold:16.0" \
+    icon.color=$FG_PRIMARY \
+    icon.padding_left=6 \
+    icon.padding_right=2 \
     label.drawing=off \
+    background.drawing=off
+
+  # App icon (sketchybar-app-font)
+  sketchybar --add item space.$i.icon left \
+    --set space.$i.icon \
+    icon.font="sketchybar-app-font:Regular:18.0" \
+    icon.color=$FG_PRIMARY \
+    icon.padding_left=2 \
+    icon.padding_right=2 \
+    label.drawing=off \
+    background.drawing=off \
+    drawing=off
+
+  # App name
+  sketchybar --add item space.$i.name left \
+    --set space.$i.name \
+    label.font="JetBrainsMono Nerd Font:Bold:14.0" \
+    label.color=$FG_PRIMARY \
+    label.padding_left=2 \
+    label.padding_right=6 \
+    icon.drawing=off \
+    background.drawing=off \
+    drawing=off
+
+  # Bracket to group all three items with shared background
+  sketchybar --add bracket space.$i \
+    space.$i.number \
+    space.$i.icon \
+    space.$i.name \
+    --set space.$i \
     background.color=$BG_SECONDARY \
     background.border_color=$BG_SECONDARY \
-    background.border_width=2 \
+    background.border_width=0 \
     background.corner_radius=6 \
     background.height=26 \
-    background.drawing=off \
-    script="$HOME/.config/sketchybar/plugins/aerospace.sh $i" \
+    background.drawing=on \
+    click_script="aerospace workspace $i" \
     --subscribe space.$i aerospace_workspace_change front_app_switched
+
+  # Set the script on the bracket
+  sketchybar --set space.$i script="$HOME/.config/sketchybar/plugins/aerospace.sh $i"
+
+  # Add spacer between workspaces (except after the last one)
+  if [ $i -lt 5 ]; then
+    sketchybar --add item space.spacer.$i left \
+      --set space.spacer.$i \
+      width=6 \
+      background.drawing=off \
+      icon.drawing=off \
+      label.drawing=off
+  fi
 done
 
 # Right side - System info
-# Clock
+# Clock - Click to open Calendar
 sketchybar --add item clock right \
   --set clock \
   update_freq=10 \
@@ -78,62 +122,97 @@ sketchybar --add item clock right \
   background.padding_left=4 \
   background.padding_right=4 \
   label.padding_right=8 \
-  script="$HOME/.config/sketchybar/plugins/clock.sh"
+  script="$HOME/.config/sketchybar/plugins/clock.sh" \
+  click_script="open -a Calendar"
 
-# WiFi
-# sketchybar --add item wifi right \
-#   --set wifi \
-#   update_freq=10 \
-#   icon.font="SF Pro:Semibold:16.0" \
-#   icon.color=$GREEN \
-#   icon.padding_left=12 \
-#   icon.padding_right=8 \
-#   background.color=$BG_SECONDARY \
-#   background.padding_left=4 \
-#   background.padding_right=4 \
-#   label.padding_right=12 \
-#   script="$HOME/.config/sketchybar/plugins/wifi.sh"
-
-# CPU
-sketchybar --add item cpu right \
-  --set cpu \
-  update_freq=5 \
-  icon.font="SF Pro:Semibold:16.0" \
-  icon.padding_left=8 \
-  icon.padding_right=4 \
-  label.padding_right=8 \
-  background.color=$BG_SECONDARY \
-  background.padding_left=4 \
-  background.padding_right=4 \
-  script="$HOME/.config/sketchybar/plugins/cpu.sh"
-
-# Memory
-sketchybar --add item memory right \
-  --set memory \
-  update_freq=5 \
-  icon.font="SF Pro:Semibold:16.0" \
-  icon.padding_left=8 \
-  icon.padding_right=4 \
-  label.padding_right=8 \
-  background.color=$BG_SECONDARY \
-  background.padding_left=4 \
-  background.padding_right=4 \
-  script="$HOME/.config/sketchybar/plugins/memory.sh"
-
-# Battery
+# Battery - Click to open Battery settings
 sketchybar --add item battery right \
   --set battery \
   update_freq=120 \
   icon.font="SF Pro:Semibold:16.0" \
   icon.color=$GREEN \
-  icon.padding_left=12 \
+  icon.padding_left=8 \
+  icon.padding_right=4 \
+  background.color=$BG_SECONDARY \
+  background.padding_left=4 \
+  background.padding_right=4 \
+  label.padding_right=8 \
+  script="$HOME/.config/sketchybar/plugins/battery.sh" \
+  click_script="open x-apple.systempreferences:com.apple.preference.battery" \
+  --subscribe battery system_woke power_source_change
+
+# WiFi - Click to open Network settings
+sketchybar --add item wifi right \
+  --set wifi \
+  update_freq=10 \
+  icon.font="SF Pro:Semibold:16.0" \
+  icon.color=$FG_PRIMARY \
+  icon.padding_left=8 \
   icon.padding_right=8 \
   background.color=$BG_SECONDARY \
   background.padding_left=4 \
   background.padding_right=4 \
-  label.padding_right=12 \
-  script="$HOME/.config/sketchybar/plugins/battery.sh" \
-  --subscribe battery system_woke power_source_change
+  label.drawing=off \
+  script="$HOME/.config/sketchybar/plugins/wifi.sh" \
+  click_script="open x-apple.systempreferences:com.apple.Network-Settings.extension"
+
+# Caffeinate - Click to toggle caffeinate
+sketchybar --add event caffeinate_toggle \
+  --add item caffeinate right \
+  --set caffeinate \
+  update_freq=10 \
+  icon.font="SF Pro:Semibold:16.0" \
+  icon.color=$YELLOW \
+  icon.padding_left=8 \
+  icon.padding_right=8 \
+  background.color=$BG_SECONDARY \
+  background.padding_left=4 \
+  background.padding_right=4 \
+  label.drawing=off \
+  script="$HOME/.config/sketchybar/plugins/caffeinate.sh" \
+  click_script="$HOME/.config/sketchybar/plugins/caffeinate_toggle.sh" \
+  --subscribe caffeinate caffeinate_toggle
+
+# Docker - Click to open Docker Desktop
+sketchybar --add item docker right \
+  --set docker \
+  update_freq=10 \
+  icon.font="sketchybar-app-font:Regular:18.0" \
+  icon.color=$ACCENT \
+  icon.padding_left=8 \
+  icon.padding_right=8 \
+  background.color=$BG_SECONDARY \
+  background.padding_left=4 \
+  background.padding_right=4 \
+  label.drawing=off \
+  script="$HOME/.config/sketchybar/plugins/docker.sh" \
+  click_script="open -a Docker"
+
+# CPU
+# sketchybar --add item cpu right \
+#   --set cpu \
+#   update_freq=5 \
+#   icon.font="SF Pro:Semibold:16.0" \
+#   icon.padding_left=8 \
+#   icon.padding_right=4 \
+#   label.padding_right=8 \
+#   background.color=$BG_SECONDARY \
+#   background.padding_left=4 \
+#   background.padding_right=4 \
+#   script="$HOME/.config/sketchybar/plugins/cpu.sh"
+#
+# # Memory
+# sketchybar --add item memory right \
+#   --set memory \
+#   update_freq=5 \
+#   icon.font="SF Pro:Semibold:16.0" \
+#   icon.padding_left=8 \
+#   icon.padding_right=4 \
+#   label.padding_right=8 \
+#   background.color=$BG_SECONDARY \
+#   background.padding_left=4 \
+#   background.padding_right=4 \
+#   script="$HOME/.config/sketchybar/plugins/memory.sh"
 
 # Finalize
 sketchybar --update

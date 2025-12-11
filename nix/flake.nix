@@ -6,6 +6,8 @@
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
     alejandra.url = "github:kamadorueda/alejandra";
     alejandra.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -15,6 +17,7 @@
     nix-darwin,
     nixpkgs,
     nix-homebrew,
+    home-manager,
     alejandra,
     # ...
   }: let
@@ -208,6 +211,12 @@
             # User owning the Homebrew prefix
             user = "asaloojee";
           };
+        }
+        home-manager.darwinModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.asaloojee = import ./home.nix;
         }
       ];
     };

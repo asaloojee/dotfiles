@@ -108,7 +108,7 @@
         onActivation.upgrade = true;
       };
 
-      services.sketchybar.enable = true;
+      services.sketchybar.enable = false;
 
       fonts.packages = [
         pkgs.fira
@@ -121,7 +121,7 @@
         pkgs.nerd-fonts.meslo-lg
         pkgs.nerd-fonts.monaspace
         pkgs.noto-fonts
-        pkgs.sketchybar-app-font
+        # pkgs.sketchybar-app-font
       ];
 
       system.activationScripts.applications.text = let

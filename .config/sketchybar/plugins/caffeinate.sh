@@ -10,8 +10,8 @@ if pgrep -q caffeinate; then
   COLOR=0xffe0af68 # Yellow (warning that sleep is prevented)
 else
   # Normal state (sleep allowed)
-  ICON="􀸘"         # moon.zzz.fill (can sleep)
-  COLOR=0xffe0af68 # Yellow (warning that sleep is prevented)
+  ICON="􀸙"         # moon.zzz.fill (can sleep)
+  COLOR=0xff565f89 # muted grey
 fi
 
 sketchybar --set caffeinate \

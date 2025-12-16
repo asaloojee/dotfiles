@@ -43,7 +43,7 @@
         pkgs.gitleaks
         pkgs.gitui
         pkgs.go
-        pkgs.hidden-bar
+        pkgs.ice-bar  
         pkgs.jq
         pkgs.mkalias
         pkgs.neovim
@@ -90,6 +90,7 @@
           "font-sf-pro"
           "ghostty"
           # "ollama"
+          "handbrake-app"
           "proton-drive"
           "proton-mail"
           "proton-pass"

@@ -465,11 +465,11 @@ sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system
 # Garbage collect to remove app from Nix store
 sudo nix-collect-garbage -d
 
-# Rebuild Launch Services database
-/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain system -domain user
-
-# Restart Finder if needed
+# Restart Finder to clear Launch Services cache
 killall Finder
+
+# Verify app is removed from Nix store
+ls /nix/store/*app-name* 2>/dev/null  # Should return "no matches found"
 ```
 
 ## Platform Information

@@ -31,6 +31,7 @@
       environment.systemPackages = [
         pkgs.aerospace
         pkgs.alejandra
+        pkgs.ast-grep
         pkgs.bat
         pkgs.brave
         # pkgs.code-cursor
@@ -43,7 +44,7 @@
         pkgs.gitleaks
         pkgs.gitui
         pkgs.go
-        pkgs.ice-bar  
+        pkgs.ice-bar
         pkgs.jq
         pkgs.mkalias
         pkgs.neovim

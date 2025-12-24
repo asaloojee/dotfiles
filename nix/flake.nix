@@ -55,6 +55,7 @@
         # pkgs.raycast
         pkgs.ripgrep
         pkgs.rustup
+# pkgs.sketchybar
         pkgs.slack
         pkgs.starship
         pkgs.stow
@@ -101,7 +102,7 @@
           # "ollama"
           "handbrake-app"
           "karabiner-elements"  # Needs stable paths for macOS permissions
-          "leader-key"
+"leader-key"
           "proton-drive"
           "proton-mail"
           "proton-pass"
@@ -136,7 +137,7 @@
         pkgs.nerd-fonts.meslo-lg
         pkgs.nerd-fonts.monaspace
         pkgs.noto-fonts
-        # pkgs.sketchybar-app-font
+#        pkgs.sketchybar-app-font
       ];
 
       system.activationScripts.applications.text = let

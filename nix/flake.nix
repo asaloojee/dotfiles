@@ -48,7 +48,6 @@
         pkgs.go
         pkgs.ice-bar
         pkgs.jq
-        pkgs.karabiner-elements
         pkgs.maccy
         pkgs.mkalias
         pkgs.neovim
@@ -101,6 +100,7 @@
           "ghostty"
           # "ollama"
           "handbrake-app"
+          "karabiner-elements"  # Needs stable paths for macOS permissions
           "leader-key"
           "proton-drive"
           "proton-mail"

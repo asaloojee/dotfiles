@@ -1,0 +1,125 @@
+{
+  "actions" : [
+    {
+      "key" : "f",
+      "type" : "folder",
+      "value" : "/Users/asaloojee"
+    },
+    {
+      "key" : "b",
+      "type" : "application",
+      "value" : "/nix/store/fan9iq3gspqi7i8adai23jzlfcp604xx-brave-1.80.113/Applications/Brave Browser.app"
+    },
+    {
+      "key" : "g",
+      "type" : "application",
+      "value" : "/Applications/Ghostty.app"
+    },
+    {
+      "actions" : [
+        {
+          "actions" : [
+            {
+              "key" : "s",
+              "type" : "application",
+              "value" : "/Applications/Safari.app"
+            },
+            {
+              "key" : "i",
+              "type" : "application",
+              "value" : "/System/Applications/Music.app"
+            },
+            {
+              "key" : "m",
+              "type" : "application",
+              "value" : "/System/Applications/Messages.app"
+            }
+          ],
+          "iconPath" : "apple.logo",
+          "key" : "a",
+          "type" : "group"
+        },
+        {
+          "actions" : [
+            {
+              "key" : "c",
+              "type" : "application",
+              "value" : "/Applications/Claude.app"
+            },
+            {
+              "key" : "d",
+              "type" : "application",
+              "value" : "/Applications/Docker.app"
+            },
+            {
+              "key" : "f",
+              "type" : "application",
+              "value" : "/Applications/Figma.app"
+            },
+            {
+              "key" : "o",
+              "type" : "application",
+              "value" : "/nix/store/8ccclp36gmyzipwdwpga5220w135k4sd-obsidian-1.8.10/Applications/Obsidian.app"
+            }
+          ],
+          "iconPath" : "apple.terminal.fill",
+          "key" : "d",
+          "type" : "group"
+        },
+        {
+          "actions" : [
+            {
+              "key" : "m",
+              "type" : "application",
+              "value" : "/Applications/Proton Mail.app"
+            },
+            {
+              "key" : "p",
+              "type" : "application",
+              "value" : "/Applications/Proton Pass.app"
+            },
+            {
+              "key" : "v",
+              "type" : "application",
+              "value" : "/Applications/ProtonVPN.app"
+            },
+            {
+              "key" : "d",
+              "type" : "application",
+              "value" : "/Applications/Proton Drive.app"
+            }
+          ],
+          "iconPath" : "diamond.fill",
+          "key" : "p",
+          "type" : "group"
+        },
+        {
+          "actions" : [
+            {
+              "key" : "d",
+              "type" : "application",
+              "value" : "/Applications/Discord.app"
+            },
+            {
+              "key" : "s",
+              "type" : "application",
+              "value" : "/nix/store/5hhzf5d4k1iysx1cbszgblhsmpyphcd8-slack-4.42.120/Applications/Slack.app"
+            },
+            {
+              "key" : "t",
+              "type" : "application",
+              "value" : "/nix/store/i5rc13s2niyw2mngysm5r0ciylcvfvzj-telegram-desktop-5.15.4/Applications/Telegram.app"
+            }
+          ],
+          "iconPath" : "message.fill",
+          "key" : "m",
+          "type" : "group"
+        }
+      ],
+      "iconPath" : "circle.grid.2x2.fill",
+      "key" : "o",
+      "type" : "group"
+    }
+  ],
+  "type" : "group"
+}

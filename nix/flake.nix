@@ -79,8 +79,13 @@
           "bun"
           "composer"
           "mas"
-          "tailscale"
         ];
+
+        # Services that should not be upgraded during rebuild
+        # (prevents issues with running daemons)
+        extraConfig = ''
+          brew "tailscale", restart_service: :changed
+        '';
         casks = [
           "adobe-creative-cloud"
           "claude"
@@ -118,15 +123,7 @@
       services.sketchybar.enable = false;
 
       # JankyBorders - window borders for focused windows
-      services.jankyborders = {
-        enable = true;
-        style = "round";
-        width = 4.0;
-        hidpi = true;
-        active_color = "0xffbb9af7";  # Tokyo Night purple to match your theme
-        background_color = "0x00000000";  # Transparent
-        blacklist = ["Leader Key" "Finder"];
-      };
+      services.jankyborders.enable = false;
 
       fonts.packages = [
         pkgs.fira

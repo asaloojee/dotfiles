@@ -30,7 +30,7 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # See: https://nikitabobko.github.io/AeroSpace/guide#layouts
 # The 'accordion-padding' specifies the size of accordion padding
 # You can set 0 to disable the padding feature
-accordion-padding = 30
+accordion-padding = 20
 
 # Possible values: tiles|accordion
 default-root-container-layout = 'accordion'
@@ -51,12 +51,12 @@ key-mapping.preset = 'qwerty'
 # Gaps between windows (inner-*) and between monitor edges (outer-*).
 # Uniform gaps with larger top padding for SketchyBar
 [gaps]
-inner.horizontal = 6
-inner.vertical =   6
-outer.left =       6
-outer.bottom =     6
-outer.top =        42  # Larger top gap to accommodate SketchyBar
-outer.right =      6
+inner.horizontal = 8
+inner.vertical =   8
+outer.left =       8
+outer.bottom =     8
+outer.top =        [{ monitor."DELL S2722QC" = 44 }, 8]
+outer.right =      8
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes

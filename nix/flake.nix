@@ -79,7 +79,6 @@
           "bun"
           "composer"
           "mas"
-          "tailscale"
         ];
         casks = [
           "adobe-creative-cloud"
@@ -116,6 +115,22 @@
       };
 
       services.sketchybar.enable = false;
+
+      # Tailscale VPN service
+      services.tailscale = {
+        enable = true;
+      };
+
+      # JankyBorders - window borders for focused windows
+      services.jankyborders = {
+        enable = true;
+        style = "round";
+        width = 7.5;
+        hidpi = true;
+        active_color = "0xffbb9af7";  # Tokyo Night purple to match your theme
+        background_color = "0x00000000";  # Transparent
+        blacklist = ["Leader Key" "Finder"];
+      };
 
       fonts.packages = [
         pkgs.fira

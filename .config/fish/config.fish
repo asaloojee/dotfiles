@@ -24,7 +24,66 @@ fish_add_path /run/current-system/sw/bin
 alias ls="eza --icons=always"
 alias g="gitui"
 alias mux="tmuxinator"
-alias rebuild="sudo darwin-rebuild switch --flake ~/dotfiles/nix#mac"
+# Fully shutdown tailscale (useful for manual troubleshooting)
+function tailscale-stop
+    echo "🛑 Shutting down tailscale completely..."
+    tailscale down 2>/dev/null || true
+    brew services stop tailscale 2>/dev/null || true
+    sudo brew services stop tailscale 2>/dev/null || true
+    launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.tailscale.plist 2>/dev/null || true
+    sudo launchctl unload /Library/LaunchDaemons/homebrew.mxcl.tailscale.plist 2>/dev/null || true
+    pkill -9 tailscaled 2>/dev/null || true
+    sudo pkill -9 tailscaled 2>/dev/null || true
+    echo "✅ Tailscale fully stopped"
+end
+
+# Fully start tailscale
+function tailscale-start
+    echo "🚀 Starting tailscale..."
+    sudo brew services start tailscale
+    sleep 2
+    tailscale up 2>/dev/null || echo "⚠️  Run 'tailscale up' manually if needed"
+    echo "✅ Tailscale started"
+end
+
+# Rebuild system with automatic service management
+function rebuild
+    # Fully shutdown tailscale before rebuild
+    echo "🛑 Shutting down tailscale completely..."
+
+    # 1. Disconnect from tailscale network
+    tailscale down 2>/dev/null || true
+
+    # 2. Stop brew service (tries both user and system level)
+    brew services stop tailscale 2>/dev/null || true
+    sudo brew services stop tailscale 2>/dev/null || true
+
+    # 3. Unload launchd agents/daemons
+    launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.tailscale.plist 2>/dev/null || true
+    sudo launchctl unload /Library/LaunchDaemons/homebrew.mxcl.tailscale.plist 2>/dev/null || true
+
+    # 4. Kill any remaining tailscaled processes
+    pkill -9 tailscaled 2>/dev/null || true
+    sudo pkill -9 tailscaled 2>/dev/null || true
+
+    echo "✅ Tailscale fully stopped"
+    sleep 1
+
+    # Run darwin-rebuild
+    echo "🔄 Running darwin-rebuild..."
+    sudo darwin-rebuild switch --flake ~/dotfiles/nix#mac
+
+    # Restart tailscale after successful rebuild
+    if test $status -eq 0
+        echo "✅ Rebuild successful, restarting tailscale..."
+        sudo brew services start tailscale
+        sleep 2
+        tailscale up 2>/dev/null || echo "⚠️  Run 'tailscale up' manually if needed"
+    else
+        echo "❌ Rebuild failed, tailscale not restarted"
+        return 1
+    end
+end
 alias n="nvim"
 alias cc="claude"
 

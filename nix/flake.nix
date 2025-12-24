@@ -35,6 +35,7 @@
         pkgs.bat
         pkgs.brave
         # pkgs.code-cursor
+        pkgs.doppler
         pkgs.eza
         pkgs.fastfetch
         pkgs.fd
@@ -43,13 +44,16 @@
         pkgs.git
         pkgs.gitleaks
         pkgs.gitui
+        pkgs.gnupg
         pkgs.go
         pkgs.ice-bar
         pkgs.jq
+        pkgs.karabiner-elements
+        pkgs.maccy
         pkgs.mkalias
         pkgs.neovim
         pkgs.obsidian
-        pkgs.raycast
+        # pkgs.raycast
         pkgs.ripgrep
         pkgs.rustup
         pkgs.slack
@@ -62,7 +66,7 @@
         pkgs.uutils-coreutils
         pkgs.uv
         pkgs.yazi
-        pkgs.zed-editor
+        # pkgs.zed-editor
         pkgs.zoxide
       ];
 
@@ -92,6 +96,7 @@
           "ghostty"
           # "ollama"
           "handbrake-app"
+          "leader-key"
           "proton-drive"
           "proton-mail"
           "proton-pass"

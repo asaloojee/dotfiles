@@ -48,7 +48,7 @@ end
 
 # Rebuild system configuration
 function rebuild
-    echo "🔄 Running darwin-rebuild..."
+    echo "🔄 Rebuilding Nix flake..."
     sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac
 end
 alias n="nvim"

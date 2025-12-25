@@ -33,14 +33,12 @@
         pkgs.alejandra
         pkgs.ast-grep
         pkgs.bat
-        pkgs.brave
         # pkgs.code-cursor
         pkgs.doppler
         pkgs.eza
         pkgs.fastfetch
         pkgs.fd
         pkgs.fish
-        pkgs.gh
         pkgs.git
         pkgs.gitleaks
         pkgs.gitui
@@ -48,22 +46,18 @@
         pkgs.go
         pkgs.ice-bar
         pkgs.jq
-        pkgs.maccy
         pkgs.mkalias
         pkgs.neovim
-        pkgs.obsidian
         # pkgs.raycast
         pkgs.ripgrep
         pkgs.rustup
-# pkgs.sketchybar
-        pkgs.slack
+        # pkgs.sketchybar
         pkgs.starship
         pkgs.stow
-        pkgs.telegram-desktop
         pkgs.tmux
         pkgs.tmuxinator
         pkgs.tree
-        pkgs.uutils-coreutils
+        # pkgs.uutils-coreutils
         pkgs.uv
         pkgs.yazi
         # pkgs.zed-editor
@@ -88,6 +82,7 @@
         '';
         casks = [
           "adobe-creative-cloud"
+          "brave-browser"
           "claude"
           "claude-code"
           "discord"
@@ -100,15 +95,19 @@
           "font-sf-pro"
           "ghostty"
           # "ollama"
+          "obsidian"
           "handbrake-app"
           "karabiner-elements"  # Needs stable paths for macOS permissions
-"leader-key"
+          "leader-key"
+          "maccy"
           "proton-drive"
           "proton-mail"
           "proton-pass"
           "protonvpn"
           "sf-symbols"
           "signal"
+          "slack"
+          "telegram"
           "zoom"
         ];
 

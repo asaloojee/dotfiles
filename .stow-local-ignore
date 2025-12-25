@@ -6,4 +6,4 @@
 \.DS_Store
 
 # ignore claude.md file for dotfiles repo
-.CLAUDE.md
+CLAUDE.md

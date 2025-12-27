@@ -161,10 +161,6 @@ alt-shift-l = ['join-with right', 'mode service']
 if.app-id = 'com.figma.Desktop'
 run = "move-node-to-workspace 3"
 
-#[[on-window-detected]]
-#if.app-id = 'com.mitchellh.ghostty'
-#run = "move-node-to-workspace 2"
-
 [[on-window-detected]]
 if.app-id = 'com.apple.Music'
 run = ["layout floating", "move-node-to-workspace 5"]
@@ -176,10 +172,6 @@ run = "move-node-to-workspace 1"
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = "move-node-to-workspace 4"
-
-#[[on-window-detected]]
-#if.app-id = 'app.zen-browser.zen'
-#run = "move-node-to-workspace 1"
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
@@ -212,7 +204,3 @@ run = 'move-node-to-workspace 1'
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
 run = 'move-node-to-workspace 5'
-
-# [[on-window-detected]]
-# if.app-id = 'com.anthropic.claudefordesktop'
-# run = 'layout floating'

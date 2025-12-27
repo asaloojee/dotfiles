@@ -24,6 +24,7 @@ fish_add_path /run/current-system/sw/bin
 alias ls="eza --icons=always"
 alias g="gitui"
 alias mux="tmuxinator"
+
 # Fully shutdown tailscale (useful for manual troubleshooting)
 function tailscale-stop
     echo "🛑 Shutting down tailscale completely..."
@@ -85,6 +86,35 @@ function gr
     else
         echo "Not in a git repository"
         return 1
+    end
+end
+
+# Caffeinate display for specified hours (1-3)
+function caff
+    if test (count $argv) -eq 0
+        echo "Usage: caff <hours>"
+        echo "  hours: 1, 2, or 3"
+        return 1
+    end
+
+    set -l hours $argv[1]
+
+    switch $hours
+        case 1
+            set -l seconds 3600
+            echo "☕ Keeping display awake for 1 hour..."
+            caffeinate -d -t $seconds
+        case 2
+            set -l seconds 7200
+            echo "☕ Keeping display awake for 2 hours..."
+            caffeinate -d -t $seconds
+        case 3
+            set -l seconds 10800
+            echo "☕ Keeping display awake for 3 hours..."
+            caffeinate -d -t $seconds
+        case '*'
+            echo "❌ Invalid hours. Please specify 1, 2, or 3."
+            return 1
     end
 end
 

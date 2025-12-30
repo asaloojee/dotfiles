@@ -7,3 +7,6 @@
 
 # ignore claude.md file for dotfiles repo
 CLAUDE.md
+
+# Ignore scripts directory (manually installed, not symlinked)
+scripts

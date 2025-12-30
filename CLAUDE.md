@@ -36,7 +36,7 @@ cd ~/dotfiles
 stow .  # Creates symlinks in home directory
 ```
 
-Stow configuration in `.stow-local-ignore` excludes `.git`, `.gitignore`, and `.DS_Store`.
+Stow configuration in `.stow-local-ignore` excludes `.git`, `.gitignore`, `.DS_Store`, `CLAUDE.md`, and `scripts/`.
 
 ## Architecture
 
@@ -66,9 +66,13 @@ Stow configuration in `.stow-local-ignore` excludes `.git`, `.gitignore`, and `.
 ├── nix/
 │   ├── flake.nix          # System packages, Homebrew, macOS settings
 │   └── flake.lock         # Locked dependencies
+├── scripts/               # Utility scripts (version controlled, not symlinked)
+│   ├── install.sh         # Script installer
+│   ├── tailscale-nuclear-reset.sh  # Tailscale troubleshooting
+│   └── README.md          # Scripts documentation
 ├── .config/
 │   ├── aerospace/         # Window manager config
-│   ├── fish/              # Fish shell (primary shell)
+│   ├── fish/              # Fish shell config (legacy, not in use)
 │   ├── ghostty/           # Terminal emulator config
 │   ├── nvim/              # Neovim (LazyVim-based, see nvim/CLAUDE.md)
 │   ├── sketchybar/        # macOS menu bar (currently disabled)
@@ -76,42 +80,81 @@ Stow configuration in `.stow-local-ignore` excludes `.git`, `.gitignore`, and `.
 │   ├── tmux/              # Terminal multiplexer config
 │   ├── tmuxinator/        # Tmux session templates
 │   └── yazi/              # Terminal file manager config
-├── .zshrc                 # Zsh config (secondary shell)
-└── .stow-local-ignore     # Stow exclusion patterns
+├── .zshrc                 # Zsh config (primary shell)
+├── .stow-local-ignore     # Stow exclusion patterns
+└── CLAUDE.md              # This file
 ```
+
+### Scripts Directory
+
+The `scripts/` directory contains utility scripts that are **version controlled but not symlinked** by Stow.
+
+**Why separate?** These scripts are installed to `~/.local/bin/` which is already in your PATH. They're excluded from Stow to avoid conflicts and allow manual installation control.
+
+**Installation:**
+
+```bash
+# On a new Mac or to update scripts:
+cd ~/dotfiles
+./scripts/install.sh
+
+# To force overwrite existing scripts:
+./scripts/install.sh --force
+```
+
+**Available scripts:**
+
+- `tailscale-nuclear-reset.sh` - Nuclear option for troubleshooting Tailscale when normal methods fail
+
+See `scripts/README.md` for detailed documentation.
 
 ## Shell Configuration
 
-### Fish (Primary Shell)
+### Zsh (Primary Shell)
 
-**Config:** `.config/fish/config.fish`
+**Config:** `.zshrc`
 
 **Key aliases and functions:**
 
 - `rebuild` → `darwin-rebuild switch --flake ~/dotfiles/nix#mac`
-- `cd` → `z` (zoxide smart directory jumping)
-- `ls` → `eza` (modern ls replacement)
+- `ls` → `eza --icons=always`
 - `g` → `gitui` (terminal git UI)
 - `mux` → `tmuxinator` (session manager)
 - `n` → `nvim`
+- `cc` → `claude`
 - `y` → `yazi` (file manager with directory tracking)
+- `gr` → jump to git repository root
+- `caff` → caffeinate display for 1-3 hours
 
 **Features:**
 
-- Starship prompt integration
-- Git wrapper enforces commands run from repo root
-- PATH includes Nix, Homebrew, Cargo, Google Cloud SDK
+- **Zinit plugin manager** with 5 essential plugins:
+  - zsh-syntax-highlighting (colors commands as you type)
+  - zsh-autosuggestions (Fish-like gray suggestions)
+  - zsh-completions (thousands of additional completions)
+  - zsh-history-substring-search (smart arrow-key history)
+  - fzf-tab (fuzzy tab completions with previews)
+- **Starship prompt** (Tokyo Night theme)
+- **Zoxide** for smart directory jumping (`z` command)
+- **Dreams of Code hacks:**
+  - Edit command in editor (Ctrl+X, Ctrl+E)
+  - Magic space (expands `!!` on spacebar)
+  - zmv (batch rename/move tool)
+  - Named directories (~dot, ~dl, ~doc)
+  - Suffix aliases (type filename to open: `README.md` → opens in bat)
+  - Global aliases (NUL, J, C for pipeline shortcuts)
+  - Git commit hotkey (Ctrl+X, G, C)
+- **10,000-entry history** with smart deduplication
+- **Case-insensitive completions** with colored output
+- PATH includes Nix, Homebrew, Cargo, Google Cloud SDK, ~/.local/bin
 
-### Zsh (Secondary Shell)
+See the [Zsh migration cheat sheet](https://github.com/user/dotfiles/blob/main/docs/zsh-cheatsheet.md) for keyboard shortcuts and usage.
 
-**Config:** `.zshrc`
+### Fish (Legacy - Not in Active Use)
 
-**Features:**
+**Config:** `.config/fish/config.fish`
 
-- Zinit plugin manager
-- oh-my-posh prompt (alternative to Starship)
-- zsh-syntax-highlighting with custom colors
-- Zoxide, NVM, Google Cloud SDK integration
+Fish shell configuration is preserved for reference but is no longer actively used. The system has migrated to Zsh.
 
 ## Development Environment
 
@@ -245,17 +288,19 @@ mux edit dev               # Edit session config
 2. Install Nix and nix-darwin (if not already installed)
 3. Rebuild system: `darwin-rebuild switch --flake ~/dotfiles/nix#mac`
 4. Stow dotfiles: `cd ~/dotfiles && stow .`
-5. Launch tmux (plugins auto-install via TPM)
-6. Launch Neovim (plugins auto-install via lazy.nvim, Mason tools auto-install)
+5. Install scripts: `cd ~/dotfiles && ./scripts/install.sh`
+6. Launch tmux (plugins auto-install via TPM)
+7. Launch Neovim (plugins auto-install via lazy.nvim, Mason tools auto-install)
+8. Launch new terminal (Zsh will auto-install Zinit and plugins on first run, takes ~5-10 seconds)
 
 ### Daily Development Workflow
 
-1. Launch Ghostty terminal (Fish shell)
+1. Launch Ghostty terminal (Zsh shell)
 2. Navigate: `z <project-name>` (zoxide)
 3. Start session: `mux start <project>`
 4. Edit: `n` or `nvim`
 5. File browsing: `y` (yazi)
-6. Git operations: `g` (gitui) or `git` (enforced from repo root)
+6. Git operations: `g` (gitui) or Ctrl+X, G, C (commit hotkey)
 7. Window management: `Alt+Ctrl+Cmd+hjkl` (AeroSpace)
 
 ### Updating the System

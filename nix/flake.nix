@@ -165,6 +165,11 @@
 
       system.primaryUser = "asaloojee";
 
+      # Set default user shell
+      users.users.asaloojee = {
+        shell = pkgs.zsh;
+      };
+
       system.defaults = {
         dock.autohide = true;
         dock.static-only = true;

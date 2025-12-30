@@ -21,7 +21,7 @@ style = "#7aa2f7"
 read_only = " 󱌃"
 home_symbol = "󰜥 "
 truncation_length = 4
-truncate_to_repo = true
+truncate_to_repo = false
 truncation_symbol = ".../"
 
 [character]

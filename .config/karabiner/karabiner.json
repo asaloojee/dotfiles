@@ -5,6 +5,25 @@
             "complex_modifications": {
                 "rules": [
                     {
+                        "description": "Caps Lock to Hyper Key (Ctrl+Alt+Cmd)",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "caps_lock",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "left_control",
+                                        "modifiers": ["left_option", "left_command"]
+                                    }
+                                ],
+                                "to_if_alone": [{ "key_code": "escape" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Akimbo cmd to F12 (for Leader Key app)",
                         "manipulators": [
                             {
@@ -43,12 +62,7 @@
                 ]
             },
             "name": "Default",
-            "simple_modifications": [
-                {
-                    "from": { "key_code": "caps_lock" },
-                    "to": [{ "key_code": "left_control" }]
-                }
-            ],
+            "simple_modifications": [],
             "virtual_hid_keyboard": {
                 "country_code": 0,
                 "keyboard_type_v2": "ansi"

@@ -241,6 +241,7 @@ alias -s js='$EDITOR'
 alias -s ts='$EDITOR'
 alias -s tsx='$EDITOR'
 alias -s jsx='$EDITOR'
+alias -s nix='$EDITOR'
 alias -s html=open  # macOS: open in default browser
 
 # ----------------------------------------------------------------------------
@@ -271,7 +272,7 @@ bindkey -s '^Xgc' 'git commit -m ""\C-b'          # Ctrl+X, G, C
 
 # Rebuild Nix Darwin system configuration
 function rebuild() {
-    echo "🔄 Rebuilding Nix flake..."
+    echo "❄️ Rebuilding Nix flake..."
     sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac
 }
 

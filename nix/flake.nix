@@ -45,6 +45,7 @@
         pkgs.gnupg
         pkgs.go
         pkgs.ice-bar
+        pkgs.jless
         pkgs.jq
         pkgs.mkalias
         pkgs.neovim

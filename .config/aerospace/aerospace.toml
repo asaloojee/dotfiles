@@ -51,13 +51,13 @@ key-mapping.preset = 'qwerty'
 # Gaps between windows (inner-*) and between monitor edges (outer-*).
 # Uniform gaps with larger top padding for SketchyBar
 [gaps]
-inner.horizontal = 8
-inner.vertical =   8
-outer.left =       8
-outer.bottom =     8
+inner.horizontal = 4
+inner.vertical =   4
+outer.left =       4
+outer.bottom =     4
 # outer.top =        [{ monitor."DELL S2722QC" = 44 }, 8]
-outer.top = 8
-outer.right =      8
+outer.top = 4
+outer.right = 4
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -204,3 +204,7 @@ run = 'move-node-to-workspace 1'
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
 run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'layout floating'

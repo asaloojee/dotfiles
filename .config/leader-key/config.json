@@ -197,11 +197,24 @@
     {
       "actions" : [
         {
+          "iconPath" : "folder",
+          "key" : "a",
+          "type" : "application",
+          "value" : "/Applications"
+        },
+        {
           "iconPath" : "square.and.arrow.down",
           "key" : "d",
           "label" : "Downloads",
           "type" : "folder",
           "value" : "/Users/asaloojee/Downloads"
+        },
+        {
+          "iconPath" : "folder",
+          "key" : "s",
+          "label" : "screenshots",
+          "type" : "application",
+          "value" : "/Users/asaloojee/Documents/03-main/screenshots"
         },
         {
           "iconPath" : "folder",

@@ -101,6 +101,10 @@ ctrl-alt-cmd-shift-j = 'move down'
 ctrl-alt-cmd-shift-k = 'move up'
 ctrl-alt-cmd-shift-l = 'move right'
 
+# See: https://nikitabobko.github.io/AeroSpace/commands#resize
+ctrl-alt-cmd-shift-minus = 'resize smart -50'
+ctrl-alt-cmd-shift-equal = 'resize smart +50'
+
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
 # Navigate between workspaces using numbers
 ctrl-alt-cmd-1 = 'workspace 1'

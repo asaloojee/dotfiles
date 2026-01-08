@@ -199,8 +199,23 @@
         {
           "iconPath" : "folder",
           "key" : "a",
+          "label" : "Applications",
           "type" : "application",
           "value" : "/Applications"
+        },
+        {
+          "iconPath" : "folder.badge.person.crop",
+          "key" : "/",
+          "label" : "~/",
+          "type" : "application",
+          "value" : "/Users/asaloojee"
+        },
+        {
+          "iconPath" : "folder.badge.gearshape",
+          "key" : ".",
+          "label" : "dotfiles",
+          "type" : "application",
+          "value" : "/Users/asaloojee/dotfiles"
         },
         {
           "iconPath" : "square.and.arrow.down",
@@ -208,13 +223,6 @@
           "label" : "Downloads",
           "type" : "folder",
           "value" : "/Users/asaloojee/Downloads"
-        },
-        {
-          "iconPath" : "folder",
-          "key" : "s",
-          "label" : "screenshots",
-          "type" : "application",
-          "value" : "/Users/asaloojee/Documents/03-main/screenshots"
         },
         {
           "iconPath" : "folder",
@@ -245,18 +253,11 @@
           "value" : "/Users/asaloojee/Documents/03-main"
         },
         {
-          "iconPath" : "folder.badge.gearshape",
-          "key" : ".",
-          "label" : "dotfiles",
+          "iconPath" : "folder",
+          "key" : "s",
+          "label" : "screenshots",
           "type" : "application",
-          "value" : "/Users/asaloojee/dotfiles"
-        },
-        {
-          "iconPath" : "folder.badge.person.crop",
-          "key" : "/",
-          "label" : "~/",
-          "type" : "application",
-          "value" : "/Users/asaloojee"
+          "value" : "/Users/asaloojee/Documents/03-main/screenshots"
         }
       ],
       "iconPath" : "folder.fill",

@@ -39,6 +39,7 @@
         pkgs.fastfetch
         pkgs.fd
         pkgs.fish
+        pkgs.fzf
         pkgs.git
         pkgs.gitleaks
         pkgs.gitui
@@ -69,18 +70,17 @@
         enable = true;
         taps = [
           "oven-sh/bun"
+          # "TheBoredTeam/boring-notch"
         ];
+
         brews = [
           "bun"
           "composer"
           "mas"
+          "opencode"
+          "tailscale"
         ];
 
-        # Services that should not be upgraded during rebuild
-        # (prevents issues with running daemons)
-        extraConfig = ''
-          brew "tailscale", restart_service: :changed
-        '';
         casks = [
           "adobe-creative-cloud"
           "brave-browser"
@@ -122,8 +122,6 @@
       };
 
       services.sketchybar.enable = false;
-
-      # JankyBorders - window borders for focused windows
       services.jankyborders.enable = false;
 
       fonts.packages = [
@@ -193,19 +191,6 @@
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
       
-      # Automatic garbage collection - keeps rollback safety
-      nix.gc = {
-        automatic = true;
-        interval = { Weekday = 1; Hour = 3; Minute = 0; }; # Weekly on Monday
-        options = "--delete-older-than 30d";
-      };
-      
-      # Optimize store automatically  
-      nix.optimise = {
-        automatic = true;
-        interval = { Weekday = 1; Hour = 4; Minute = 0; }; # Weekly on Monday
-      };
-
       # Set Git commit hash for darwin-version.
       system.configurationRevision = self.rev or self.dirtyRev or null;
 

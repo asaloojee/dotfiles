@@ -29,6 +29,11 @@
         {
           "actions" : [
             {
+              "key" : "a",
+              "type" : "application",
+              "value" : "/System/Applications/App Store.app"
+            },
+            {
               "key" : "c",
               "type" : "application",
               "value" : "/System/Applications/Calendar.app"

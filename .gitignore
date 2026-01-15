@@ -20,3 +20,6 @@
 .claude/statsig/
 .claude/todos/
 .config/karabiner/automatic_backups
+
+# Tmuxinator configs
+.config/tmuxinator/

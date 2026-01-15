@@ -1,5 +1,5 @@
 # ============================================================================
-# Modern Zsh Configuration
+# Modern Zsh Configuration (Optimized for Speed)
 # ============================================================================
 
 # ----------------------------------------------------------------------------
@@ -17,42 +17,28 @@ fi
 source "${ZINIT_HOME}/zinit.zsh"
 
 # ----------------------------------------------------------------------------
-# Essential Zsh Plugins
+# Essential Zsh Plugins (Turbo Mode - Load After Prompt)
 # ----------------------------------------------------------------------------
 
-# Syntax highlighting (must be loaded before autosuggestions)
+# Syntax highlighting - load immediately after prompt
+zinit ice wait lucid
 zinit light zsh-users/zsh-syntax-highlighting
 
-# Fish-like autosuggestions
+# Fish-like autosuggestions - load immediately after prompt
+zinit ice wait lucid
 zinit light zsh-users/zsh-autosuggestions
 
-# Additional completions
+# Additional completions - can wait a bit longer
+zinit ice wait"1" lucid
 zinit light zsh-users/zsh-completions
 
-# History substring search (up/down arrows search history)
+# History substring search - load with keybindings
+zinit ice wait lucid atload"bindkey '^[[A' history-substring-search-up; bindkey '^[[B' history-substring-search-down"
 zinit light zsh-users/zsh-history-substring-search
 
-# FZF Tab completions (prettier tab completions)
+# FZF Tab completions - needs compinit first
+zinit ice wait"1" lucid
 zinit light Aloxaf/fzf-tab
-
-# ----------------------------------------------------------------------------
-# Syntax Highlighting Styles
-# ----------------------------------------------------------------------------
-typeset -A ZSH_HIGHLIGHT_STYLES
-
-# Commands and aliases - green and bold
-ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=green,bold
-ZSH_HIGHLIGHT_STYLES[precommand]=fg=green,bold
-ZSH_HIGHLIGHT_STYLES[arg0]=fg=green,bold
-ZSH_HIGHLIGHT_STYLES[command]=fg=green,bold
-ZSH_HIGHLIGHT_STYLES[builtin]=fg=green,bold
-ZSH_HIGHLIGHT_STYLES[function]=fg=green,bold
-
-# Paths - no underline
-ZSH_HIGHLIGHT_STYLES[path]=none
-
-# Errors - red
-ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=red,bold
 
 # ----------------------------------------------------------------------------
 # History Configuration
@@ -61,66 +47,67 @@ HISTFILE=$HOME/.zhistory
 HISTSIZE=10000
 SAVEHIST=10000
 
-# History options
-setopt SHARE_HISTORY              # Share history across all sessions
-setopt HIST_EXPIRE_DUPS_FIRST     # Expire duplicate entries first
-setopt HIST_IGNORE_ALL_DUPS       # Delete old duplicates
-setopt HIST_FIND_NO_DUPS          # Don't display duplicates in search
-setopt HIST_IGNORE_SPACE          # Don't record entries starting with space
-setopt HIST_VERIFY                # Show command with history expansion before running
-setopt INC_APPEND_HISTORY         # Write to history file immediately
+setopt SHARE_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_VERIFY
+setopt INC_APPEND_HISTORY
 
 # ----------------------------------------------------------------------------
-# Completion System
+# Completion System (Cached - Regenerates Once Per Day)
 # ----------------------------------------------------------------------------
-
-# Load and initialize completion system
 autoload -Uz compinit
-compinit
 
-# Completion options
-setopt COMPLETE_IN_WORD           # Complete from both ends of word
-setopt ALWAYS_TO_END              # Move cursor to end after completion
-setopt AUTO_MENU                  # Show completion menu on tab
-setopt AUTO_LIST                  # Automatically list choices on ambiguous completion
+if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
+    compinit
+else
+    compinit -C
+fi
 
-# Completion styling
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'  # Case-insensitive completion
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" # Colored completion
-zstyle ':completion:*' menu select                       # Arrow key navigation
-zstyle ':completion:*' squeeze-slashes true              # Normalize slashes
+setopt COMPLETE_IN_WORD
+setopt ALWAYS_TO_END
+setopt AUTO_MENU
+setopt AUTO_LIST
+
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu select
+zstyle ':completion:*' squeeze-slashes true
 
 # ----------------------------------------------------------------------------
 # Key Bindings
 # ----------------------------------------------------------------------------
-
-# Use emacs keybindings (or set to -v for vi mode)
 bindkey -e
-
-# History search with up/down arrows
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-
-# Delete key
 bindkey "^[[3~" delete-char
-
-# Home/End keys
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
+
+# Magic Space - Expand History (!! and !$)
+bindkey ' ' magic-space
+
+# Edit Command in Editor (Ctrl+X, Ctrl+E)
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
+
+# Copy current command buffer to clipboard (Ctrl+X, Ctrl+C)
+function copy-buffer-to-clipboard() {
+    echo -n "$BUFFER" | pbcopy
+    zle -M "Copied to clipboard"
+}
+zle -N copy-buffer-to-clipboard
+bindkey '^X^C' copy-buffer-to-clipboard
 
 # ----------------------------------------------------------------------------
 # Environment Variables
 # ----------------------------------------------------------------------------
-
-# Locale
 export LC_ALL=en_CA.UTF-8
 export LANG=en_CA.UTF-8
-
-# Editor
 export EDITOR=nvim
 export VISUAL=nvim
 
-# PATH - order matters (earlier = higher priority)
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/opt/homebrew/bin:$PATH"
@@ -130,108 +117,68 @@ export PATH="/run/current-system/sw/bin:$PATH"
 export PATH="$HOME/google-cloud-sdk/bin:$PATH"
 
 # ----------------------------------------------------------------------------
-# Tool Integrations
+# Tool Integrations (Cached Init Scripts)
 # ----------------------------------------------------------------------------
+ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+[[ -d "$ZSH_CACHE_DIR" ]] || mkdir -p "$ZSH_CACHE_DIR"
 
-# Zoxide (smarter cd)
-if command -v zoxide &> /dev/null; then
-    eval "$(zoxide init zsh)"
+# Zoxide
+_zoxide_cache="$ZSH_CACHE_DIR/zoxide.zsh"
+if [[ ! -f "$_zoxide_cache" || ! -s "$_zoxide_cache" || -n "$_zoxide_cache"(#qN.md+7) ]]; then
+    command -v zoxide &>/dev/null && zoxide init zsh > "$_zoxide_cache"
 fi
+[[ -f "$_zoxide_cache" ]] && source "$_zoxide_cache"
 
-# Starship prompt
-if command -v starship &> /dev/null; then
-    export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
-    eval "$(starship init zsh)"
-fi
+# Starship
+export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+eval "$(starship init zsh)"
 
-# Google Cloud SDK completions
-if [[ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]]; then
-    source "$HOME/google-cloud-sdk/completion.zsh.inc"
-fi
+# Transient Prompt
+TRANSIENT_PROMPT=`starship module character`
+zle-line-init() {
+    emulate -L zsh
+
+    [[ $CONTEXT == start ]] || return 0
+    while true; do
+        zle .recursive-edit
+        local -i ret=$?
+        [[ $ret == 0 && $KEYS == $'\4' ]] || break
+        [[ -o ignore_eof ]] || exit 0
+    done
+
+    local saved_prompt=$PROMPT
+    local saved_rprompt=$RPROMPT
+
+    PROMPT=$TRANSIENT_PROMPT
+    zle .reset-prompt
+    PROMPT=$saved_prompt
+
+    if (( ret )); then
+        zle .send-break
+    else
+        zle .accept-line
+    fi
+    return ret
+}
+zle -N zle-line-init
+
+# Google Cloud SDK completions (lazy loaded)
+zinit ice wait"2" lucid if"[[ -f $HOME/google-cloud-sdk/completion.zsh.inc ]]"
+zinit snippet "$HOME/google-cloud-sdk/completion.zsh.inc"
 
 # ----------------------------------------------------------------------------
-# Autosuggestions Configuration
+# Plugin Configuration
 # ----------------------------------------------------------------------------
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 
-# ----------------------------------------------------------------------------
-# FZF Tab Configuration
-# ----------------------------------------------------------------------------
-# Disable sort when completing `git checkout`
 zstyle ':completion:*:git-checkout:*' sort false
-
-# Preview directory contents with eza when completing cd
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
-
-# Preview files and directories
 zstyle ':fzf-tab:complete:*:*' fzf-preview 'if [[ -d $realpath ]]; then eza -1 --color=always $realpath; else bat --color=always --style=numbers --line-range=:500 $realpath 2>/dev/null || cat $realpath; fi'
-
-# ============================================================================
-# ZSH Hacks (Dreams of Code)
-# ============================================================================
-
-# ----------------------------------------------------------------------------
-# Edit Command in Editor (Ctrl+X, Ctrl+E)
-# ----------------------------------------------------------------------------
-# Open current command line in $EDITOR for complex edits
-autoload -Uz edit-command-line
-zle -N edit-command-line
-bindkey '^X^E' edit-command-line
-
-# ----------------------------------------------------------------------------
-# Magic Space - Expand History
-# ----------------------------------------------------------------------------
-# Expands history expressions like !! or !$ when you press space
-bindkey ' ' magic-space
-
-# ----------------------------------------------------------------------------
-# zmv - Batch Rename/Move Tool
-# ----------------------------------------------------------------------------
-autoload -Uz zmv
-
-# Usage examples:
-# zmv '(*).log' '$1.txt'           # Rename .log to .txt
-# zmv -w '*.log' '*.txt'           # Same, simpler syntax
-# zmv -n '(*).log' '$1.txt'        # Dry run (preview)
-# zmv -C '*.txt' 'backup/*.txt'    # Copy with patterns
-# zmv -L '*.txt' 'links/*.txt'     # Link with patterns
-
-# ----------------------------------------------------------------------------
-# Named Directories - Quick Bookmarks
-# ----------------------------------------------------------------------------
-hash -d dot=~/dotfiles
-hash -d dl=~/Downloads
-hash -d doc=~/Documents
-
-# Usage: cd ~dot, ls ~dl, etc.
-
-# ----------------------------------------------------------------------------
-# Custom Widgets
-# ----------------------------------------------------------------------------
-
-# Clear screen and scrollback (Ctrl+X, Ctrl+L)
-function clear-screen-and-scrollback() {
-  echoti civis >"$TTY"
-  printf '%b' '\e[H\e[2J\e[3J' >"$TTY"
-  echoti cnorm >"$TTY"
-  zle redisplay
-}
-zle -N clear-screen-and-scrollback
-bindkey '^X^L' clear-screen-and-scrollback
-
-# Copy current command buffer to clipboard (Ctrl+X, Ctrl+C)
-function copy-buffer-to-clipboard() {
-  echo -n "$BUFFER" | pbcopy
-  zle -M "Copied to clipboard"
-}
-zle -N copy-buffer-to-clipboard
-bindkey '^X^C' copy-buffer-to-clipboard
 
 # ----------------------------------------------------------------------------
 # Suffix Aliases - Open Files by Extension
 # ----------------------------------------------------------------------------
-# Type filename to open it with the associated program
 alias -s md=bat
 alias -s txt=bat
 alias -s log=bat
@@ -242,45 +189,19 @@ alias -s ts='$EDITOR'
 alias -s tsx='$EDITOR'
 alias -s jsx='$EDITOR'
 alias -s nix='$EDITOR'
-alias -s html=open  # macOS: open in default browser
+alias -s html=open
 
 # ----------------------------------------------------------------------------
-# Global Aliases - Use Anywhere in Commands
-# ----------------------------------------------------------------------------
-alias -g NE='2>/dev/null'           # Redirect stderr to /dev/null
-alias -g NO='>/dev/null'            # Redirect stdout to /dev/null
-alias -g NUL='>/dev/null 2>&1'      # Redirect both to /dev/null
-alias -g J='| jq'                   # Pipe to jq
-alias -g C='| pbcopy'               # Copy output to clipboard (macOS)
-
-# Usage: cat file.json J
-#        echo "hello" C
-#        ls /nonexistent NUL
-
-# ----------------------------------------------------------------------------
-# Git Hotkey Insertions
-# ----------------------------------------------------------------------------
-bindkey -s '^Xgc' 'git commit -m ""\C-b'          # Ctrl+X, G, C
-
-# ============================================================================
-# Custom Functions and Aliases (From Fish Config)
-# ============================================================================
-
-# ----------------------------------------------------------------------------
-# System Management
+# Functions
 # ----------------------------------------------------------------------------
 
-# Rebuild Nix Darwin system configuration
+# Rebuild Nix Darwin system
 function rebuild() {
     echo "❄️ Rebuilding Nix flake..."
     sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac
 }
 
-# ----------------------------------------------------------------------------
-# File and Directory Navigation
-# ----------------------------------------------------------------------------
-
-# Yazi file manager with directory changing
+# Yazi with directory tracking
 function y() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
     yazi "$@" --cwd-file="$tmp"
@@ -301,11 +222,7 @@ function gr() {
     fi
 }
 
-# ----------------------------------------------------------------------------
-# Utilities
-# ----------------------------------------------------------------------------
-
-# Caffeinate display for specified hours (1-3)
+# Caffeinate display (1-3 hours)
 function caff() {
     local hours=${1:-1}
     [[ $hours =~ ^[1-3]$ ]] || { echo "Usage: caff [1-3]"; return 1; }
@@ -313,10 +230,17 @@ function caff() {
     caffeinate -d -t $((hours * 3600))
 }
 
-# ============================================================================
-# General Aliases
-# ============================================================================
+# Refresh cached init scripts
+function zsh-refresh-cache() {
+    echo "🔄 Refreshing zsh cache..."
+    rm -f "$ZSH_CACHE_DIR"/*.zsh
+    source ~/.zshrc
+    echo "✅ Cache refreshed!"
+}
 
+# ----------------------------------------------------------------------------
+# Aliases
+# ----------------------------------------------------------------------------
 alias ls="eza --icons=always"
 alias g="gitui"
 alias mux="tmuxinator"

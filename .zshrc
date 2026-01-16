@@ -17,27 +17,23 @@ fi
 source "${ZINIT_HOME}/zinit.zsh"
 
 # ----------------------------------------------------------------------------
-# Essential Zsh Plugins (Turbo Mode - Load After Prompt)
+# Essential Zsh Plugins (Synchronous Loading)
 # ----------------------------------------------------------------------------
 
-# Syntax highlighting - load immediately after prompt
-zinit ice wait lucid
+# Syntax highlighting
 zinit light zsh-users/zsh-syntax-highlighting
 
-# Fish-like autosuggestions - load immediately after prompt
-zinit ice wait lucid
+# Fish-like autosuggestions
 zinit light zsh-users/zsh-autosuggestions
 
-# Additional completions - can wait a bit longer
-zinit ice wait"1" lucid
+# Additional completions
 zinit light zsh-users/zsh-completions
 
-# History substring search - load with keybindings
-zinit ice wait lucid atload"bindkey '^[[A' history-substring-search-up; bindkey '^[[B' history-substring-search-down"
+# History substring search
+zinit ice atload"bindkey '^[[A' history-substring-search-up; bindkey '^[[B' history-substring-search-down"
 zinit light zsh-users/zsh-history-substring-search
 
-# FZF Tab completions - needs compinit first
-zinit ice wait"1" lucid
+# FZF Tab completions
 zinit light Aloxaf/fzf-tab
 
 # ----------------------------------------------------------------------------
@@ -228,14 +224,6 @@ function caff() {
     [[ $hours =~ ^[1-3]$ ]] || { echo "Usage: caff [1-3]"; return 1; }
     echo "☕ Keeping display awake for $hours hour(s)..."
     caffeinate -d -t $((hours * 3600))
-}
-
-# Refresh cached init scripts
-function zsh-refresh-cache() {
-    echo "🔄 Refreshing zsh cache..."
-    rm -f "$ZSH_CACHE_DIR"/*.zsh
-    source ~/.zshrc
-    echo "✅ Cache refreshed!"
 }
 
 # ----------------------------------------------------------------------------

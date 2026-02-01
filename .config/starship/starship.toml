@@ -26,16 +26,16 @@ truncation_symbol = ".../"
 
 [character]
 format = "$symbol "
-success_symbol = "[](#bb9af7)"
-error_symbol = "[](#f7768e)"
+success_symbol = "[󰅂](#bb9af7)"
+error_symbol = "[󰅂](#f7768e)"
 
 [git_branch]
-symbol = " "
+symbol = "󰘬 "
 format = "[$symbol$branch]($style) "
 style = "#565f89"
 
 [jobs]
-symbol = " "
+symbol = "󰒓 "
 style = "bold #f7768e"
 number_threshold = 1
 format = "[$symbol]($style)"
@@ -45,17 +45,17 @@ format = '([\[$all_status$ahead_behind\]]($style) )'
 style = "#565f89"
 
 # Git remote status
-ahead = ""      # Commits ahead of remote
-behind = ""     # Commits behind remote
-diverged = ""    # Branch has diverged from remote
+ahead = "󰁝"      # Commits ahead of remote
+behind = "󰁅"     # Commits behind remote
+diverged = "󰹹"    # Branch has diverged from remote
 
 # Working directory status
-conflicted = ""  # Merge conflicts
-deleted = ""     # Deleted files
-renamed = ""     # Renamed files
-modified = ""    # Modified files
-staged = ""      # Staged changes (added to index)
-untracked = ""   # Untracked files
+conflicted = "󰅖"  # Merge conflicts
+deleted = "󰍴"     # Deleted files
+renamed = "󰄾"     # Renamed files
+modified = "!"    # Modified files
+staged = "+"      # Staged changes (added to index)
+untracked = "?"   # Untracked files
 stashed = ""     # Stashed changes
 
 [git_state]

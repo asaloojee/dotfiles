@@ -112,6 +112,10 @@ export PATH="/nix/var/nix/profiles/default/bin:$PATH"
 export PATH="/run/current-system/sw/bin:$PATH"
 export PATH="$HOME/google-cloud-sdk/bin:$PATH"
 
+# Bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
 # ----------------------------------------------------------------------------
 # Tool Integrations (Cached Init Scripts)
 # ----------------------------------------------------------------------------

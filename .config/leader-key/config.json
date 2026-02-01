@@ -166,11 +166,6 @@
               "value" : "/System/Applications/Font Book.app"
             },
             {
-              "key" : "n",
-              "type" : "application",
-              "value" : "/Applications/Sleeve.app"
-            },
-            {
               "key" : "p",
               "type" : "application",
               "value" : "/Applications/PDFgear.app"

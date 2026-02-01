@@ -3,6 +3,9 @@
 -- Add any additional options here
 vim.g.lazyvim_prettier_needs_config = false
 
+-- Disable LazyVim's format-on-save (use <leader>cf to format manually)
+vim.g.autoformat = false
+
 -- Disable LazyVim's automatic root detection
 -- This ensures nvim stays in the directory where you opened it
 vim.g.root_spec = { "cwd" }

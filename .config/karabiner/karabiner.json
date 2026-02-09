@@ -1,5 +1,4 @@
 {
-    "global": { "show_in_menu_bar": false },
     "profiles": [
         {
             "complex_modifications": {
@@ -45,6 +44,7 @@
                     },
                     {
                         "description": "mash f+j to escape",
+                        "enabled": false,
                         "manipulators": [
                             {
                                 "from": {
@@ -62,7 +62,6 @@
                 ]
             },
             "name": "Default",
-            "simple_modifications": [],
             "virtual_hid_keyboard": {
                 "country_code": 0,
                 "keyboard_type_v2": "ansi"

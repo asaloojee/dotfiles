@@ -26,8 +26,8 @@ truncation_symbol = ".../"
 
 [character]
 format = "$symbol "
-success_symbol = "[󰅂](#bb9af7)"
-error_symbol = "[󰅂](#f7768e)"
+success_symbol = "[❯](#bb9af7)"
+error_symbol = "[❯](#f7768e)"
 
 [git_branch]
 symbol = "󰘬 "

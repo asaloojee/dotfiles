@@ -44,11 +44,6 @@
               "value" : "/System/Applications/Music.app"
             },
             {
-              "key" : "m",
-              "type" : "application",
-              "value" : "/System/Applications/Messages.app"
-            },
-            {
               "key" : "n",
               "type" : "application",
               "value" : "/Applications/Numbers.app"
@@ -80,6 +75,11 @@
               "key" : "d",
               "type" : "application",
               "value" : "/Applications/Discord.app"
+            },
+            {
+              "key" : "m",
+              "type" : "application",
+              "value" : "/System/Applications/Messages.app"
             },
             {
               "key" : "s",
@@ -164,6 +164,11 @@
               "key" : "f",
               "type" : "application",
               "value" : "/System/Applications/Font Book.app"
+            },
+            {
+              "key" : "k",
+              "type" : "application",
+              "value" : "/Applications/Karabiner-Elements.app"
             },
             {
               "key" : "p",

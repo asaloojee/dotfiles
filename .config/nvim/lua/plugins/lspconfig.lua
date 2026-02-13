@@ -197,6 +197,29 @@ return {
         },
       })
 
+      -- ESLint Language Server
+      lspconfig.eslint.setup({
+        on_attach = function(client, bufnr)
+          on_attach(client, bufnr)
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            command = "EslintFixAll",
+          })
+        end,
+        capabilities = capabilities,
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
+        settings = {
+          workingDirectories = { mode = "auto" },
+        },
+      })
+
+      -- Emmet Language Server
+      lspconfig.emmet_language_server.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { "html", "css", "scss", "javascriptreact", "typescriptreact", "astro" },
+      })
+
       -- Python Language Server (Pyright)
       lspconfig.pyright.setup({
         on_attach = on_attach,

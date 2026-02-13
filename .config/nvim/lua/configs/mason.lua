@@ -14,5 +14,7 @@ return {
     "json-lsp",
     "lua-language-server",
     "pyright",
+    "eslint-lsp",
+    "emmet-language-server",
   },
 }

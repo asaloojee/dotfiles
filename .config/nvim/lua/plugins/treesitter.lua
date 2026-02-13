@@ -10,6 +10,7 @@ return {
         "tsx",
         "typescript",
         "javascript",
+        "jsdoc",
         "astro",
         "html",
         "http",

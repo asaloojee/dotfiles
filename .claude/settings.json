@@ -4,6 +4,7 @@
     "MAX_THINKING_TOKENS": "31999"
   },
   "includeCoAuthoredBy": false,
+  "model": "opus",
   "enabledPlugins": {
     "dev-browser@dev-browser-marketplace": true,
     "ast-grep@ast-grep-marketplace": true,

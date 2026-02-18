@@ -8,7 +8,7 @@ cursor-style = block
 cursor-style-blink = false
 window-title-font-family = "JetBrainsMono Nerd Font"
 
-background-opacity = 0.9
+background-opacity = 0.90
 background-blur = true
 
 macos-titlebar-style = tabs
@@ -25,4 +25,3 @@ macos-secure-input-indication = false
 macos-auto-secure-input = true
 
 theme = tokyonight 
-keybind = shift+enter=text:\n

@@ -13,7 +13,10 @@ return {
         nerd_font_variant = 'mono'
       },
       completion = {
-        documentation = { auto_show = false }
+        documentation = { auto_show = false },
+        trigger = {
+          show_on_trigger_character = false,
+        },
       },
       cmdline = { enabled = false },
       sources = {

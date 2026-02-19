@@ -1,7 +1,6 @@
 return {
   {
     'saghen/blink.cmp',
-    dependencies = { 'rafamadriz/friendly-snippets' },
     version = '1.*',
     opts = {
       keymap = { 
@@ -20,7 +19,7 @@ return {
       },
       cmdline = { enabled = false },
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer' }
+        default = { 'lsp', 'path', 'buffer' }
       },
       fuzzy = { implementation = "prefer_rust_with_warning" }
     },

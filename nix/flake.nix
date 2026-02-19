@@ -100,6 +100,7 @@
           "karabiner-elements"  # Needs stable paths for macOS permissions
           "leader-key"
           "maccy"
+          "mos"
           "proton-drive"
           "proton-mail"
           "proton-pass"

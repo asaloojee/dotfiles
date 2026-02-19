@@ -14,3 +14,15 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.formatoptions:remove({ "c", "r", "o" })
   end,
 })
+
+-- Hide diagnostics while typing, show them when you leave insert mode
+-- vim.api.nvim_create_autocmd("InsertEnter", {
+--   callback = function()
+--     vim.diagnostic.hide()
+--   end,
+-- })
+-- vim.api.nvim_create_autocmd("InsertLeave", {
+--   callback = function()
+--     vim.diagnostic.show()
+--   end,
+-- })

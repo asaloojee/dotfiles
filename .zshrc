@@ -17,24 +17,28 @@ fi
 source "${ZINIT_HOME}/zinit.zsh"
 
 # ----------------------------------------------------------------------------
-# Essential Zsh Plugins (Synchronous Loading)
+# Essential Zsh Plugins (Turbo-loaded - deferred after first prompt)
 # ----------------------------------------------------------------------------
 
+# Additional completions (load first so compinit picks them up)
+zinit ice wait"0a" lucid blockf atpull"zinit creinstall -q ."
+zinit light zsh-users/zsh-completions
+
+# FZF Tab completions (after zsh-completions)
+zinit ice wait"0b" lucid
+zinit light Aloxaf/fzf-tab
+
 # Syntax highlighting
+zinit ice wait"0c" lucid
 zinit light zsh-users/zsh-syntax-highlighting
 
 # Fish-like autosuggestions
+zinit ice wait"0c" lucid
 zinit light zsh-users/zsh-autosuggestions
 
-# Additional completions
-zinit light zsh-users/zsh-completions
-
 # History substring search
-zinit ice atload"bindkey '^[[A' history-substring-search-up; bindkey '^[[B' history-substring-search-down"
+zinit ice wait"0c" lucid atload"bindkey '^[[A' history-substring-search-up; bindkey '^[[B' history-substring-search-down"
 zinit light zsh-users/zsh-history-substring-search
-
-# FZF Tab completions
-zinit light Aloxaf/fzf-tab
 
 # ----------------------------------------------------------------------------
 # History Configuration
@@ -129,9 +133,13 @@ if [[ ! -f "$_zoxide_cache" || ! -s "$_zoxide_cache" || -n "$_zoxide_cache"(#qN.
 fi
 [[ -f "$_zoxide_cache" ]] && source "$_zoxide_cache"
 
-# Starship
+# Starship (cached)
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
-eval "$(starship init zsh)"
+_starship_cache="$ZSH_CACHE_DIR/starship.zsh"
+if [[ ! -f "$_starship_cache" || ! -s "$_starship_cache" || -n "$_starship_cache"(#qN.md+7) ]]; then
+    command -v starship &>/dev/null && starship init zsh > "$_starship_cache"
+fi
+[[ -f "$_starship_cache" ]] && source "$_starship_cache"
 
 # Transient Prompt
 TRANSIENT_PROMPT=`starship module character`

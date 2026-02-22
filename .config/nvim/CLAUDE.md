@@ -13,183 +13,110 @@ This is a Neovim configuration built on top of LazyVim, optimized for web develo
 - `init.lua` - Entry point that bootstraps the config by requiring `config.lazy`
 - `lua/config/` - Core configuration files
   - `lazy.lua` - Plugin manager setup and LazyVim bootstrap
-  - `options.lua` - Vim options (indent, folding, line numbers)
-  - `keymaps.lua` - Custom key mappings
-  - `autocmds.lua` - Autocommands (format options, etc.)
+  - `options.lua` - Vim options (folding, line numbers, formatting behavior)
+  - `autocmds.lua` - Autocommands (disables comment continuation)
 - `lua/plugins/` - Plugin specifications (each file is auto-loaded by lazy.nvim)
-- `lua/configs/` - Configuration modules used by plugins (e.g., mason tool list)
-- `snippets/` - Custom snippets
+- `lazyvim.json` - Tracks enabled LazyVim extras (managed via `:LazyExtras` UI)
 - `lazy-lock.json` - Plugin version lockfile
+- `stylua.toml` - Lua formatter config
 
 ### Plugin Loading System
 
-The configuration uses LazyVim's plugin structure where:
-1. LazyVim core plugins are imported via `{ "LazyVim/LazyVim", import = "lazyvim.plugins" }`
-2. LazyVim extras are selectively imported (e.g., `lazyvim.plugins.extras.util.rest`)
-3. Custom plugins in `lua/plugins/*.lua` are auto-imported via `{ import = "plugins" }`
-4. Each file in `lua/plugins/` returns a table or array of plugin specs
+1. LazyVim core plugins imported via `{ "LazyVim/LazyVim", import = "lazyvim.plugins" }`
+2. `lazy.lua` imports `lazyvim.plugins.extras.util.rest` (kulala REST client)
+3. `lazyvim.json` enables extras: `lang.typescript`, `lang.json`, `lang.markdown`
+4. Custom plugins in `lua/plugins/*.lua` auto-imported via `{ import = "plugins" }`
 
 ## Language Server Configuration
 
-### LSP Setup Pattern
+### LSP Setup
 
-All LSP servers are configured in `lua/plugins/lspconfig.lua` with a consistent pattern:
-- Capabilities are extended with `blink.cmp` completions
-- Diagnostics use custom icons and hide in insert mode
-- Each server has specific settings for optimal behavior
+All LSP servers are configured in `lua/plugins/lspconfig.lua` using LazyVim's `opts.servers` table pattern (not manual `lspconfig.X.setup()` calls). LazyVim handles `on_attach` and capabilities automatically.
 
-### Configured Language Servers
+### Configured Servers
 
-- **vtsls** - TypeScript/JavaScript (excludes .astro files)
-- **astro** - Astro framework files
-- **cssls** - CSS/SCSS/Less
-- **cssmodules_ls** - CSS Modules in JS/TS files
+- **vtsls** - TypeScript/JavaScript (returns `nil` root_dir for `.astro` files to avoid conflict)
+- **astro** - Astro framework (uses local project TypeScript SDK from `node_modules/`)
+- **cssls** - CSS/SCSS/Less (ignores unknown at-rules for Tailwind compatibility)
+- **cssmodules_ls** - CSS Modules in JS/TS files (`camelCase = "dashes"`)
 - **html** - HTML and Astro
-- **jsonls** - JSON/JSONC
-- **lua_ls** - Lua with Neovim API support
-- **pyright** - Python with virtual environment detection
-
-### Key LSP Behaviors
-
-- Diagnostics automatically hide on `InsertEnter` and show on `InsertLeave`
-- Python LSP auto-detects `.venv` directories in the current working directory
-- TypeScript LSP has inlay hints disabled for cleaner UI
-- Astro files are handled by the Astro LSP, not vtsls
+- **jsonls** - JSON/JSONC (configured by LazyVim lang.json extra)
+- **lua_ls** - Lua (configured by LazyVim defaults, not customized here)
+- **pyright** - Python with `.venv` auto-detection, `typeCheckingMode = "basic"`
 
 ## Formatting
 
-Formatting is handled by `conform.nvim` with these formatters:
-- **prettier** - JS/TS/React/Vue/CSS/HTML/JSON/YAML/Markdown (100 char width, single quotes)
-- **stylua** - Lua (100 char width)
+- **Format-on-save is disabled** (`vim.g.autoformat = false`). Format manually with `<leader>cf`.
+- **Prettier runs without project config** (`vim.g.lazyvim_prettier_needs_config = false`)
+- LSP formatting is used as fallback when no formatter matches
+
+Formatters:
+- **prettier** - JS/TS/React/Vue/CSS/SCSS/LESS/HTML/JSON/YAML/Markdown (100 char width, single quotes)
+- **stylua** - Lua (conform.nvim overrides to 100 char width via `--column-width 100`; `stylua.toml` says 120)
 - **ruff_format** - Python
 - **Astro LSP** - Astro files use LSP formatting
 
-Format with `<leader>cf` in normal or visual mode.
-
 ## Completion
 
-Uses `blink.cmp` (not nvim-cmp) for completions:
-- Tab key selects and accepts completions
-- Enter key accepts completions
-- Documentation auto-show is disabled
-- Sources: LSP, path, snippets, buffer
-- Cmdline completion is disabled
+Uses `blink.cmp` v1.x (not nvim-cmp):
+- Tab/Enter to accept completions
+- Documentation auto-show disabled
+- Sources: LSP, path, buffer (no snippets source)
+- Auto-trigger on special characters disabled (`show_on_trigger_character = false`)
+- Cmdline completion disabled
+- Rust-based fuzzy matching preferred
 
 ## Debugging (DAP)
 
-Debugging is configured using nvim-dap with the Debug Adapter Protocol. The setup includes:
-- **nvim-dap** - Core DAP client
-- **nvim-dap-ui** - Debugging UI with breakpoints, variables, call stack, and console
-- **nvim-dap-python** - Python debugging with debugpy
-- **nvim-dap-virtual-text** - Inline variable display during debugging
+Python debugging via nvim-dap + nvim-dap-python + debugpy:
+- Uses `.venv/bin/python` if available, falls back to system python
+- DAP UI opens automatically on debug session start
 
-### Python Debugging Setup
+Key mappings: `<leader>db` (breakpoint), `<leader>dc` (continue), `<leader>di/do/dO` (step into/out/over), `<leader>dt` (terminate), `<F5>` (continue/start)
 
-Python debugging automatically uses:
-- `.venv/bin/python` if a virtual environment exists in the project root
-- System `python3` or `python` as fallback
+Python-specific: `<leader>dpr` (debug test method), `<leader>dpc` (debug test class)
 
-The debugpy adapter is configured in `lua/plugins/dap-python.lua`.
+## Important Configuration Details
 
-### Debugging Key Mappings
+### Key Behavioral Settings
 
-**General DAP:**
-- `<leader>db` - Toggle breakpoint
-- `<leader>dB` - Set conditional breakpoint
-- `<leader>dc` - Continue execution
-- `<leader>dC` - Run to cursor
-- `<leader>dg` - Go to line (without executing)
-- `<leader>di` - Step into
-- `<leader>do` - Step out
-- `<leader>dO` - Step over
-- `<leader>dp` - Pause execution
-- `<leader>dr` - Toggle REPL
-- `<leader>ds` - Session menu
-- `<leader>dt` - Terminate session
-- `<leader>dw` - Widgets menu
-- `<F5>` - Continue/start debugging
-- `<F10>` - Step over
-- `<F11>` - Step into
-- `<F12>` - Step out
+- **Root detection disabled**: `vim.g.root_spec = { "cwd" }` - stays in opened directory
+- **Absolute line numbers** (not relative)
+- **Treesitter folding** with all folds open by default (`foldlevelstart = 99`)
+- **Comment continuation disabled** via autocmd
+- **noice.nvim is disabled** (`enabled = false`)
+- **Indentation**: 2 spaces (inherited from LazyVim defaults, not explicitly set in options.lua)
 
-**Python-Specific:**
-- `<leader>dpr` - Debug Python test method (under cursor)
-- `<leader>dpc` - Debug Python test class
+### Theme
 
-### Debugging Workflow
+Tokyo Night (`tokyonight-night` variant) with custom font styles:
+- Comments: italic
+- Keywords: italic + bold
+- Functions: bold
 
-1. Open a Python file
-2. Set breakpoints with `<leader>db`
-3. Start debugging with `<F5>` or `<leader>dc`
-4. Use step commands to navigate through code
-5. Inspect variables in the DAP UI
-6. Terminate with `<leader>dt`
+### Custom UI
 
-The DAP UI automatically opens when a debug session starts, showing:
-- Scopes (local/global variables)
-- Breakpoints list
-- Call stack
-- Debug console
-
-## Mason Tool Management
-
-Tools are automatically installed via `mason-tool-installer.nvim` using the list in `lua/configs/mason.lua`:
-
-**LSP Servers:**
-- css-lsp, cssmodules-language-server, vtsls, astro-language-server
-- html-lsp, json-lsp, lua-language-server, pyright
-
-**Formatters:**
-- prettier, stylua, ruff
-
-## Development Workflow
-
-### Checking Plugin Status
-```bash
-nvim
-:Lazy
-```
-
-### Installing/Updating Tools
-Mason tools are auto-installed on startup. To manually manage:
-```bash
-:Mason
-:MasonUpdate
-```
-
-### Updating Plugins
-```bash
-:Lazy sync  # Update all plugins
-:Lazy update  # Update specific plugins
-```
-
-### Treesitter Management
-Parsers are auto-installed for configured languages. To manually install:
-```bash
-:TSUpdate
-:TSInstall <language>
-```
-
-### Formatting Code
-- In normal/visual mode: `<leader>cf`
-- Prettier is used for most web languages
-- Configuration: `lua/plugins/conform.lua`
+- **lualine.lua** - Custom statusline with powerline-style separators (`` / ``), shows: mode, branch, filename, encoding, filetype, progress, location
+- **devicons.lua** - `tiny-devicons-auto-colors.nvim` matches file icons to Tokyo Night palette
+- **telescope.lua** - Shows hidden files, ignores `.git/` and `.DS_Store`
 
 ## Configuration Patterns
 
 ### Adding a New LSP Server
 
-1. Add server to `lua/configs/mason.lua` ensure_installed list
-2. Configure in `lua/plugins/lspconfig.lua`:
+Configure in `lua/plugins/lspconfig.lua` using the LazyVim opts pattern:
 ```lua
-lspconfig.server_name.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { "filetype" },
-  settings = {
-    -- Server-specific settings
+return {
+  "neovim/nvim-lspconfig",
+  opts = {
+    servers = {
+      server_name = {
+        filetypes = { "filetype" },
+        settings = { ... },
+      },
+    },
   },
-})
+}
 ```
 
 ### Adding a New Plugin
@@ -198,108 +125,20 @@ Create `lua/plugins/plugin-name.lua`:
 ```lua
 return {
   "author/plugin-name",
-  opts = {
-    -- configuration
-  },
+  opts = { ... },
 }
 ```
 
-### Modifying Key Mappings
+### Adding Key Mappings
 
-Edit `lua/config/keymaps.lua`:
+Create or edit `lua/config/keymaps.lua` (does not currently exist - no custom keymaps defined):
 ```lua
 vim.keymap.set("mode", "key", function() ... end, { desc = "Description" })
 ```
 
-## Important Configuration Details
-
-### Root Directory Behavior
-
-The config disables LazyVim's automatic root detection:
-```lua
-vim.g.root_spec = { "cwd" }
-```
-Neovim stays in the directory where it was opened, rather than jumping to project roots.
-
-### Indentation Settings
-
-Default indentation is 2 spaces across all file types:
-- `tabstop = 2`
-- `softtabstop = 2`
-- `shiftwidth = 2`
-- `expandtab = true`
-
-### Folding
-
-Treesitter-based folding is enabled with all folds open by default (`foldlevelstart = 99`).
-
-### Line Numbers
-
-Configured to use absolute line numbers (not relative):
-```lua
-vim.opt.number = true
-vim.opt.relativenumber = false
-```
-
-### Comment Continuation
-
-Auto-comment continuation is disabled for all file types via autocmd in `lua/config/autocmds.lua`.
-
-## Styling and Formatting Tools
-
-- **stylua.toml** - Lua formatting config (2-space indent, 120 char width)
-- **Prettier** - Web language formatting (single quotes, 100 char width)
-
-## Plugin Ecosystem
-
-Key plugins beyond LazyVim defaults:
-- **blink.cmp** - Fast completion engine (replaces nvim-cmp)
-- **conform.nvim** - Formatting
-- **mason.nvim + mason-tool-installer.nvim** - LSP/tool management
-- **nvim-treesitter** - Syntax highlighting and code understanding
-- **nvim-dap + nvim-dap-ui** - Debugging with DAP (LazyVim extra)
-- **nvim-dap-python** - Python debugging support
-- **noice.nvim** - Enhanced UI for messages/cmdline
-- **kulala.nvim** - REST client (LazyVim extra)
-
 ## Troubleshooting
 
-### LSP Not Attaching
-
-Check if the LSP is installed:
-```bash
-:Mason
-```
-
-Verify LSP is running:
-```bash
-:LspInfo
-```
-
-### Formatter Not Working
-
-Ensure the formatter is installed via Mason and configured in `lua/plugins/conform.lua`.
-
-### Python Virtual Environment Not Detected
-
-The config looks for `.venv` in the current working directory. Ensure:
-1. Virtual environment is named `.venv`
-2. Located in the root of your project
-3. Neovim was opened from the project root
-
-### Python Debugger Not Working
-
-Ensure debugpy is installed in your Python environment:
-```bash
-# If using a virtual environment
-source .venv/bin/activate
-pip install debugpy
-
-# Or globally
-pip install debugpy
-```
-
-Check DAP status:
-```bash
-:checkhealth dap
-```
+- **LSP not attaching**: Check `:Mason` for installation, `:LspInfo` for status
+- **Formatter not working**: Verify installed via Mason, check `lua/plugins/conform.lua`
+- **Python venv not detected**: Must be named `.venv` in project root, open Neovim from project root
+- **Python debugger**: Install debugpy in venv (`pip install debugpy`), check `:checkhealth dap`

@@ -3,7 +3,7 @@ return {
     'saghen/blink.cmp',
     version = '1.*',
     opts = {
-      keymap = { 
+      keymap = {
         preset = 'default',
         ['<Tab>'] = { 'select_and_accept', 'snippet_forward', 'fallback' },
         ['<CR>'] = { 'accept', 'fallback' }

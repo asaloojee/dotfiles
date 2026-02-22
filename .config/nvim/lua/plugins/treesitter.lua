@@ -13,7 +13,6 @@ return {
         "jsdoc",
         "astro",
         "html",
-        "http",
         "json",
         "lua",
         "markdown",

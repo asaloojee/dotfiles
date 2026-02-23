@@ -19,3 +19,6 @@ vim.opt.foldtext = ""
 -- Absolute line numbers instead of relative
 vim.opt.number = true
 vim.opt.relativenumber = false
+
+-- Don't update diagnostics while typing in insert mode
+vim.diagnostic.config({ update_in_insert = false })

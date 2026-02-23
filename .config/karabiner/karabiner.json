@@ -4,7 +4,7 @@
             "complex_modifications": {
                 "rules": [
                     {
-                        "description": "Mouse Button 6 to Command+Click",
+                        "description": "Mouse Button 6 to Command + Click",
                         "manipulators": [
                             {
                                 "from": { "pointing_button": "button6" },
@@ -44,17 +44,11 @@
                         ]
                     },
                     {
-                        "description": "Mouse Button 7 to Command Key (held)",
+                        "description": "Mouse Button 7 to Enter",
                         "manipulators": [
                             {
                                 "from": { "pointing_button": "button7" },
-                                "to": [
-                                    {
-                                        "hold_down_milliseconds": 0,
-                                        "key_code": "left_command"
-                                    }
-                                ],
-                                "to_after_key_up": [{ "key_code": "left_command" }],
+                                "to": [{ "key_code": "return_or_enter" }],
                                 "type": "basic"
                             }
                         ]

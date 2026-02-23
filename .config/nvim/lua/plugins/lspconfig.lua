@@ -2,7 +2,7 @@ return {
   "neovim/nvim-lspconfig",
   opts = {
     servers = {
-      -- CSS: ignore unknown at-rules (Tailwind's @apply, etc.)
+      -- CSS: ignore unknown at-rules (PostCSS, etc.)
       cssls = {
         settings = {
           css = { lint = { unknownAtRules = "ignore" } },
@@ -17,16 +17,16 @@ return {
         init_options = { camelCase = "dashes" },
       },
 
-      -- Astro: uses local project's TypeScript SDK
+      -- Astro: resolve TypeScript SDK per-project
       astro = {
-        init_options = {
-          typescript = {
-            tsdk = vim.fn.getcwd() .. "/node_modules/typescript/lib",
-          },
-        },
+        on_new_config = function(new_config, new_root_dir)
+          new_config.init_options = new_config.init_options or {}
+          new_config.init_options.typescript = new_config.init_options.typescript or {}
+          new_config.init_options.typescript.tsdk = new_root_dir .. "/node_modules/typescript/lib"
+        end,
       },
 
-      -- TypeScript/JavaScript: skip .astro files, disable inlay hints
+      -- TypeScript/JavaScript: skip .astro files
       vtsls = {
         filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
         root_dir = function(bufnr_or_fname)
@@ -42,6 +42,21 @@ return {
         end,
         settings = {
           typescript = {
+            suggest = { completeFunctionCalls = true },
+            preferences = { preferTypeOnlyAutoImports = true },
+            updateImportsOnFileMove = { enabled = "always" },
+            inlayHints = {
+              parameterNames = { enabled = "none" },
+              parameterTypes = { enabled = false },
+              variableTypes = { enabled = false },
+              propertyDeclarationTypes = { enabled = false },
+              functionLikeReturnTypes = { enabled = false },
+              enumMemberValues = { enabled = false },
+            },
+          },
+          javascript = {
+            suggest = { completeFunctionCalls = true },
+            updateImportsOnFileMove = { enabled = "always" },
             inlayHints = {
               parameterNames = { enabled = "none" },
               parameterTypes = { enabled = false },
@@ -54,9 +69,12 @@ return {
         },
       },
 
+      -- ESLint
+      eslint = {},
+
       -- HTML: also attach to Astro files
       html = {
-        filetypes = { "html", "astro" },
+        filetypes = { "html" },
       },
 
       -- Python: auto-detect .venv, basic type checking
@@ -72,7 +90,7 @@ return {
           },
         },
         before_init = function(_, config)
-          local venv_path = vim.fn.getcwd() .. "/.venv"
+          local venv_path = config.root_dir .. "/.venv"
           if vim.fn.isdirectory(venv_path) == 1 then
             config.settings.python.pythonPath = venv_path .. "/bin/python"
           end

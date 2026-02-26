@@ -107,6 +107,7 @@ export LC_ALL=en_CA.UTF-8
 export LANG=en_CA.UTF-8
 export EDITOR=nvim
 export VISUAL=nvim
+export NODE_ENV=development
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"

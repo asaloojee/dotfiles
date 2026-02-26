@@ -4,7 +4,18 @@
             "complex_modifications": {
                 "rules": [
                     {
+                        "description": "Mouse Button 6 to Hold Command",
+                        "manipulators": [
+                            {
+                                "from": { "pointing_button": "button6" },
+                                "to": [{ "key_code": "left_command" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Mouse Button 6 to Command + Click",
+                        "enabled": false,
                         "manipulators": [
                             {
                                 "from": { "pointing_button": "button6" },

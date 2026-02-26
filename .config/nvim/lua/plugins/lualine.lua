@@ -8,7 +8,7 @@ return {
         icons_enabled = true,
         theme = "auto",
         component_separators = "|",
-        section_separators = { left = "", right = "" },
+        section_separators = { left = "", right = "" },
       },
       sections = {
         lualine_a = {
@@ -30,18 +30,16 @@ return {
             "filename",
             path = 0,
             padding = { left = 1, right = 1 },
-            -- color = { gui = "bold" },
           },
         },
         lualine_x = {
           {
             "encoding",
             padding = { left = 1, right = 1 },
-            -- color = { gui = "bold" },
           },
           {
             "fileformat",
-            symbols = { unix = "" },
+            symbols = { unix = "" },
             padding = { left = 1, right = 1 },
             color = { gui = "bold" },
           },
@@ -49,7 +47,6 @@ return {
             "filetype",
             icon_only = false,
             padding = { left = 1, right = 1 },
-            -- color = { gui = "bold" },
           },
         },
         lualine_y = {

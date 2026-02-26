@@ -4,9 +4,6 @@
 -- Use prettier even without a project config file
 vim.g.lazyvim_prettier_needs_config = false
 
--- Disable format-on-save (use <leader>cf to format manually)
-vim.g.autoformat = false
-
 -- Stay in the directory where nvim was opened
 vim.g.root_spec = { "cwd" }
 

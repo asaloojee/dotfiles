@@ -52,6 +52,7 @@
         pkgs.neovim
         # pkgs.raycast
         pkgs.ripgrep
+        pkgs.rust-analyzer
         pkgs.rustup
         # pkgs.sketchybar
         pkgs.starship

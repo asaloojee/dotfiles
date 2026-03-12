@@ -41,6 +41,7 @@
         pkgs.fish
         pkgs.fzf
         pkgs.git
+        pkgs.git-filter-repo
         pkgs.gitleaks
         pkgs.gitui
         pkgs.gnupg
@@ -107,9 +108,7 @@
           "proton-pass"
           "protonvpn"
           "sf-symbols"
-          "signal"
           "slack"
-          "telegram"
           "zoom"
         ];
 

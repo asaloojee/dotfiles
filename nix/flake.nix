@@ -36,14 +36,11 @@
         pkgs.alejandra
         pkgs.ast-grep
         pkgs.bat
-        # pkgs.code-cursor
         pkgs.doppler
         pkgs.eza
         pkgs.fastfetch
         pkgs.fd
         pkgs.fish
-        pkgs.fzf
-        pkgs.git
         pkgs.git-filter-repo
         pkgs.gitleaks
         pkgs.gitui
@@ -54,21 +51,15 @@
         pkgs.jq
         pkgs.mkalias
         pkgs.neovim
-        # pkgs.raycast
         pkgs.ripgrep
         pkgs.rust-analyzer
         pkgs.rustup
-        # pkgs.sketchybar
-        # pkgs.starship  # Managed by home-manager
         pkgs.stow
         pkgs.tmux
         pkgs.tmuxinator
         pkgs.tree
-        # pkgs.uutils-coreutils
         pkgs.uv
         pkgs.yazi
-        # pkgs.zed-editor
-        # pkgs.zoxide  # Managed by home-manager
       ];
 
       homebrew = {

@@ -1,0 +1,229 @@
+{
+  config,
+  pkgs,
+  ...
+}: {
+  home.username = "asaloojee";
+  home.homeDirectory = "/Users/asaloojee";
+  home.stateVersion = "24.11";
+
+  programs.home-manager.enable = true;
+
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+    options = ["--cmd cd"];
+  };
+
+  programs.zsh = {
+    enable = true;
+    enableCompletion = false; # We handle compinit ourselves
+
+    history = {
+      size = 10000;
+      save = 10000;
+      path = "$HOME/.zhistory";
+      share = true;
+      expireDuplicatesFirst = true;
+      ignoreAllDups = true;
+      ignoreSpace = true;
+    };
+
+    shellAliases = {
+      ls = "eza --icons=always";
+      g = "gitui";
+      mux = "tmuxinator";
+      n = "nvim";
+      cc = "claude";
+      rebuild = "echo '❄️ Rebuilding Nix flake...' && sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac";
+    };
+
+    initContent = ''
+      # -----------------------------------------------------------------------
+      # Zinit Plugin Manager
+      # -----------------------------------------------------------------------
+      ZINIT_HOME="''${XDG_DATA_HOME:-''${HOME}/.local/share}/zinit/zinit.git"
+
+      if [[ ! -d "$ZINIT_HOME" ]]; then
+          mkdir -p "$(dirname $ZINIT_HOME)"
+          git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+      fi
+
+      source "''${ZINIT_HOME}/zinit.zsh"
+
+      # -----------------------------------------------------------------------
+      # Plugins (Turbo-loaded - deferred after first prompt)
+      # -----------------------------------------------------------------------
+      zinit ice wait"0a" lucid blockf atpull"zinit creinstall -q ."
+      zinit light zsh-users/zsh-completions
+
+      zinit ice wait"0b" lucid
+      zinit light Aloxaf/fzf-tab
+
+      zinit ice wait"0c" lucid
+      zinit light zsh-users/zsh-syntax-highlighting
+
+      zinit ice wait"0c" lucid
+      zinit light zsh-users/zsh-autosuggestions
+
+      zinit ice wait"0c" lucid atload"bindkey '^[[A' history-substring-search-up; bindkey '^[[B' history-substring-search-down"
+      zinit light zsh-users/zsh-history-substring-search
+
+      # -----------------------------------------------------------------------
+      # Completion System (Cached - Regenerates Once Per Day)
+      # -----------------------------------------------------------------------
+      autoload -Uz compinit
+
+      if [[ -n ''${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
+          compinit
+      else
+          compinit -C
+      fi
+
+      setopt COMPLETE_IN_WORD
+      setopt ALWAYS_TO_END
+      setopt AUTO_MENU
+      setopt AUTO_LIST
+
+      zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+      zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
+      zstyle ':completion:*' menu select
+      zstyle ':completion:*' squeeze-slashes true
+
+      # Additional history options not covered by HM
+      setopt HIST_FIND_NO_DUPS
+      setopt HIST_VERIFY
+      setopt INC_APPEND_HISTORY
+
+      # -----------------------------------------------------------------------
+      # Key Bindings
+      # -----------------------------------------------------------------------
+      bindkey -e
+      bindkey "^[[3~" delete-char
+      bindkey "^[[H" beginning-of-line
+      bindkey "^[[F" end-of-line
+
+      bindkey ' ' magic-space
+
+      autoload -Uz edit-command-line
+      zle -N edit-command-line
+      bindkey '^X^E' edit-command-line
+
+      function copy-buffer-to-clipboard() {
+          echo -n "$BUFFER" | pbcopy
+          zle -M "Copied to clipboard"
+      }
+      zle -N copy-buffer-to-clipboard
+      bindkey '^X^C' copy-buffer-to-clipboard
+
+      # -----------------------------------------------------------------------
+      # Environment & PATH
+      # -----------------------------------------------------------------------
+      export LC_ALL=en_CA.UTF-8
+      export LANG=en_CA.UTF-8
+      export EDITOR=nvim
+      export VISUAL=nvim
+      export NODE_ENV=development
+
+      export PATH="$HOME/.local/bin:$PATH"
+      export PATH="$HOME/.cargo/bin:$PATH"
+      export PATH="/opt/homebrew/bin:$PATH"
+      export PATH="/opt/homebrew/sbin:$PATH"
+      export PATH="/nix/var/nix/profiles/default/bin:$PATH"
+      export PATH="/run/current-system/sw/bin:$PATH"
+      export PATH="$HOME/google-cloud-sdk/bin:$PATH"
+
+      export BUN_INSTALL="$HOME/.bun"
+      export PATH="$BUN_INSTALL/bin:$PATH"
+
+      # -----------------------------------------------------------------------
+      # Starship (cached)
+      # -----------------------------------------------------------------------
+      export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
+      ZSH_CACHE_DIR="''${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+      [[ -d "$ZSH_CACHE_DIR" ]] || mkdir -p "$ZSH_CACHE_DIR"
+
+      _starship_cache="$ZSH_CACHE_DIR/starship.zsh"
+      if [[ ! -f "$_starship_cache" || ! -s "$_starship_cache" || -n "$_starship_cache"(#qN.md+7) ]]; then
+          command -v starship &>/dev/null && starship init zsh > "$_starship_cache"
+      fi
+      [[ -f "$_starship_cache" ]] && source "$_starship_cache"
+
+      # Transient Prompt
+      TRANSIENT_PROMPT=`starship module character`
+      zle-line-init() {
+          emulate -L zsh
+          [[ $CONTEXT == start ]] || return 0
+          while true; do
+              zle .recursive-edit
+              local -i ret=$?
+              [[ $ret == 0 && $KEYS == $'\4' ]] || break
+              [[ -o ignore_eof ]] || exit 0
+          done
+          local saved_prompt=$PROMPT
+          local saved_rprompt=$RPROMPT
+          PROMPT=$TRANSIENT_PROMPT
+          zle .reset-prompt
+          PROMPT=$saved_prompt
+          if (( ret )); then
+              zle .send-break
+          else
+              zle .accept-line
+          fi
+          return ret
+      }
+      zle -N zle-line-init
+
+      # Google Cloud SDK completions (lazy loaded)
+      zinit ice wait"2" lucid if"[[ -f $HOME/google-cloud-sdk/completion.zsh.inc ]]"
+      zinit snippet "$HOME/google-cloud-sdk/completion.zsh.inc"
+
+      # -----------------------------------------------------------------------
+      # Plugin Configuration
+      # -----------------------------------------------------------------------
+      ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+      ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+
+      zstyle ':completion:*:git-checkout:*' sort false
+      zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+      zstyle ':fzf-tab:complete:*:*' fzf-preview 'if [[ -d $realpath ]]; then eza -1 --color=always $realpath; else bat --color=always --style=numbers --line-range=:500 $realpath 2>/dev/null || cat $realpath; fi'
+
+      # -----------------------------------------------------------------------
+      # Suffix Aliases
+      # -----------------------------------------------------------------------
+      alias -s md=bat
+      alias -s txt=bat
+      alias -s log=bat
+      alias -s json=jless
+      alias -s py='$EDITOR'
+      alias -s js='$EDITOR'
+      alias -s ts='$EDITOR'
+      alias -s tsx='$EDITOR'
+      alias -s jsx='$EDITOR'
+      alias -s nix='$EDITOR'
+      alias -s html=open
+
+      # -----------------------------------------------------------------------
+      # Functions
+      # -----------------------------------------------------------------------
+      function y() {
+          local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+          yazi "$@" --cwd-file="$tmp"
+          if cwd="$(command cat -- "$tmp")" && [[ -n "$cwd" ]] && [[ "$cwd" != "$PWD" ]]; then
+              builtin cd -- "$cwd"
+          fi
+          rm -f -- "$tmp"
+      }
+
+      function gr() {
+          local root=$(command git rev-parse --show-toplevel 2>/dev/null)
+          if [[ -n "$root" ]]; then
+              builtin cd "$root"
+          else
+              echo "Not in a git repository"
+              return 1
+          fi
+      }
+    '';
+  };
+}

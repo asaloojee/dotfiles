@@ -2,10 +2,11 @@
   enable = true;
   lfs.enable = true;
 
-  userName = "asaloojee";
-  userEmail = "asaloojee@omniwerx.io";
-
-  extraConfig = {
+  settings = {
+    user = {
+      name = "asaloojee";
+      email = "asaloojee@omniwerx.io";
+    };
     init.defaultBranch = "main";
     pull.rebase = true;
   };

@@ -2,22 +2,22 @@
 # Start with: tmuxinator start pre-script-web (or: mux start pre-script-web)
 
 name: pre-script-web
-root: ~/Dev/pre-script-web
+root: ~/dev/pre-script/pre-script-web
 
 windows:
   - editor:
-      root: ~/Dev/pre-script-web/pre-script-wp/static-pages/src/pages/
+      root: ~/dev/pre-script/pre-script-web/pre-script-wp/static-pages/src/pages/
       panes:
         -  # Empty pane in ps-theme-bricks src directory
   - page-mount:
-      root: ~/Dev/pre-script-web/pre-script-wp/static-pages/src/pages/
+      root: ~/dev/pre-script/pre-script-web/pre-script-wp/static-pages/src/pages/
       panes:
         -  # Serve page for local development
   - wp-env:
-      root: ~/Dev/pre-script-web/pre-script-wp/ps-theme-bricks/src/
+      root: ~/dev/pre-script/pre-script-web/pre-script-wp/ps-theme-bricks/src/
       panes:
         - wp-env start
   - api:
-      root: ~/Dev/pre-script-api-serverless/
+      root: ~/dev/pre-script/pre-script-api-serverless/
       panes:
         -  # Empty pane

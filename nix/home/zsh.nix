@@ -105,26 +105,6 @@
     bindkey '^X^C' copy-buffer-to-clipboard
 
     # -----------------------------------------------------------------------
-    # Environment & PATH
-    # -----------------------------------------------------------------------
-    export LC_ALL=en_CA.UTF-8
-    export LANG=en_CA.UTF-8
-    export EDITOR=nvim
-    export VISUAL=nvim
-    export NODE_ENV=development
-
-    export PATH="$HOME/.local/bin:$PATH"
-    export PATH="$HOME/.cargo/bin:$PATH"
-    export PATH="/opt/homebrew/bin:$PATH"
-    export PATH="/opt/homebrew/sbin:$PATH"
-    export PATH="/nix/var/nix/profiles/default/bin:$PATH"
-    export PATH="/run/current-system/sw/bin:$PATH"
-    export PATH="$HOME/google-cloud-sdk/bin:$PATH"
-
-    export BUN_INSTALL="$HOME/.bun"
-    export PATH="$BUN_INSTALL/bin:$PATH"
-
-    # -----------------------------------------------------------------------
     # Transient Prompt (replaces previous prompt with minimal character)
     # -----------------------------------------------------------------------
     TRANSIENT_PROMPT=`starship module character`

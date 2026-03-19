@@ -10,6 +10,22 @@
 
   programs.home-manager.enable = true;
 
+  home.sessionVariables = {
+    LC_ALL = "en_CA.UTF-8";
+    LANG = "en_CA.UTF-8";
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+    NODE_ENV = "development";
+    BUN_INSTALL = "$HOME/.bun";
+  };
+
+  home.sessionPath = [
+    "$HOME/.local/bin"
+    "$HOME/.cargo/bin"
+    "$HOME/google-cloud-sdk/bin"
+    "$HOME/.bun/bin"
+  ];
+
   programs = {
     fzf = import ./home/fzf.nix {inherit pkgs;};
     git = import ./home/git.nix {inherit pkgs;};

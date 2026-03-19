@@ -36,6 +36,8 @@
         pkgs.alejandra
         pkgs.ast-grep
         pkgs.bat
+        pkgs.bun
+        pkgs.claude-code
         pkgs.doppler
         pkgs.eza
         pkgs.fastfetch
@@ -51,6 +53,7 @@
         pkgs.jq
         pkgs.mkalias
         pkgs.neovim
+        pkgs.phpPackages.composer
         pkgs.ripgrep
         pkgs.rust-analyzer
         pkgs.rustup
@@ -64,14 +67,9 @@
 
       homebrew = {
         enable = true;
-        taps = [
-          "oven-sh/bun"
-          # "TheBoredTeam/boring-notch"
-        ];
+        taps = [];
 
         brews = [
-          "bun"
-          "composer"
           "mas"
           "tailscale"
         ];
@@ -80,7 +78,6 @@
           "adobe-creative-cloud"
           "brave-browser"
           "claude"
-          "claude-code"
           "discord"
           "docker-desktop"
           "figma"

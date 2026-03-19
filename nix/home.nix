@@ -27,8 +27,11 @@
   ];
 
   programs = {
+    bat = import ./home/bat.nix {inherit pkgs;};
+    eza = import ./home/eza.nix {inherit pkgs;};
     fzf = import ./home/fzf.nix {inherit pkgs;};
     git = import ./home/git.nix {inherit pkgs;};
+    tmux = import ./home/tmux.nix {inherit pkgs;};
     zoxide = import ./home/zoxide.nix {inherit pkgs;};
     starship = import ./home/starship.nix {inherit pkgs lib;};
     zsh = import ./home/zsh.nix {inherit config pkgs lib;};

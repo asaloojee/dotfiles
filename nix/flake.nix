@@ -35,11 +35,9 @@
         pkgs.aerospace
         pkgs.alejandra
         pkgs.ast-grep
-        pkgs.bat
         pkgs.bun
         pkgs.claude-code
         pkgs.doppler
-        pkgs.eza
         pkgs.fastfetch
         pkgs.fd
         pkgs.fish
@@ -58,7 +56,6 @@
         pkgs.rust-analyzer
         pkgs.rustup
         pkgs.stow
-        pkgs.tmux
         pkgs.tmuxinator
         pkgs.tree
         pkgs.uv

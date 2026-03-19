@@ -18,7 +18,6 @@
   };
 
   shellAliases = {
-    ls = "eza --icons=always";
     g = "gitui";
     mux = "tmuxinator";
     n = "nvim";

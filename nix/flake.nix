@@ -59,7 +59,7 @@
         pkgs.rust-analyzer
         pkgs.rustup
         # pkgs.sketchybar
-        pkgs.starship
+        # pkgs.starship  # Managed by home-manager
         pkgs.stow
         pkgs.tmux
         pkgs.tmuxinator

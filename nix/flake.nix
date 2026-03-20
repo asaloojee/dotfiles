@@ -1,5 +1,5 @@
 {
-  description = "Darwin system flake V1.2";
+  description = "Darwin system flake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -8,8 +8,6 @@
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    alejandra.url = "github:kamadorueda/alejandra";
-    alejandra.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ {
@@ -18,192 +16,40 @@
     nixpkgs,
     nix-homebrew,
     home-manager,
-    alejandra,
-    # ...
-  }: let
-    configuration = {
-      pkgs,
-      config,
-      ...
-    }: {
-      nixpkgs.config.allowUnfree = true;
-      nix.settings.warn-dirty = false;
+    ...
+  }: {
+    formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
 
-      # List packages installed in system profile. To search by name, run:
-      # $ nix-env -qaP | grep wget
-      environment.systemPackages = [
-        pkgs.aerospace
-        pkgs.alejandra
-        pkgs.ast-grep
-        pkgs.bun
-        pkgs.claude-code
-        pkgs.doppler
-        pkgs.fastfetch
-        pkgs.fd
-        pkgs.fish
-        pkgs.git-filter-repo
-        pkgs.gitleaks
-        pkgs.gitui
-        pkgs.gnupg
-        pkgs.go
-        pkgs.ice-bar
-        pkgs.jless
-        pkgs.jq
-        pkgs.mkalias
-        pkgs.neovim
-        pkgs.phpPackages.composer
-        pkgs.ripgrep
-        pkgs.rust-analyzer
-        pkgs.rustup
-        pkgs.stow
-        pkgs.tmuxinator
-        pkgs.tree
-        pkgs.uv
-        pkgs.yazi
-      ];
-
-      homebrew = {
-        enable = true;
-        taps = [];
-
-        brews = [
-          "mas"
-          "tailscale"
-        ];
-
-        casks = [
-          "adobe-creative-cloud"
-          "brave-browser"
-          "claude"
-          "discord"
-          "docker-desktop"
-          "figma"
-          "font-hack-nerd-font"
-          "font-martel"
-          "font-playfair"
-          "font-sf-mono"
-          "font-sf-pro"
-          "ghostty"
-          # "ollama"
-          "obsidian"
-          "handbrake-app"
-          "karabiner-elements"  # Needs stable paths for macOS permissions
-          "leader-key"
-          "maccy"
-          "mos"
-          "proton-drive"
-          "proton-mail"
-          "proton-pass"
-          "protonvpn"
-          "sf-symbols"
-          "slack"
-          "zoom"
-        ];
-
-        masApps = {
-              # "Yoink" = 457622435;
-          "PDFgear" = 6469021132;
-        };
-        onActivation.cleanup = "zap";
-        onActivation.autoUpdate = true;
-        onActivation.upgrade = true;
-      };
-
-      services.sketchybar.enable = false;
-      services.jankyborders.enable = false;
-
-      fonts.packages = [
-        pkgs.fira
-        pkgs.iosevka-comfy.comfy
-        pkgs.iosevka-comfy.comfy-duo
-        pkgs.maple-mono.NF-unhinted
-        pkgs.maple-mono.truetype
-        pkgs.nerd-fonts.iosevka
-        pkgs.nerd-fonts.jetbrains-mono
-        pkgs.nerd-fonts.meslo-lg
-        pkgs.nerd-fonts.monaspace
-        pkgs.noto-fonts
-#        pkgs.sketchybar-app-font
-      ];
-
-      system.activationScripts.applications.text = let
-        env = pkgs.buildEnv {
-          name = "system-applications";
-          paths = config.environment.systemPackages;
-          pathsToLink = [ "/Applications" ];
-        };
-      in
-        pkgs.lib.mkForce ''
-          # Set up applications.
-          echo "setting up /Applications..." >&2
-          rm -rf /Applications/Nix\ Apps
-          mkdir -p /Applications/Nix\ Apps
-          find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
-          while read -r src; do
-          app_name=$(basename "$src")
-          echo "copying $src" >&2
-          ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
-          done
-
-          # Clean up broken symlinks
-          echo "cleaning up broken symlinks..." >&2
-          find "/Applications/Nix Apps" -type l ! -exec test -e {} \; -delete
-        '';
-
-      system.primaryUser = "asaloojee";
-
-      # Set default user shell
-      users.users.asaloojee = {
-        name = "asaloojee";
-        home = "/Users/asaloojee";
-        shell = pkgs.zsh;
-      };
-
-      system.defaults = {
-        dock.autohide = true;
-        dock.static-only = true;
-        dock.tilesize = 16;
-        finder.ShowPathbar = true;
-        finder.NewWindowTarget = "Documents";
-        menuExtraClock.ShowSeconds = true;
-        finder.FXPreferredViewStyle = "clmv";
-        loginwindow.GuestEnabled = false;
-        NSGlobalDomain.AppleInterfaceStyle = "Dark";
-        NSGlobalDomain.KeyRepeat = 2;
-        finder.AppleShowAllExtensions = true;
-        WindowManager.EnableStandardClickToShowDesktop = false;
-        SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true;
-        NSGlobalDomain.NSNavPanelExpandedStateForSaveMode2 = true;
-      };
-
-      programs.zsh.enable = true;
-
-      # Necessary for using flakes on this system.
-      nix.settings.experimental-features = "nix-command flakes";
-      
-      # Set Git commit hash for darwin-version.
-      system.configurationRevision = self.rev or self.dirtyRev or null;
-
-      # Used for backwards compatibility, please read the changelog before changing.
-      # $ darwin-rebuild changelog
-      system.stateVersion = 6;
-
-      # The platform the configuration will be used on.
-      nixpkgs.hostPlatform = "aarch64-darwin";
-    };
-  in {
-    # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#simple
     darwinConfigurations."mac" = nix-darwin.lib.darwinSystem {
       modules = [
-        configuration
+        ./modules/packages.nix
+        ./modules/homebrew.nix
+        ./modules/macos-defaults.nix
+        ./modules/fonts.nix
+        ./modules/apps.nix
+        ({pkgs, ...}: {
+          nixpkgs.config.allowUnfree = true;
+          nix.settings.warn-dirty = false;
+          nix.settings.experimental-features = "nix-command flakes";
+          nixpkgs.hostPlatform = "aarch64-darwin";
+
+          system.primaryUser = "asaloojee";
+          users.users.asaloojee = {
+            name = "asaloojee";
+            home = "/Users/asaloojee";
+            shell = pkgs.zsh;
+          };
+
+          programs.zsh.enable = true;
+
+          system.configurationRevision = self.rev or self.dirtyRev or null;
+          system.stateVersion = 6;
+        })
         nix-homebrew.darwinModules.nix-homebrew
         {
           nix-homebrew = {
             enable = true;
-            # Apple Silicon
             enableRosetta = true;
-            # User owning the Homebrew prefix
             user = "asaloojee";
           };
         }

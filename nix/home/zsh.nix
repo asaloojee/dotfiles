@@ -5,7 +5,33 @@
   ...
 }: {
   enable = true;
+  dotDir = "${config.xdg.configHome}/zsh";
   enableCompletion = false; # We handle compinit ourselves
+
+  autosuggestion = {
+    enable = true;
+    strategy = ["history" "completion"];
+  };
+
+  syntaxHighlighting.enable = true;
+
+  plugins = [
+    {
+      name = "zsh-completions";
+      src = pkgs.zsh-completions;
+      file = "share/zsh-completions/zsh-completions.zsh";
+    }
+    {
+      name = "fzf-tab";
+      src = pkgs.zsh-fzf-tab;
+      file = "share/fzf-tab/fzf-tab.plugin.zsh";
+    }
+    {
+      name = "zsh-history-substring-search";
+      src = pkgs.zsh-history-substring-search;
+      file = "share/zsh-history-substring-search/zsh-history-substring-search.zsh";
+    }
+  ];
 
   history = {
     size = 10000;
@@ -26,36 +52,6 @@
   };
 
   initContent = ''
-    # -----------------------------------------------------------------------
-    # Zinit Plugin Manager
-    # -----------------------------------------------------------------------
-    ZINIT_HOME="''${XDG_DATA_HOME:-''${HOME}/.local/share}/zinit/zinit.git"
-
-    if [[ ! -d "$ZINIT_HOME" ]]; then
-        mkdir -p "$(dirname $ZINIT_HOME)"
-        git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-    fi
-
-    source "''${ZINIT_HOME}/zinit.zsh"
-
-    # -----------------------------------------------------------------------
-    # Plugins (Turbo-loaded - deferred after first prompt)
-    # -----------------------------------------------------------------------
-    zinit ice wait"0a" lucid blockf atpull"zinit creinstall -q ."
-    zinit light zsh-users/zsh-completions
-
-    zinit ice wait"0b" lucid
-    zinit light Aloxaf/fzf-tab
-
-    zinit ice wait"0c" lucid
-    zinit light zsh-users/zsh-syntax-highlighting
-
-    zinit ice wait"0c" lucid
-    zinit light zsh-users/zsh-autosuggestions
-
-    zinit ice wait"0c" lucid atload"bindkey '^[[A' history-substring-search-up; bindkey '^[[B' history-substring-search-down"
-    zinit light zsh-users/zsh-history-substring-search
-
     # -----------------------------------------------------------------------
     # Completion System (Cached - Regenerates Once Per Day)
     # -----------------------------------------------------------------------
@@ -96,6 +92,10 @@
     zle -N edit-command-line
     bindkey '^X^E' edit-command-line
 
+    # History substring search keybindings
+    bindkey '^[[A' history-substring-search-up
+    bindkey '^[[B' history-substring-search-down
+
     function copy-buffer-to-clipboard() {
         echo -n "$BUFFER" | pbcopy
         zle -M "Copied to clipboard"
@@ -130,16 +130,14 @@
     }
     zle -N zle-line-init
 
-    # Google Cloud SDK completions (lazy loaded)
-    zinit ice wait"2" lucid if"[[ -f $HOME/google-cloud-sdk/completion.zsh.inc ]]"
-    zinit snippet "$HOME/google-cloud-sdk/completion.zsh.inc"
+    # Google Cloud SDK completions
+    if [[ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]]; then
+        source "$HOME/google-cloud-sdk/completion.zsh.inc"
+    fi
 
     # -----------------------------------------------------------------------
     # Plugin Configuration
     # -----------------------------------------------------------------------
-    ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-    ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-
     zstyle ':completion:*:git-checkout:*' sort false
     zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
     zstyle ':fzf-tab:complete:*:*' fzf-preview 'if [[ -d $realpath ]]; then eza -1 --color=always $realpath; else bat --color=always --style=numbers --line-range=:500 $realpath 2>/dev/null || cat $realpath; fi'

@@ -7,6 +7,7 @@
   home.username = "asaloojee";
   home.homeDirectory = "/Users/asaloojee";
   home.stateVersion = "24.11";
+  xdg.enable = true;
 
   programs.home-manager.enable = true;
 
@@ -35,5 +36,19 @@
     zoxide = import ./home/zoxide.nix {inherit pkgs;};
     starship = import ./home/starship.nix {inherit pkgs lib;};
     zsh = import ./home/zsh.nix {inherit config pkgs lib;};
+    direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
+    };
+    delta = {
+      enable = true;
+      options = {
+        syntax-theme = "tokyonight_night";
+        line-numbers = true;
+        side-by-side = true;
+        navigate = true;
+      };
+    };
   };
 }

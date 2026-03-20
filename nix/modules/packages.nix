@@ -1,0 +1,34 @@
+{pkgs, ...}: {
+  environment.systemPackages = [
+    pkgs.aerospace
+    pkgs.alejandra
+    pkgs.ast-grep
+    pkgs.btop
+    pkgs.bun
+    pkgs.claude-code
+    pkgs.doppler
+    pkgs.fastfetch
+    pkgs.fd
+    pkgs.fish
+    pkgs.gh
+    pkgs.git-filter-repo
+    pkgs.gitleaks
+    pkgs.gitui
+    pkgs.gnupg
+    pkgs.go
+    pkgs.ice-bar
+    pkgs.jless
+    pkgs.jq
+    pkgs.mkalias
+    pkgs.neovim
+    pkgs.phpPackages.composer
+    pkgs.ripgrep
+    pkgs.rust-analyzer
+    pkgs.rustup
+    pkgs.stow
+    pkgs.tmuxinator
+    pkgs.tree
+    pkgs.uv
+    pkgs.yazi
+  ];
+}

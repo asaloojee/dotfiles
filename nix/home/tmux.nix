@@ -16,11 +16,12 @@
         set -g @tokyo-night-tmux_show_datetime 0
         set -g @tokyo-night-tmux_show_path 0
         set -g @tokyo-night-tmux_path_format relative
-        set -g @tokyo-night-tmux_window_id_style digital
+        set -g @tokyo-night-tmux_window_id_style none
         set -g @tokyo-night-tmux_show_git 0
       '';
     }
     yank
+    resurrect
   ];
 
   extraConfig = ''

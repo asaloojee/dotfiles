@@ -9,6 +9,7 @@
     };
     init.defaultBranch = "main";
     pull.rebase = true;
+    merge.conflictstyle = "zdiff3";
   };
 
   includes = [

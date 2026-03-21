@@ -15,7 +15,4 @@
     SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true;
     NSGlobalDomain.NSNavPanelExpandedStateForSaveMode2 = true;
   };
-
-  services.sketchybar.enable = false;
-  services.jankyborders.enable = false;
 }

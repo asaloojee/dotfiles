@@ -5,7 +5,6 @@
 
     brews = [
       "mas"
-      "tailscale"
     ];
 
     casks = [

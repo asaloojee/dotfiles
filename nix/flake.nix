@@ -27,6 +27,7 @@
         ./modules/macos-defaults.nix
         ./modules/fonts.nix
         ./modules/apps.nix
+        ./modules/tailscale.nix
         ({pkgs, ...}: {
           nixpkgs.config.allowUnfree = true;
           nix.settings.warn-dirty = false;
@@ -41,6 +42,8 @@
           };
 
           programs.zsh.enable = true;
+
+          nix.optimise.automatic = true;
 
           system.configurationRevision = self.rev or self.dirtyRev or null;
           system.stateVersion = 6;

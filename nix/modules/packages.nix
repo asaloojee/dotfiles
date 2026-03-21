@@ -9,7 +9,6 @@
     pkgs.doppler
     pkgs.fastfetch
     pkgs.fd
-    pkgs.fish
     pkgs.gh
     pkgs.git-filter-repo
     pkgs.gitleaks
@@ -26,6 +25,7 @@
     pkgs.rust-analyzer
     pkgs.rustup
     pkgs.stow
+    pkgs.tailscale
     pkgs.tmuxinator
     pkgs.tree
     pkgs.uv

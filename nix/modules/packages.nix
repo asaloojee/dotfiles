@@ -18,6 +18,8 @@
     pkgs.ice-bar
     pkgs.jless
     pkgs.jq
+    pkgs.just
+    pkgs.lazydocker
     pkgs.mkalias
     pkgs.neovim
     pkgs.phpPackages.composer

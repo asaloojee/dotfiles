@@ -48,7 +48,7 @@
     mux = "tmuxinator";
     n = "nvim";
     cc = "claude";
-    flake-rebuild = "sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac";
+    rebuild = "sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac";
   };
 
   initContent = ''

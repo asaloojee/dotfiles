@@ -21,6 +21,8 @@ BLOCKED_SITES=(
   "www.wornandwound.com"
   "ablogtowatch.com"
   "www.ablogtowatch.com"
+  "watchuseek.com"
+  "www.watchuseek.com"
 )
 
 HOSTS_FILE="/etc/hosts"
@@ -54,7 +56,7 @@ setup_password() {
     echo "Password must be at least 12 characters. Make it painful to type."
     exit 1
   fi
-  hash_password "$pass1" > "$HASH_FILE"
+  hash_password "$pass1" >"$HASH_FILE"
   chmod 600 "$HASH_FILE"
   echo "Password saved."
 }
@@ -81,12 +83,12 @@ block_sites() {
     exit 0
   fi
 
-  echo "" | sudo tee -a "$HOSTS_FILE" > /dev/null
-  echo "$MARKER_START" | sudo tee -a "$HOSTS_FILE" > /dev/null
+  echo "" | sudo tee -a "$HOSTS_FILE" >/dev/null
+  echo "$MARKER_START" | sudo tee -a "$HOSTS_FILE" >/dev/null
   for site in "${BLOCKED_SITES[@]}"; do
-    echo "127.0.0.1  $site" | sudo tee -a "$HOSTS_FILE" > /dev/null
+    echo "127.0.0.1  $site" | sudo tee -a "$HOSTS_FILE" >/dev/null
   done
-  echo "$MARKER_END" | sudo tee -a "$HOSTS_FILE" > /dev/null
+  echo "$MARKER_END" | sudo tee -a "$HOSTS_FILE" >/dev/null
 
   # Flush DNS cache so changes take effect immediately
   sudo dscacheutil -flushcache
@@ -131,26 +133,26 @@ if [ ! -f "$HASH_FILE" ]; then
 fi
 
 case "${1:-}" in
-  on|block)
-    block_sites
-    ;;
-  off|unblock)
-    unblock_sites
-    ;;
-  status)
-    show_status
-    ;;
-  reset-password)
-    verify_password
-    rm "$HASH_FILE"
-    setup_password
-    ;;
-  *)
-    echo "Usage: focus [on|off|status|reset-password]"
-    echo ""
-    echo "  on    — Block distracting sites (no password needed)"
-    echo "  off   — Unblock sites (password required)"
-    echo "  status — Show current blocking status"
-    echo "  reset-password — Change your password"
-    ;;
+on | block)
+  block_sites
+  ;;
+off | unblock)
+  unblock_sites
+  ;;
+status)
+  show_status
+  ;;
+reset-password)
+  verify_password
+  rm "$HASH_FILE"
+  setup_password
+  ;;
+*)
+  echo "Usage: focus [on|off|status|reset-password]"
+  echo ""
+  echo "  on    — Block distracting sites (no password needed)"
+  echo "  off   — Unblock sites (password required)"
+  echo "  status — Show current blocking status"
+  echo "  reset-password — Change your password"
+  ;;
 esac

@@ -10,3 +10,6 @@ CLAUDE.md
 
 # Ignore scripts directory (manually installed, not symlinked)
 scripts
+
+# Ignore justfile (repo management, not a dotfile)
+justfile

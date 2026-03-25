@@ -39,8 +39,9 @@ diff:
 
 # Collect nix garbage (old generations + store)
 gc:
-    sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system
-    sudo nix-collect-garbage -d
+    sudo -i nix-env --delete-generations old --profile /nix/var/nix/profiles/system
+    sudo -i nix-collect-garbage -d
+    sudo -i nix store gc
 
 # Show generations history
 generations:

@@ -169,6 +169,10 @@
         rm -f -- "$tmp"
     }
 
+    function gp() {
+        git add -A && git commit -m "''${*:-update}" && git push
+    }
+
     function gr() {
         local root=$(command git rev-parse --show-toplevel 2>/dev/null)
         if [[ -n "$root" ]]; then

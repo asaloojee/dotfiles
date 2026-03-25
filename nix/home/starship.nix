@@ -25,7 +25,7 @@
     fill.symbol = " ";
 
     directory = {
-      style = "#7aa2f7";
+      style = "blue";
       read_only = " 󱌃";
       home_symbol = "󰜥 ";
       truncation_length = 4;
@@ -35,26 +35,26 @@
 
     character = {
       format = "$symbol ";
-      success_symbol = "[❯](#bb9af7)";
-      error_symbol = "[❯](#f7768e)";
+      success_symbol = "[❯](magenta)";
+      error_symbol = "[❯](red)";
     };
 
     git_branch = {
       symbol = "󰘬 ";
       format = "[$symbol$branch]($style) ";
-      style = "#565f89";
+      style = "bright-black";
     };
 
     jobs = {
       symbol = "󰒓 ";
-      style = "bold #f7768e";
+      style = "bold red";
       number_threshold = 1;
       format = "[$symbol]($style)";
     };
 
     git_status = {
       format = "([\\[$all_status$ahead_behind\\]]($style) )";
-      style = "#565f89";
+      style = "bright-black";
       ahead = "󰁝";
       behind = "󰁅";
       diverged = "󰹹";
@@ -69,18 +69,18 @@
 
     git_state = {
       format = "\\([$state( $progress_current/$progress_total)]($style)\\) ";
-      style = "#565f89";
+      style = "bright-black";
     };
 
     git_metrics = {
       disabled = false;
-      added_style = "#9ece6a";
-      deleted_style = "#f7768e";
+      added_style = "green";
+      deleted_style = "red";
     };
 
     cmd_duration = {
       format = "[$duration]($style)";
-      style = "#e0af68";
+      style = "yellow";
     };
 
     memory_usage.symbol = "󰍛 ";
@@ -88,7 +88,7 @@
     bun = {
       symbol = " ";
       format = "[$symbol($version )]($style)";
-      style = "#f7768e";
+      style = "red";
       detect_extensions = [];
       detect_files = ["bun.lock"];
       detect_folders = [];
@@ -97,7 +97,7 @@
     nodejs = {
       symbol = " ";
       format = "[$symbol($version )]($style)";
-      style = "#9ece6a";
+      style = "green";
       detect_extensions = [];
       detect_files = ["package-lock.json" "yarn.lock"];
       detect_folders = [];
@@ -106,7 +106,7 @@
     python = {
       symbol = " ";
       format = "[$symbol($version )]($style)";
-      style = "#e0af68";
+      style = "yellow";
     };
   };
 }

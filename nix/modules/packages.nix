@@ -31,6 +31,5 @@
     pkgs.tmuxinator
     pkgs.tree
     pkgs.uv
-    pkgs.yazi
   ];
 }

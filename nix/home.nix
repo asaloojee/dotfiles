@@ -11,6 +11,10 @@
 
   programs.home-manager.enable = true;
 
+  # Disable Stylix for apps that manage their own theming
+  stylix.targets.neovim.enable = false;
+  stylix.targets.tmux.enable = false;
+
   home.sessionVariables = {
     LC_ALL = "en_CA.UTF-8";
     LANG = "en_CA.UTF-8";
@@ -28,12 +32,14 @@
   ];
 
   programs = {
+    aerospace = import ./home/aerospace.nix {inherit pkgs;};
     bat = import ./home/bat.nix {inherit pkgs;};
     eza = import ./home/eza.nix {inherit pkgs;};
     fzf = import ./home/fzf.nix {inherit pkgs;};
+    ghostty = import ./home/ghostty.nix {inherit pkgs;};
     git = import ./home/git.nix {inherit pkgs;};
     tmux = import ./home/tmux.nix {inherit pkgs;};
-    zoxide = import ./home/zoxide.nix {inherit pkgs;};
+zoxide = import ./home/zoxide.nix {inherit pkgs;};
     starship = import ./home/starship.nix {inherit pkgs lib;};
     zsh = import ./home/zsh.nix {inherit config pkgs lib;};
     direnv = {
@@ -44,7 +50,7 @@
     delta = {
       enable = true;
       options = {
-        syntax-theme = "tokyonight_night";
+        syntax-theme = "base16-stylix";
         line-numbers = true;
         side-by-side = true;
         navigate = true;

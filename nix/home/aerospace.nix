@@ -5,12 +5,6 @@
     after-login-command = [];
     after-startup-command = [];
 
-    exec-on-workspace-change = [
-      "/bin/bash"
-      "-c"
-      "/run/current-system/sw/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE"
-    ];
-
     start-at-login = true;
 
     enable-normalization-flatten-containers = true;
@@ -64,17 +58,7 @@
       ctrl-alt-cmd-tab = "workspace-back-and-forth";
       ctrl-alt-cmd-shift-tab = "move-workspace-to-monitor --wrap-around next";
 
-      ctrl-alt-cmd-r = "mode resize";
       ctrl-alt-cmd-shift-semicolon = "mode service";
-    };
-
-    mode.resize.binding = {
-      minus = "resize smart -50";
-      shift-equal = "resize smart +50";
-      equal = "balance-sizes";
-      esc = "mode main";
-      ctrl-c = "mode main";
-      enter = "mode main";
     };
 
     mode.service.binding = {

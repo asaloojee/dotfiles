@@ -4,6 +4,11 @@
   settings = {
     after-login-command = [];
     after-startup-command = [];
+    exec-on-workspace-change = [
+      "/bin/bash"
+      "-c"
+      "sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE"
+    ];
 
     start-at-login = true;
 
@@ -121,10 +126,6 @@
       }
       {
         "if".app-id = "com.tinyspeck.slackmacgap";
-        run = "layout floating";
-      }
-      {
-        "if".app-id = "com.replay.sleeve";
         run = "layout floating";
       }
     ];

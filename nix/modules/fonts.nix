@@ -10,5 +10,6 @@
     pkgs.nerd-fonts.meslo-lg
     pkgs.nerd-fonts.monaspace
     pkgs.noto-fonts
+    pkgs.sketchybar-app-font
   ];
 }

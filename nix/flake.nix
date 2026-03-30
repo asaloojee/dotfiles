@@ -31,6 +31,7 @@
         ./modules/fonts.nix
         ./modules/apps.nix
         ./modules/tailscale.nix
+        ./modules/sketchybar.nix
         ./modules/stylix.nix
         ({pkgs, ...}: {
           nixpkgs.config.allowUnfree = true;

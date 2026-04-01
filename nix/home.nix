@@ -4,6 +4,9 @@
   lib,
   ...
 }: {
+  imports = [
+    ./home/fastfetch.nix
+  ];
   home.username = "asaloojee";
   home.homeDirectory = "/Users/asaloojee";
   home.stateVersion = "24.11";

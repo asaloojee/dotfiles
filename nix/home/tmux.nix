@@ -1,8 +1,12 @@
 {pkgs, ...}: {
   enable = true;
+  aggressiveResize = true;
   baseIndex = 1;
+  disableConfirmationPrompt = true;
   keyMode = "vi";
   mouse = true;
+  newSession = true;
+  secureSocket = true;
   shortcut = "Space";
   terminal = "xterm-256color";
   shell = "${pkgs.zsh}/bin/zsh";
@@ -27,6 +31,9 @@
   extraConfig = ''
     # Terminal overrides
     set-option -sa terminal-overrides ",xterm*:Tc"
+    set -as terminal-features ",xterm-256color:RGB"
+    set -as terminal-features ",xterm-ghostty:RGB"
+    set -as terminal-features ",tmux-256color:RGB"
 
     # Pane base index
     set -g pane-base-index 1

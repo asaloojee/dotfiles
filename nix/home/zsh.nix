@@ -45,6 +45,7 @@
 
   shellAliases = {
     g = "gitui";
+    ff = "fastfetch";
     mux = "tmuxinator";
     n = "nvim";
     cc = "claude";
@@ -141,6 +142,17 @@
     zstyle ':completion:*:git-checkout:*' sort false
     zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
     zstyle ':fzf-tab:complete:*:*' fzf-preview 'if [[ -d $realpath ]]; then eza -1 --color=always $realpath; else bat --color=always --style=numbers --line-range=:500 $realpath 2>/dev/null || cat $realpath; fi'
+
+    # -----------------------------------------------------------------------
+    # Global Aliases (expand anywhere in the command, not just at the start)
+    # -----------------------------------------------------------------------
+    alias -g NE='2>/dev/null'
+    alias -g ND='>/dev/null'
+    alias -g NUL='>/dev/null 2>&1'
+    alias -g JQ='| jq'
+
+    # Suppress paste highlight flash
+    zle_highlight+=(paste:none)
 
     # -----------------------------------------------------------------------
     # Suffix Aliases

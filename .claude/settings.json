@@ -6,7 +6,6 @@
   "includeCoAuthoredBy": false,
   "model": "opus",
   "enabledPlugins": {
-    "dev-browser@dev-browser-marketplace": true,
     "ast-grep@ast-grep-marketplace": true,
     "feature-dev@claude-plugins-official": true,
     "frontend-design@claude-plugins-official": true

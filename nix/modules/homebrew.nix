@@ -38,7 +38,7 @@
 
     masApps = {
       # "Yoink" = 457622435;
-      "PDFgear" = 6469021132;
+      # "PDFgear" = 6469021132;
     };
 
     onActivation.cleanup = "zap";

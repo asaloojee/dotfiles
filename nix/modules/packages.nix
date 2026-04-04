@@ -30,6 +30,7 @@
     pkgs.tailscale
     pkgs.tmuxinator
     pkgs.tree
+    pkgs.tree-sitter
     pkgs.uv
   ];
 }

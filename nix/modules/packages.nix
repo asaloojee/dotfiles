@@ -15,6 +15,7 @@
     pkgs.gitui
     pkgs.gnupg
     pkgs.go
+
     pkgs.ice-bar
     pkgs.jless
     pkgs.jq
@@ -32,5 +33,19 @@
     pkgs.tree
     pkgs.tree-sitter
     pkgs.uv
+
+    # Language servers (for Helix)
+    pkgs.typescript
+    pkgs.typescript-language-server
+    pkgs.vscode-langservers-extracted # CSS, HTML, JSON, ESLint
+    pkgs.yaml-language-server
+    pkgs.bash-language-server
+    pkgs.astro-language-server
+    pkgs.marksman
+    pkgs.taplo
+
+    # Formatters
+    pkgs.prettier
+    pkgs.ruff
   ];
 }

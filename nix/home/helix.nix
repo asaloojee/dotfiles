@@ -16,6 +16,9 @@
       # Tint the statusline per mode (NOR/INS/SEL), like lualine in Neovim
       color-modes = true;
 
+      # Borders around autocomplete/hover popups
+      popup-border = "all";
+
       # Show bufferline when multiple buffers are open
       bufferline = "multiple";
 
@@ -54,8 +57,14 @@
         git-global = true;
       };
 
-      # Compact diagnostic marker on all affected lines
-      end-of-line-diagnostics = "warning";
+      # Disable end-of-line markers — inline-diagnostics handles the full messages
+      end-of-line-diagnostics = "disable";
+
+      # Inline diagnostics — render messages at the error site
+      inline-diagnostics = {
+        cursor-line = "warning";
+        other-lines = "error";
+      };
 
       # LSP overlays — toggle at runtime with:
       #   :toggle lsp.display-inlay-hints

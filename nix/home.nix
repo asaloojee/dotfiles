@@ -12,17 +12,21 @@
   home.stateVersion = "24.11";
   xdg.enable = true;
 
+  # Adopt new defaults for stateVersion > 24.11
+  gtk.gtk4.theme = null;
+
   programs.home-manager.enable = true;
 
   # Disable Stylix for apps that manage their own theming
+  stylix.targets.helix.enable = false;
   stylix.targets.neovim.enable = false;
   stylix.targets.tmux.enable = false;
 
   home.sessionVariables = {
     LC_ALL = "en_CA.UTF-8";
     LANG = "en_CA.UTF-8";
-    EDITOR = "nvim";
-    VISUAL = "nvim";
+    EDITOR = "hx";
+    VISUAL = "hx";
     NODE_ENV = "development";
     BUN_INSTALL = "$HOME/.bun";
   };
@@ -41,6 +45,7 @@
     fzf = import ./home/fzf.nix {inherit pkgs;};
     ghostty = import ./home/ghostty.nix {inherit pkgs;};
     git = import ./home/git.nix {inherit pkgs;};
+    helix = import ./home/helix.nix {inherit pkgs;};
     tmux = import ./home/tmux.nix {inherit pkgs;};
     zoxide = import ./home/zoxide.nix {inherit pkgs;};
     starship = import ./home/starship.nix {inherit pkgs lib;};

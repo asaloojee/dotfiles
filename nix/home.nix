@@ -19,7 +19,7 @@
 
   # Disable Stylix for apps that manage their own theming
   stylix.targets.helix.enable = false;
-  stylix.targets.neovim.enable = false;
+
   stylix.targets.tmux.enable = false;
 
   home.sessionVariables = {
@@ -50,11 +50,7 @@
     zoxide = import ./home/zoxide.nix {inherit pkgs;};
     starship = import ./home/starship.nix {inherit pkgs lib;};
     zsh = import ./home/zsh.nix {inherit config pkgs lib;};
-    neovim = {
-      enable = true;
-      viAlias = true;
-      vimAlias = true;
-    };
+
     direnv = {
       enable = true;
       enableZshIntegration = true;

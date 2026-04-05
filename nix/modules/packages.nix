@@ -22,7 +22,7 @@
     pkgs.just
     pkgs.lazydocker
     pkgs.mkalias
-    pkgs.neovim
+
     pkgs.phpPackages.composer
     pkgs.ripgrep
     pkgs.rust-analyzer

@@ -47,7 +47,7 @@
     g = "gitui";
     ff = "fastfetch";
     mux = "tmuxinator";
-    n = "nvim";
+
     cc = "claude";
     rebuild = "sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac";
   };

@@ -18,15 +18,13 @@
   programs.home-manager.enable = true;
 
   # Disable Stylix for apps that manage their own theming
-  stylix.targets.helix.enable = false;
-
   stylix.targets.tmux.enable = false;
 
   home.sessionVariables = {
     LC_ALL = "en_CA.UTF-8";
     LANG = "en_CA.UTF-8";
-    EDITOR = "hx";
-    VISUAL = "hx";
+    EDITOR = "nvim";
+    VISUAL = "nvim";
     NODE_ENV = "development";
     BUN_INSTALL = "$HOME/.bun";
   };
@@ -45,7 +43,11 @@
     fzf = import ./home/fzf.nix {inherit pkgs;};
     ghostty = import ./home/ghostty.nix {inherit pkgs;};
     git = import ./home/git.nix {inherit pkgs;};
-    helix = import ./home/helix.nix {inherit pkgs;};
+    neovim = {
+      enable = true;
+      viAlias = true;
+      vimAlias = true;
+    };
     tmux = import ./home/tmux.nix {inherit pkgs;};
     zoxide = import ./home/zoxide.nix {inherit pkgs;};
     starship = import ./home/starship.nix {inherit pkgs lib;};

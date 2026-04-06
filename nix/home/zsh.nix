@@ -172,14 +172,6 @@
     # -----------------------------------------------------------------------
     # Functions
     # -----------------------------------------------------------------------
-    function hx() {
-        if [[ $# -eq 0 ]]; then
-            command hx .
-        else
-            command hx "$@"
-        fi
-    }
-
     function gp() {
         git add -A && git commit -m "''${*:-update}" && git push
     }

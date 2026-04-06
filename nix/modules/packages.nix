@@ -22,8 +22,11 @@
     pkgs.just
     pkgs.lazydocker
     pkgs.mkalias
+    pkgs.neovim
 
     pkgs.phpPackages.composer
+    pkgs.prettier
+    pkgs.ruff
     pkgs.ripgrep
     pkgs.rust-analyzer
     pkgs.rustup
@@ -33,19 +36,5 @@
     pkgs.tree
     pkgs.tree-sitter
     pkgs.uv
-
-    # Language servers (for Helix)
-    pkgs.typescript
-    pkgs.typescript-language-server
-    pkgs.vscode-langservers-extracted # CSS, HTML, JSON, ESLint
-    pkgs.yaml-language-server
-    pkgs.bash-language-server
-    pkgs.astro-language-server
-    pkgs.marksman
-    pkgs.taplo
-
-    # Formatters
-    pkgs.prettier
-    pkgs.ruff
   ];
 }

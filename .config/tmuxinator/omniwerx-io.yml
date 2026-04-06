@@ -7,10 +7,10 @@ root: ~/dev/omniwerx-io/
 windows:
   - terminal:
       panes:
-        -  # Empty pane for nvim - cd into needed directory
+        -  # empty pane for commands
   - editor:
       panes:
-        - nvim
+        - hx
   - claude:
       panes:
         - cc

@@ -57,13 +57,13 @@
         git-global = true;
       };
 
-      # Disable end-of-line markers — inline-diagnostics handles the full messages
-      end-of-line-diagnostics = "disable";
+      # Short severity marker (e.g. ■) at the end of lines with diagnostics
+      end-of-line-diagnostics = "hint";
 
-      # Inline diagnostics — render messages at the error site
+      # Full diagnostic message only when cursor is on the line
       inline-diagnostics = {
         cursor-line = "warning";
-        other-lines = "error";
+        other-lines = "disable";
       };
 
       # LSP overlays — toggle at runtime with:
@@ -80,6 +80,12 @@
   };
 
   languages = {
+    language-server.astro-ls = {
+      command = "astro-ls";
+      args = ["--stdio"];
+      config.typescript.tsdk = "${pkgs.typescript}/lib/node_modules/typescript/lib";
+    };
+
     language = let
       prettier = lang: {
         name = lang;
@@ -110,7 +116,12 @@
       (prettier "markdown")
       {
         name = "astro";
+        language-servers = ["astro-ls"];
         auto-format = true;
+        formatter = {
+          command = "prettier";
+          args = ["--single-quote" "--print-width" "100" "--parser" "astro"];
+        };
       }
       {
         name = "python";

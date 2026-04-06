@@ -10,7 +10,7 @@ windows:
         -  # empty pane for commands
   - editor:
       panes:
-        - hx
+        - nvim
   - claude:
       panes:
         - cc

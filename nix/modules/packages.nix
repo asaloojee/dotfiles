@@ -5,7 +5,7 @@
     pkgs.ast-grep
     pkgs.btop
     pkgs.bun
-    pkgs.claude-code
+    pkgs.claude-code-bin
     pkgs.doppler
     pkgs.fastfetch
     pkgs.fd

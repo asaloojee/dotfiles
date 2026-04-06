@@ -43,11 +43,6 @@
     fzf = import ./home/fzf.nix {inherit pkgs;};
     ghostty = import ./home/ghostty.nix {inherit pkgs;};
     git = import ./home/git.nix {inherit pkgs;};
-    neovim = {
-      enable = true;
-      viAlias = true;
-      vimAlias = true;
-    };
     tmux = import ./home/tmux.nix {inherit pkgs;};
     zoxide = import ./home/zoxide.nix {inherit pkgs;};
     starship = import ./home/starship.nix {inherit pkgs lib;};

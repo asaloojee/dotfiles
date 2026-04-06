@@ -24,12 +24,19 @@
     pkgs.mkalias
     pkgs.neovim
 
+    # LSP servers
+    pkgs.vtsls
+    pkgs.typescript
+    pkgs.vscode-langservers-extracted
+    pkgs.astro-language-server
+
     pkgs.phpPackages.composer
     pkgs.prettier
     pkgs.ruff
     pkgs.ripgrep
     pkgs.rust-analyzer
     pkgs.rustup
+    pkgs.stylua
     pkgs.stow
     pkgs.tailscale
     pkgs.tmuxinator

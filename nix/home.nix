@@ -21,6 +21,11 @@
   # Disable Stylix for apps that manage their own theming
   stylix.targets.tmux.enable = false;
 
+  home.file.".prettierrc".text = builtins.toJSON {
+    singleQuote = true;
+    printWidth = 100;
+  };
+
   home.sessionVariables = {
     LC_ALL = "en_CA.UTF-8";
     LANG = "en_CA.UTF-8";

@@ -5,6 +5,7 @@ vim.g.maplocalleader = "\\"
 vim.opt.number = true
 vim.opt.relativenumber = false
 vim.opt.signcolumn = "yes"
+vim.opt.clipboard = "unnamedplus"
 
 -- Diagnostics
 vim.diagnostic.config({

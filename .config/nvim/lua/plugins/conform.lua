@@ -25,6 +25,9 @@ return {
       prettier = {
         prepend_args = { "--single-quote", "--print-width", "100" },
       },
+      stylua = {
+        prepend_args = { "--indent-type", "Spaces", "--indent-width", "4" },
+      },
     },
   },
 }

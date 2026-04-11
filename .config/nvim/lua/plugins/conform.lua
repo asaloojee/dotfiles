@@ -16,5 +16,10 @@ return {
 			python = { "ruff_format" },
 			rust = { "rustfmt" },
 		},
+		formatters = {
+			rustfmt = {
+				prepend_args = { "--config", "tab_spaces=2" },
+			},
+		},
 	},
 }

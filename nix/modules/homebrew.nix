@@ -23,6 +23,7 @@
       # "ollama"
       "obsidian"
       "handbrake-app"
+      "jordanbaird-ice"
       "karabiner-elements" # Needs stable paths for macOS permissions
       "leader-key"
       "maccy"

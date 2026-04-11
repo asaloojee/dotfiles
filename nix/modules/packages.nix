@@ -1,6 +1,5 @@
 {pkgs, ...}: {
   environment.systemPackages = [
-    pkgs.aerospace
     pkgs.alejandra
     pkgs.ast-grep
     pkgs.btop
@@ -16,12 +15,10 @@
     pkgs.gnupg
     pkgs.go
 
-    pkgs.ice-bar
     pkgs.jless
     pkgs.jq
     pkgs.just
     pkgs.lazydocker
-    pkgs.mkalias
     pkgs.neovim
 
     # LSP servers

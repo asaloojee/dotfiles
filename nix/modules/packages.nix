@@ -36,6 +36,7 @@
     pkgs.ruff
     pkgs.ripgrep
     pkgs.rust-analyzer
+    pkgs.rustfmt
     pkgs.rustup
     pkgs.stylua
     pkgs.stow

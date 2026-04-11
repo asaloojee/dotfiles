@@ -23,7 +23,7 @@
     window-padding-y = 0;
     macos-window-shadow = false;
     mouse-hide-while-typing = true;
-    macos-secure-input-indication = false;
+    macos-secure-input-indication = true;
     macos-auto-secure-input = true;
   };
 }

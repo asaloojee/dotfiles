@@ -43,5 +43,6 @@
     pkgs.tree
     pkgs.tree-sitter
     pkgs.uv
+    pkgs.yubikey-manager
   ];
 }

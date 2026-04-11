@@ -7,6 +7,16 @@ vim.opt.relativenumber = false
 vim.opt.signcolumn = "yes"
 vim.opt.clipboard = "unnamedplus"
 
+-- Cursor: replace the block with a thick bottom bar while waiting for a motion
+-- (e.g. after `d`, `c`, `y`) so operator-pending mode is visually obvious.
+vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
+
+-- Indentation: 4 spaces everywhere
+vim.opt.expandtab = true
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+
 -- Diagnostics
 vim.diagnostic.config({
 	severity_sort = true,

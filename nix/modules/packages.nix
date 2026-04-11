@@ -30,6 +30,7 @@
     pkgs.vscode-langservers-extracted
     pkgs.astro-language-server
 
+    pkgs.openssh
     pkgs.phpPackages.composer
     pkgs.prettier
     pkgs.ruff

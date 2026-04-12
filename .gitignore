@@ -24,5 +24,8 @@
 # Tmuxinator configs
 .config/tmuxinator/
 
+# Claude Code project instructions (local only)
+CLAUDE.md
+
 # Leader-key config, auto-managed by app
 .config/leader-key/config.json

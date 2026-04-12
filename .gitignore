@@ -23,3 +23,6 @@
 
 # Tmuxinator configs
 .config/tmuxinator/
+
+# Leader-key config, auto-managed by app
+.config/leader-key/config.json

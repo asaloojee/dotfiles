@@ -37,11 +37,17 @@ flake-info:
 diff:
     darwin-rebuild build --flake ~/dotfiles/nix#mac && nix store diff-closures /nix/var/nix/profiles/system ./result && rm result
 
-# Collect nix garbage (old generations + store)
+# Collect nix store gc
 gc:
-    sudo -i nix-env --delete-generations old --profile /nix/var/nix/profiles/system
-    sudo -i nix-collect-garbage -d
     sudo -i nix store gc
+
+# Delte old profiles
+delete-old:
+    sudo -i nix-env --delete-generations old --profile /nix/var/nix/profiles/system
+
+# nix garbage collect
+collect-garbage:
+    sudo -i nix-collect-garbage -d
 
 # Show generations history
 generations:

@@ -2,6 +2,7 @@
   environment.systemPackages = [
     pkgs.alejandra
     pkgs.ast-grep
+    pkgs.biome
     pkgs.btop
     pkgs.bun
     pkgs.claude-code-bin
@@ -29,7 +30,6 @@
 
     pkgs.openssh
     pkgs.phpPackages.composer
-    pkgs.prettier
     pkgs.ruff
     pkgs.ripgrep
     pkgs.rust-analyzer

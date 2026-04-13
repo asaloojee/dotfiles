@@ -15,11 +15,13 @@ return {
 			lua = { "stylua" },
 			python = { "ruff_format" },
 			rust = { "rustfmt" },
-		},
-		formatters = {
-			rustfmt = {
-				prepend_args = { "--config", "tab_spaces=2" },
-			},
+			javascript = { "biome" },
+			typescript = { "biome" },
+			javascriptreact = { "biome" },
+			typescriptreact = { "biome" },
+			css = { "biome" },
+			json = { "biome" },
+			graphql = { "biome" },
 		},
 	},
 }

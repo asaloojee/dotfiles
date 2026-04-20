@@ -4,6 +4,8 @@ vim.g.maplocalleader = "\\"
 -- Options
 vim.opt.number = true
 vim.opt.relativenumber = false
+vim.opt.cursorline = true
+vim.opt.cursorlineopt = "number"
 vim.opt.signcolumn = "yes"
 vim.opt.clipboard = "unnamedplus"
 

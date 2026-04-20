@@ -13,3 +13,6 @@ scripts
 
 # Ignore justfile (repo management, not a dotfile)
 justfile
+
+# Ignore pi config (managed declaratively via home-manager)
+\.pi

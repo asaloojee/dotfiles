@@ -5,20 +5,20 @@
 
     brews = [
       "mas"
+      "pi-coding-agent"
     ];
 
+    # Ownership rule:
+    # - Nix owns CLI/dev tooling and open fonts
+    # - Homebrew owns GUI/macOS apps + proprietary font exceptions
     casks = [
+      # GUI/macOS apps
       "adobe-creative-cloud"
       "brave-browser"
       "claude"
       "discord"
       "docker-desktop"
       "figma"
-      "font-hack-nerd-font"
-      "font-martel"
-      "font-playfair"
-      "font-sf-mono"
-      "font-sf-pro"
       "ghostty"
       # "ollama"
       "obsidian"
@@ -35,6 +35,12 @@
       "sf-symbols"
       "slack"
       "zoom"
+
+      # Font exceptions kept in Homebrew (not managed by nixpkgs)
+      "font-martel"
+      "font-playfair"
+      "font-sf-mono"
+      "font-sf-pro"
     ];
 
     masApps = {

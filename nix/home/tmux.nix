@@ -83,6 +83,10 @@
     bind -r S-Left resize-pane -L 5
     bind -r S-Right resize-pane -R 5
 
+    # Set extended keys for CLI agent workflows
+    set -g extended-keys on
+    set -g extended-keys-format csi-u
+
     # Custom status bar
     set -g status-right "#[fg=blue,bold]#(echo '#{pane_current_path}' | sed 's|^$HOME|~|' | awk -F/ '{print $1\"/\"$2\"/\"$3}') "
   '';

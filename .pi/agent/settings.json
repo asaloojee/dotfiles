@@ -1,0 +1,10 @@
+{
+  "lastChangelogVersion": "0.67.68",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.3-codex",
+  "defaultThinkingLevel": "medium",
+  "packages": [
+    "npm:@ifi/oh-pi-themes"
+  ],
+  "theme": "tokyo-night"
+}

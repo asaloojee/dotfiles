@@ -24,7 +24,6 @@ return {
 			"toml",
 			"bash",
 			"svelte",
-			"vue",
 		}
 		local installed = require("nvim-treesitter.config").get_installed()
 		local to_install = vim.iter(parsers)

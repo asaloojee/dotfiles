@@ -22,6 +22,7 @@ return {
 			css = { "biome" },
 			json = { "biome" },
 			graphql = { "biome" },
+			svelte = { "biome" },
 		},
 	},
 }

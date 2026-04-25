@@ -24,10 +24,11 @@
     pkgs.neovim
 
     # LSP servers
-    pkgs.vtsls
+    pkgs.astro-language-server
+    pkgs.svelte-language-server
     pkgs.typescript
     pkgs.vscode-langservers-extracted
-    pkgs.astro-language-server
+    pkgs.vtsls
 
     pkgs.openssh
     pkgs.phpPackages.composer

@@ -29,7 +29,6 @@
     pkgs.typescript
     pkgs.vscode-langservers-extracted
     pkgs.vtsls
-    pkgs.vue-language-server
 
     pkgs.openssh
     pkgs.phpPackages.composer

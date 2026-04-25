@@ -29,6 +29,7 @@
     VISUAL = "nvim";
     NODE_ENV = "development";
     BUN_INSTALL = "$HOME/.bun";
+    COMPOSER_PHAR_PATH = "/run/current-system/sw/bin/composer";
   };
 
   home.sessionPath = [

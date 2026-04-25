@@ -2,7 +2,7 @@
  * Safety Gate Extension
  *
  * Adds confirmations for dangerous shell commands and sensitive file edits.
- * - Confirms before bash commands like rm, mv, sudo, chmod/chown, dd, mkfs, etc.
+ * - Confirms before bash commands like rm, mv, sudo, chmod/chown, dd, mkfs, build commands, etc.
  * - Confirms before edit/write on sensitive paths (.env, .git, .ssh, keys, etc.)
  * - In non-interactive mode, blocks these actions by default.
  */
@@ -23,6 +23,10 @@ export default function (pi: ExtensionAPI) {
 		{ name: "recursive delete flags", pattern: /\brm\b[^\n]*\s(-r|-rf|-fr|--recursive)\b/i },
 		{ name: "force overwrite flags", pattern: /\b(mv|cp)\b[^\n]*\s(-f|--force)\b/i },
 		{ name: "git history rewrite", pattern: /\bgit\s+reset\s+--hard\b|\bgit\s+clean\s+-fdx\b/i },
+		{ name: "package manager build scripts", pattern: /\b(npm|pnpm|yarn|bun)\s+(run\s+)?build\b/i },
+		{ name: "make/just build", pattern: /\b(make|just)\s+build\b/i },
+		{ name: "docker build", pattern: /\bdocker\s+buildx?\b/i },
+		{ name: "language/toolchain build", pattern: /\b(go|cargo)\s+build\b/i },
 	];
 
 	const sensitivePathPatterns: Rule[] = [

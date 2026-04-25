@@ -23,6 +23,7 @@ return {
 			json = { "biome" },
 			graphql = { "biome" },
 			svelte = { "biome" },
+			vue = { "biome" },
 		},
 	},
 }

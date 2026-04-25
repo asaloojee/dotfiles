@@ -23,6 +23,7 @@
       # "ollama"
       "obsidian"
       "handbrake-app"
+      "helium-browser"
       "jordanbaird-ice"
       "karabiner-elements" # Needs stable paths for macOS permissions
       "leader-key"
@@ -34,7 +35,6 @@
       "protonvpn"
       "sf-symbols"
       "slack"
-      "zen"
       "zoom"
 
       # Font exceptions kept in Homebrew (not managed by nixpkgs)

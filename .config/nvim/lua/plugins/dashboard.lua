@@ -16,6 +16,7 @@ return {
           { icon = " ", key = "f", desc = "Find File", action = "<cmd>Telescope find_files<cr>" },
           { icon = " ", key = "g", desc = "Live Grep", action = "<cmd>Telescope live_grep<cr>" },
           { icon = " ", key = "r", desc = "Recent Files", action = "<cmd>Telescope oldfiles<cr>" },
+          { icon = " ", key = "e", desc = "Explorer Sidebar", action = "<cmd>NvimTreeToggle<cr>" },
           { icon = " ", key = "q", desc = "Quit", action = "<cmd>qa<cr>" },
         },
       },

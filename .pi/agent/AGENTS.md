@@ -21,3 +21,6 @@ When proposing or completing changes, include a brief summary with:
 - Prefer `bun` over `npm` for JavaScript/TypeScript workflows and command suggestions.
 - Only suggest `npm` when required for compatibility or when a tool explicitly requires npm semantics.
 - For pi package management, use `pi install` / `pi update` / `pi remove` commands as the primary interface.
+
+## Editing configs
+- When asked to edit configs, look in ~/dotfiles first.

@@ -11,6 +11,6 @@ windows:
   - editor:
       panes:
         - nvim
-  - claude:
+  - agent:
       panes:
-        - cc
+        - pi

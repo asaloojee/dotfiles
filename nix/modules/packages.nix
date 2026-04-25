@@ -6,6 +6,7 @@
     pkgs.btop
     pkgs.bun
     pkgs.claude-code-bin
+    pkgs.dioxus-cli
     pkgs.doppler
     pkgs.fastfetch
     pkgs.fd

@@ -64,7 +64,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 -- Enable LSP servers (configs in lsp/*.lua)
-vim.lsp.enable({ "rust_analyzer", "vtsls", "cssls", "html", "astro", "svelte" })
+vim.lsp.enable({ "rust_analyzer", "vtsls", "cssls", "html", "astro", "svelte", "vue_ls" })
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

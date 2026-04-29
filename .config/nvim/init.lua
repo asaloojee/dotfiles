@@ -13,7 +13,7 @@ vim.opt.clipboard = "unnamedplus"
 -- (e.g. after `d`, `c`, `y`) so operator-pending mode is visually obvious.
 vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
 
--- Indentation: 4 spaces everywhere
+-- Indentation defaults (2 spaces); formatter/LSP can enforce project-specific style
 vim.opt.expandtab = true
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2

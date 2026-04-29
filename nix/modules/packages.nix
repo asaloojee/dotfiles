@@ -32,6 +32,7 @@
     pkgs.vtsls
 
     pkgs.openssh
+    pkgs.prettier
     pkgs.phpPackages.composer
     pkgs.ruff
     pkgs.ripgrep

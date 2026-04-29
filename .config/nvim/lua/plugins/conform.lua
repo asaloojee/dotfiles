@@ -5,18 +5,14 @@ return {
 		{
 			"<leader>cf",
 			function()
-				local ft = vim.bo[vim.api.nvim_get_current_buf()].filetype
-				if ft == "vue" then
-					vim.notify("Vue formatting is disabled (no working formatter configured)", vim.log.levels.WARN)
-					return
-				end
 				require("conform").format({ lsp_format = "fallback" })
 			end,
 		},
 	},
 	opts = {
 		format_on_save = function(bufnr)
-			if vim.bo[bufnr].filetype == "vue" then
+			local ft = vim.bo[bufnr].filetype
+			if ft == "scss" or ft == "vue" then
 				return nil
 			end
 			return { timeout_ms = 3000, lsp_format = "fallback" }
@@ -32,6 +28,8 @@ return {
 			css = { "biome" },
 			json = { "biome" },
 			graphql = { "biome" },
+			vue = { "prettier" },
+			-- Use LSP formatting for framework files (Astro/Svelte)
 			html = { "biome_html" },
 		},
 		formatters = {

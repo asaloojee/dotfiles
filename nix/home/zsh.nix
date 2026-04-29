@@ -82,7 +82,7 @@
     # -----------------------------------------------------------------------
     # Key Bindings
     # -----------------------------------------------------------------------
-    bindkey -e
+    bindkey -v
     bindkey "^[[3~" delete-char
     bindkey "^[[H" beginning-of-line
     bindkey "^[[F" end-of-line
@@ -105,11 +105,33 @@
     bindkey '^X^C' copy-buffer-to-clipboard
 
     # -----------------------------------------------------------------------
+    # Vi Mode Cursor Shape
+    # -----------------------------------------------------------------------
+    function _set-vi-cursor-shape() {
+        if [[ "$KEYMAP" == vicmd ]]; then
+            printf '\e[4 q' # steady underline
+        else
+            printf '\e[2 q' # steady block
+        fi
+    }
+
+    zle-keymap-select() {
+        _set-vi-cursor-shape
+    }
+    zle -N zle-keymap-select
+
+    zle-line-finish() {
+        printf '\e[2 q' # keep block cursor when leaving the prompt editor
+    }
+    zle -N zle-line-finish
+
+    # -----------------------------------------------------------------------
     # Transient Prompt (replaces previous prompt with minimal character)
     # -----------------------------------------------------------------------
     TRANSIENT_PROMPT=`starship module character`
     zle-line-init() {
         emulate -L zsh
+        _set-vi-cursor-shape
         [[ $CONTEXT == start ]] || return 0
         while true; do
             zle .recursive-edit

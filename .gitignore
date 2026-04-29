@@ -29,3 +29,6 @@ CLAUDE.md
 
 # Leader-key config, auto-managed by app
 .config/leader-key/config.json
+
+# pi-lens 
+**/.pi-lens/

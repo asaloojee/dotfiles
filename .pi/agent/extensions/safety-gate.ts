@@ -2,7 +2,7 @@
  * Safety Gate Extension
  *
  * Adds confirmations for dangerous shell commands and sensitive file edits.
- * - Confirms before bash commands like rm, mv, sudo, chmod/chown, dd, mkfs, build commands, etc.
+ * - Confirms before bash commands like rm, mv, sudo, chmod/chown, dd, mkfs, install/build commands, etc.
  * - Confirms before git commands that can change the current working tree (revert/reset/checkout/restore/etc.).
  * - Allows read-only git inspection commands (diff/log/show/status) without prompting.
  * - Confirms before edit/write on sensitive paths (.env, .git, .ssh, keys, etc.)
@@ -32,6 +32,15 @@ export default function (pi: ExtensionAPI) {
 		{
 			name: "force overwrite flags",
 			pattern: /\b(mv|cp)\b[^\n]*\s(-f|--force)\b/i,
+		},
+		{
+			name: "package manager install commands",
+			pattern:
+				/\b(npm|pnpm|yarn|bun|pip|pip3|uv|poetry|pipx|conda|mamba)\s+(install|add|sync)\b/i,
+		},
+		{
+			name: "python module install",
+			pattern: /\bpython\d*\s+-m\s+pip\s+install\b/i,
 		},
 		{
 			name: "package manager build scripts",

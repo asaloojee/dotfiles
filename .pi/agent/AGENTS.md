@@ -33,6 +33,8 @@ When proposing or completing changes, include a brief summary with:
 
 - Prefer `bun` over `npm` for JavaScript/TypeScript workflows and command suggestions.
 - Only suggest `npm` when required for compatibility or when a tool explicitly requires npm semantics.
+- Prefer `uv` over `pip` for Python package installation workflows and command suggestions.
+- Only suggest `pip` when required for compatibility or when a tool explicitly requires pip semantics.
 - For pi package management, use `pi install` / `pi update` / `pi remove` commands as the primary interface.
 
 ## Editing configs

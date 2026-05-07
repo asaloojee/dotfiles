@@ -19,7 +19,7 @@
       "discord"
       "docker-desktop"
       "figma"
-      "ghostty"
+      "alacritty"
       # "ollama"
       "obsidian"
       "handbrake-app"

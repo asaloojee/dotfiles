@@ -21,6 +21,7 @@
 
   # Disable Stylix for apps that manage their own theming
   stylix.targets.tmux.enable = false;
+  stylix.targets.alacritty.enable = false;
 
   home.sessionVariables = {
     LC_ALL = "en_CA.UTF-8";
@@ -44,7 +45,7 @@
     bat = import ./home/bat.nix {inherit pkgs;};
     eza = import ./home/eza.nix {inherit pkgs;};
     fzf = import ./home/fzf.nix {inherit pkgs;};
-    ghostty = import ./home/ghostty.nix {inherit pkgs;};
+    alacritty = import ./home/alacritty.nix {inherit pkgs;};
     git = import ./home/git.nix {inherit pkgs;};
     tmux = import ./home/tmux.nix {inherit pkgs;};
     zoxide = import ./home/zoxide.nix {inherit pkgs;};

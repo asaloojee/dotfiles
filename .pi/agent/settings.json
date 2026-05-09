@@ -1,7 +1,7 @@
 {
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.3-codex",
-  "defaultThinkingLevel": "medium",
+  "defaultModel": "gpt-5.5",
+  "defaultThinkingLevel": "high",
   "packages": ["npm:@ifi/oh-pi-themes", "npm:pi-lens", "npm:context-mode"],
   "theme": "tokyo-night",
   "collapseChangelog": true,

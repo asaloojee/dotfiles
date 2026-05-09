@@ -48,7 +48,6 @@
     ff = "fastfetch";
     mux = "tmuxinator";
 
-    cc = "claude";
     rebuild = "sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac";
   };
 

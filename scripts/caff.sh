@@ -14,5 +14,5 @@ if ! [[ "$hours" =~ ^[1-3]$ ]]; then
     exit 1
 fi
 
-echo "☕ Keeping display awake for $hours hour(s)..."
+echo "Keeping display awake for $hours hour(s)..."
 caffeinate -d -t $((hours * 3600))

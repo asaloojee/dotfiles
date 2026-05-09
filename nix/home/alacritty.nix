@@ -30,8 +30,8 @@
 
     window = {
       padding = {
-        x = 8;
-        y = 8;
+        x = 12;
+        y = 12;
       };
       dynamic_padding = false;
       option_as_alt = "Both";

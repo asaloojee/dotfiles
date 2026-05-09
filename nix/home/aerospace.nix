@@ -22,12 +22,12 @@
     key-mapping.preset = "qwerty";
 
     gaps = {
-      inner.horizontal = 4;
-      inner.vertical = 4;
-      outer.left = 4;
-      outer.bottom = 4;
-      outer.top = 4;
-      outer.right = 4;
+      inner.horizontal = 8;
+      inner.vertical = 8;
+      outer.left = 8;
+      outer.bottom = 8;
+      outer.top = 8;
+      outer.right = 8;
     };
 
     mode.main.binding = {
@@ -89,6 +89,11 @@
       }
       {
         "if".app-id = "com.brave.Browser";
+        "if".window-title-regex-substring = "DevTools";
+        run = "layout floating";
+      }
+      {
+        "if".app-id = "net.imput.helium";
         "if".window-title-regex-substring = "DevTools";
         run = "layout floating";
       }

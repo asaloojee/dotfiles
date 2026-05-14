@@ -9,7 +9,7 @@
  * - In non-interactive mode, blocks these actions by default.
  */
 
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 type Rule = { name: string; pattern: RegExp };
 

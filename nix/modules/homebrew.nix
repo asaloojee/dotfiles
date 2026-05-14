@@ -5,7 +5,7 @@
 
     brews = [
       "mas"
-      "pi-coding-agent"
+       "pi-coding-agent"
     ];
 
     # Ownership rule:

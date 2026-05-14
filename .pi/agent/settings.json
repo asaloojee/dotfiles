@@ -2,7 +2,7 @@
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "high",
-  "packages": ["npm:@ifi/oh-pi-themes", "npm:pi-lens", "npm:context-mode"],
+  "packages": ["npm:@ifi/oh-pi-themes", "npm:pi-lens"],
   "theme": "tokyo-night",
   "collapseChangelog": true,
   "installTelemetry": false,

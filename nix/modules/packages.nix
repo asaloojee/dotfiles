@@ -2,7 +2,6 @@
   environment.systemPackages = [
     pkgs.alejandra
     pkgs.ast-grep
-    pkgs.biome
     pkgs.btop
     pkgs.bun
     pkgs.dioxus-cli
@@ -31,6 +30,8 @@
     pkgs.vtsls
 
     pkgs.openssh
+    pkgs.oxfmt
+    pkgs.oxlint
     pkgs.potrace
     pkgs.prettier
     pkgs.phpPackages.composer

@@ -32,3 +32,6 @@ CLAUDE.md
 
 # pi-lens 
 **/.pi-lens/
+
+# Local agent skills (live-managed via ~/.pi/agent/skills symlink; not redistributed)
+.pi/agent/skills/

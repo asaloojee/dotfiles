@@ -2,9 +2,13 @@
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "high",
-  "packages": ["npm:@ifi/oh-pi-themes", "npm:pi-lens"],
+  "packages": [
+    "npm:@ifi/oh-pi-themes",
+    "npm:pi-lens"
+  ],
   "theme": "tokyo-night",
   "collapseChangelog": true,
   "installTelemetry": false,
-  "hideThinkingBlock": true
+  "hideThinkingBlock": true,
+  "lastChangelogVersion": "0.74.0"
 }

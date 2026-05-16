@@ -3,7 +3,7 @@
     pkgs.alejandra
     pkgs.ast-grep
     pkgs.btop
-    pkgs.bun
+    pkgs.pnpm
     pkgs.dioxus-cli
     pkgs.doppler
     pkgs.fastfetch

@@ -15,7 +15,6 @@
       "$git_status"
       "$git_metrics"
       "$fill"
-      "$bun"
       "$nodejs"
       "$cmd_duration $jobs $time"
       "$line_break"
@@ -85,21 +84,12 @@
 
     memory_usage.symbol = "󰍛 ";
 
-    bun = {
-      symbol = " ";
-      format = "[$symbol($version )]($style)";
-      style = "red";
-      detect_extensions = [];
-      detect_files = ["bun.lock"];
-      detect_folders = [];
-    };
-
     nodejs = {
       symbol = " ";
       format = "[$symbol($version )]($style)";
       style = "green";
       detect_extensions = [];
-      detect_files = ["package-lock.json" "yarn.lock"];
+      detect_files = ["pnpm-lock.yaml" "package-lock.json" "yarn.lock"];
       detect_folders = [];
     };
 

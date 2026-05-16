@@ -9,7 +9,21 @@
  * - In non-interactive mode, blocks these actions by default.
  */
 
-import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+type ToolCallEvent = { toolName: string; input: Record<string, unknown> };
+type ToolCallContext = {
+	hasUI: boolean;
+	ui: { confirm(title: string, message: string): Promise<boolean> };
+};
+type ToolCallResult = { block: true; reason: string } | undefined;
+type ExtensionAPI = {
+	on(
+		eventName: "tool_call",
+		handler: (
+			event: ToolCallEvent,
+			ctx: ToolCallContext,
+		) => ToolCallResult | Promise<ToolCallResult>,
+	): void;
+};
 
 type Rule = { name: string; pattern: RegExp };
 
@@ -36,7 +50,7 @@ export default function (pi: ExtensionAPI) {
 		{
 			name: "package manager install commands",
 			pattern:
-				/\b(npm|pnpm|yarn|bun|pip|pip3|uv|poetry|pipx|conda|mamba)\s+(install|add|sync)\b/i,
+				/\b(npm|pnpm|yarn|pip|pip3|uv|poetry|pipx|conda|mamba)\s+(install|add|sync)\b/i,
 		},
 		{
 			name: "python module install",
@@ -44,7 +58,7 @@ export default function (pi: ExtensionAPI) {
 		},
 		{
 			name: "package manager build scripts",
-			pattern: /\b(npm|pnpm|yarn|bun)\s+(run\s+)?build\b/i,
+			pattern: /\b(npm|pnpm|yarn)\s+(run\s+)?build\b/i,
 		},
 		{ name: "make/just build", pattern: /\b(make|just)\s+build\b/i },
 		{ name: "docker build", pattern: /\bdocker\s+buildx?\b/i },

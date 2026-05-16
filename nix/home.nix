@@ -29,15 +29,16 @@
     EDITOR = "nvim";
     VISUAL = "nvim";
     NODE_ENV = "development";
-    BUN_INSTALL = "$HOME/.bun";
+    PNPM_HOME = "$HOME/.local/share/pnpm";
+    PNPM_CONFIG_STORE_DIR = "$HOME/.local/share/pnpm/store";
     COMPOSER_PHAR_PATH = "/run/current-system/sw/bin/composer";
   };
 
   home.sessionPath = [
+    "$HOME/.local/share/pnpm"
     "$HOME/.local/bin"
     "$HOME/.cargo/bin"
     "$HOME/google-cloud-sdk/bin"
-    "$HOME/.bun/bin"
   ];
 
   programs = {

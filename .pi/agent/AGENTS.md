@@ -31,7 +31,7 @@ When proposing or completing changes, include a brief summary with:
 
 ## Tooling preferences
 
-- Prefer `bun` over `npm` for JavaScript/TypeScript workflows and command suggestions.
+- Prefer `pnpm` for JavaScript/TypeScript workflows and command suggestions.
 - Only suggest `npm` when required for compatibility or when a tool explicitly requires npm semantics.
 - Prefer `uv` over `pip` for Python package installation workflows and command suggestions.
 - Only suggest `pip` when required for compatibility or when a tool explicitly requires pip semantics.

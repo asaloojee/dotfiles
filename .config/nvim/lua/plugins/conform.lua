@@ -28,7 +28,8 @@ return {
 	},
 	opts = {
 		format_on_save = function(bufnr)
-			if vim.bo[bufnr].filetype == "vue" then
+			local filetype = vim.bo[bufnr].filetype
+			if filetype == "vue" or filetype == "scss" then
 				return nil
 			end
 
@@ -43,8 +44,8 @@ return {
 			javascriptreact = { "oxfmt" },
 			typescriptreact = { "oxfmt" },
 			vue = { "oxfmt" },
-			-- Svelte formatting needs newer/project-local Oxfmt plus the project's svelte/compiler.
-			svelte = { "oxfmt_project" },
+			-- Oxfmt currently rejects .svelte via --stdin-filepath; use the Svelte LSP on save.
+			svelte = { lsp_format = "fallback" },
 			css = { "oxfmt" },
 			scss = { "oxfmt" },
 			less = { "oxfmt" },

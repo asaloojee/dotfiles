@@ -85,7 +85,7 @@
     memory_usage.symbol = "󰍛 ";
 
     nodejs = {
-      symbol = " ";
+      symbol = " ";
       format = "[$symbol($version )]($style)";
       style = "green";
       detect_extensions = [];
@@ -94,7 +94,7 @@
     };
 
     python = {
-      symbol = " ";
+      symbol = " ";
       format = "[$symbol($version )]($style)";
       style = "yellow";
     };

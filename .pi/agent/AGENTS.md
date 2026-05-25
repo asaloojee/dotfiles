@@ -37,6 +37,15 @@ When proposing or completing changes, include a brief summary with:
 - Only suggest `pip` when required for compatibility or when a tool explicitly requires pip semantics.
 - For pi package management, use `pi install` / `pi update` / `pi remove` commands as the primary interface.
 
+## Formatting parity with Neovim
+
+- When editing code, match my Neovim Conform formatter setup from `~/dotfiles/.config/nvim/lua/plugins/conform.lua`.
+- Do not use Prettier unless the project explicitly configures Prettier.
+- Where applicable, prefer the project's formatter command over a raw formatter binary; for Vite Plus projects, use `vp fmt`.
+- For JS, TS, CSS, HTML, JSON, YAML, Markdown, and similar web files, prefer `pnpm exec vp fmt --write <changed-files>` when `vite-plus` / `vp` is available; otherwise use the formatter selected by Conform, such as `oxfmt`.
+- Verify with `pnpm exec vp fmt --check <changed-files>` in Vite Plus projects when practical.
+- For Svelte files, remember that Neovim uses Svelte LSP formatting rather than `oxfmt`.
+
 ## Editing configs
 
 - Treat `~/dotfiles` as the primary source of truth for system/user configuration.

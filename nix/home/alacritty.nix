@@ -6,16 +6,16 @@
 
     font = {
       normal = {
-        family = "JetBrainsMono Nerd Font";
-        style = "Regular";
+        family = "JetBrainsMono Nerd Font Propo";
+        style = "Light";
       };
       bold = {
-        family = "JetBrainsMono Nerd Font";
-        style = "Bold";
+        family = "JetBrainsMono Nerd Font Propo";
+        style = "Regular";
       };
       italic = {
-        family = "JetBrainsMono Nerd Font";
-        style = "Italic";
+        family = "JetBrainsMono Nerd Font Propo";
+        style = "Light Italic";
       };
       size = 18.0;
     };

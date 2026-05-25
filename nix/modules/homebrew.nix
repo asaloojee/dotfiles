@@ -27,6 +27,7 @@
       "helium-browser"
       "jordanbaird-ice"
       "karabiner-elements" # Needs stable paths for macOS permissions
+      "keepingyouawake"
       "leader-key"
       "maccy"
       "mos"

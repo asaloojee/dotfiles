@@ -35,6 +35,8 @@
   };
 
   home.sessionPath = [
+    "$HOME/.vite-plus/bin"
+    "$HOME/.local/share/pnpm/bin"
     "$HOME/.local/share/pnpm"
     "$HOME/.local/bin"
     "$HOME/.cargo/bin"

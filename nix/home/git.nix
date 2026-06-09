@@ -12,6 +12,7 @@
       email = "asaloojee@omniwerx.io";
     };
     init.defaultBranch = "main";
+    core.pager = "hunk pager";
     pull.rebase = true;
     merge.conflictstyle = "zdiff3";
     alias = {
@@ -20,6 +21,7 @@
       c = "commit";
       cm = "commit -m";
       p = "push";
+      hdiff = "!hunk diff";
       lg = "log --oneline --graph --decorate -20";
     };
   };

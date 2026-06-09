@@ -21,12 +21,15 @@ When proposing or completing changes, include a brief summary with:
 - If a change is non-obvious, call it out explicitly before or after editing.
 - If requirements, specs, or direction are ambiguous, ask concise clarifying questions before making broad edits.
 
-## Execution mode: plan vs do
+## Execution mode: advice vs edits
 
 - Detect user intent from phrasing before acting.
-- If the user asks exploratory questions (e.g., "how would this work", "how would you", "what’s the approach", "can you outline"), respond with a concise plan/pitch first and do not execute changes yet.
-- If the user gives direct implementation commands (e.g., "do X", "implement Y", "change this", "fix it"), execute immediately without pitching first.
-- No implicit mutation: for informational/planning requests, read-only tools may be used to gather context, but do not perform mutating actions (file edits/writes or state-changing commands) unless the user explicitly asks to execute.
+- If the user asks exploratory questions or requests recommendations (e.g., "how would this work", "how would you", "what’s the approach", "can you outline", "what do you recommend"), respond with explanation, advice, or a concise plan only. Do not initiate file edits, writes, or other mutating commands.
+- If the user gives a direct edit or implementation request (e.g., "do X", "implement Y", "change this", "fix it", "make the edit"), initiate the requested edit/write through the approved tool path so the safety gate extension can intercept it for approval.
+- Under no circumstances bypass the safety gate extension for mutations. Do not mutate files or project state through shell scripts, shell redirection, install/remove commands, migrations, deletes, or other state-changing commands unless that action is explicitly expected to be caught by the safety gate. Project-standard formatter CLI commands are an allowed exception when they are explicitly requested or clearly part of the requested implementation workflow.
+- Permanently banned mutation paths: `python`/`node`/`ruby`/similar scripts that write files, shell redirection (`>`/`>>`), in-place shell edits (`sed -i`, `perl -pi`, etc.), `mv`/`cp` over source files, temp-file replacement workflows, and full-file rewrites for small edits unless explicitly approved.
+- For files owned by the configured formatter (for example oxfmt via `vp fmt`/Neovim Conform), do not introduce or preserve non-canonical formatting such as tab indentation to minimize a diff. If formatting churn is likely because the committed file is not formatter-canonical, call that out before editing.
+- No implicit mutation: for informational/planning requests, read-only tools may be used to gather context, but do not perform mutating actions unless the user explicitly asks for an edit/implementation.
 - Continue to follow safety/approval gates: if the request is ambiguous, risky, destructive, or conflicts with higher-priority instructions, pause and confirm before proceeding.
 
 ## Tooling preferences
@@ -42,8 +45,9 @@ When proposing or completing changes, include a brief summary with:
 - When editing code, match my Neovim Conform formatter setup from `~/dotfiles/.config/nvim/lua/plugins/conform.lua`.
 - Do not use Prettier unless the project explicitly configures Prettier.
 - Where applicable, prefer the project's formatter command over a raw formatter binary; for Vite Plus projects, use `vp fmt`.
-- For JS, TS, CSS, HTML, JSON, YAML, Markdown, and similar web files, prefer `pnpm exec vp fmt --write <changed-files>` when `vite-plus` / `vp` is available; otherwise use the formatter selected by Conform, such as `oxfmt`.
-- Verify with `pnpm exec vp fmt --check <changed-files>` in Vite Plus projects when practical.
+- For JS, TS, CSS, HTML, JSON, YAML, Markdown, and similar web files, oxfmt via `vp fmt` / Neovim Conform is the canonical formatter when `vite-plus` / `vp` is available; otherwise use the formatter selected by Conform.
+- Formatter write commands are allowed when they use the project-standard formatter that is already available in the repo/toolchain. Prefer `vp fmt` / `oxfmt` for web files in Vite Plus projects, and use standard ecosystem formatters such as `rustfmt` for Rust projects when appropriate.
+- Do not use pi-specific formatting tools for source files unless explicitly requested; they may use different whitespace standards than Neovim/Conform and can create noisy diffs.
 - For Svelte files, remember that Neovim uses Svelte LSP formatting rather than `oxfmt`.
 
 ## Editing configs

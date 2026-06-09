@@ -7,6 +7,7 @@
   imports = [
     ./home/fastfetch.nix
     ./home/gitui.nix
+    ./home/hunk.nix
     ./home/pi-agent.nix
   ];
   home.username = "asaloojee";
@@ -61,15 +62,6 @@
       enable = true;
       enableZshIntegration = true;
       nix-direnv.enable = true;
-    };
-    delta = {
-      enable = true;
-      options = {
-        syntax-theme = "base16-stylix";
-        line-numbers = true;
-        side-by-side = true;
-        navigate = true;
-      };
     };
   };
 }

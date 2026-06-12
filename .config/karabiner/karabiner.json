@@ -70,7 +70,7 @@
                         ]
                     },
                     {
-                        "description": "Caps Lock to Hyper Key (Ctrl+Alt+Cmd)",
+                        "description": "Caps Lock to Hyper Key (Ctrl+Alt+Cmd), Escape on tap",
                         "manipulators": [
                             {
                                 "from": {

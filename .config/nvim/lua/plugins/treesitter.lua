@@ -5,6 +5,7 @@ return {
 	build = ":TSUpdate",
 	init = function()
 		local parsers = {
+			"dockerfile",
 			"css",
 			"scss",
 			"tsx",

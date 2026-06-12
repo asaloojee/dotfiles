@@ -1,12 +1,7 @@
 {...}: {
   homebrew = {
     enable = true;
-    taps = [
-      "modem-dev/tap"
-    ];
-
     brews = [
-      "modem-dev/tap/hunk"
       "mas"
       "pi-coding-agent"
     ];

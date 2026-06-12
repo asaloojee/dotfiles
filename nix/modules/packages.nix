@@ -23,11 +23,14 @@
 
     # LSP servers
     pkgs.astro-language-server
+    pkgs.docker-compose-language-service
+    pkgs.dockerfile-language-server
     pkgs.svelte-language-server
     pkgs.typescript
     pkgs.vue-language-server
     pkgs.vscode-langservers-extracted
     pkgs.vtsls
+    pkgs.yaml-language-server
 
     pkgs.openssh
     pkgs.oxfmt

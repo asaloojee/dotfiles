@@ -9,6 +9,17 @@ vim.opt.cursorlineopt = "number"
 vim.opt.signcolumn = "yes"
 vim.opt.clipboard = "unnamedplus"
 
+-- Docker Compose files get a dedicated filetype so compose-specific LSPs can attach.
+vim.filetype.add({
+	filename = {
+		["compose.yaml"] = "yaml.docker-compose",
+		["compose.yml"] = "yaml.docker-compose",
+		["docker-compose.yaml"] = "yaml.docker-compose",
+		["docker-compose.yml"] = "yaml.docker-compose",
+	},
+})
+vim.treesitter.language.register("yaml", "yaml.docker-compose")
+
 -- Cursor: replace the block with a thick bottom bar while waiting for a motion
 -- (e.g. after `d`, `c`, `y`) so operator-pending mode is visually obvious.
 vim.opt.guicursor = "n-v-c-sm:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
@@ -64,7 +75,19 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 -- Enable LSP servers (configs in lsp/*.lua)
-vim.lsp.enable({ "rust_analyzer", "vtsls", "cssls", "html", "astro", "svelte", "vue_ls", "oxlint" })
+vim.lsp.enable({
+	"rust_analyzer",
+	"vtsls",
+	"cssls",
+	"html",
+	"astro",
+	"svelte",
+	"vue_ls",
+	"oxlint",
+	"dockerls",
+	"yamlls",
+	"docker_compose_language_service",
+})
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

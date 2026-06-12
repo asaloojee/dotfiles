@@ -53,6 +53,7 @@ return {
 			json = { "oxfmt" },
 			jsonc = { "oxfmt" },
 			yaml = { "oxfmt" },
+			["yaml.docker-compose"] = { "oxfmt" },
 			markdown = { "oxfmt" },
 			["markdown.mdx"] = { "oxfmt" },
 			graphql = { "oxfmt" },

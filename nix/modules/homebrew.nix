@@ -13,7 +13,6 @@
       # GUI/macOS apps
       "adobe-creative-cloud"
       "blender"
-      "brave-browser"
       "claude"
       "discord"
       "docker-desktop"

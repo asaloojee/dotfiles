@@ -24,6 +24,7 @@
   stylix.targets.tmux.enable = false;
   stylix.targets.alacritty.enable = false;
   stylix.targets.zellij.enable = false;
+  stylix.targets.gtk.enable = false;
 
   home.sessionVariables = {
     LC_ALL = "en_CA.UTF-8";

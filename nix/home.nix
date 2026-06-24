@@ -23,7 +23,6 @@
   # Disable Stylix for apps that manage their own theming
   stylix.targets.tmux.enable = false;
   stylix.targets.alacritty.enable = false;
-  stylix.targets.zellij.enable = false;
   stylix.targets.gtk.enable = false;
 
   home.sessionVariables = {
@@ -54,7 +53,6 @@
     alacritty = import ./home/alacritty.nix {inherit pkgs;};
     git = import ./home/git.nix {inherit pkgs;};
     tmux = import ./home/tmux.nix {inherit pkgs;};
-    zellij = import ./home/zellij.nix {inherit pkgs;};
     zoxide = import ./home/zoxide.nix {inherit pkgs;};
     starship = import ./home/starship.nix {inherit pkgs lib;};
     zsh = import ./home/zsh.nix {inherit config pkgs lib;};

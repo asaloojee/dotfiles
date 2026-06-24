@@ -36,7 +36,7 @@
       dynamic_padding = false;
       option_as_alt = "Both";
       decorations = "Buttonless";
-      opacity = 0.9;
+      opacity = 1;
       blur = true;
     };
 

@@ -45,7 +45,6 @@
     pkgs.rustup
     pkgs.stylua
     pkgs.stow
-    pkgs.tailscale
     pkgs.tmuxinator
     pkgs.tree
     pkgs.tree-sitter

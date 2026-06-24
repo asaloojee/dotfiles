@@ -34,6 +34,7 @@
       "protonvpn"
       "sf-symbols"
       "slack"
+      "tailscale-app"
       "zoom"
 
       # Font exceptions kept in Homebrew (not managed by nixpkgs)

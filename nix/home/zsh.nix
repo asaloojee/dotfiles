@@ -47,8 +47,6 @@
     g = "gitui";
     ff = "fastfetch";
     mux = "tmuxinator";
-    zj = "zellij";
-    zjow = "zellij --layout omniwerx-io attach --create omniwerx-io";
 
     rebuild = "sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac";
   };

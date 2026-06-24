@@ -30,7 +30,7 @@
         ./modules/homebrew.nix
         ./modules/macos-defaults.nix
         ./modules/fonts.nix
-        # ./modules/sketchybar.nix
+        ./modules/sketchybar.nix
         ./modules/stylix.nix
         ({pkgs, ...}: {
           nixpkgs.config.allowUnfree = true;

@@ -19,7 +19,7 @@ install-scripts force="":
 
 # Format all nix files
 fmt:
-    alejandra nix/flake.nix nix/home.nix nix/home/*.nix nix/modules/*.nix
+    alejandra nix/flake.nix nix/home.nix nix/home/*.nix nix/modules/*.nix nix/packages/*.nix
 
 # Update flake inputs
 update:

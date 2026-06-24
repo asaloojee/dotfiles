@@ -31,5 +31,7 @@
     };
 
     opacity.terminal = 0.90;
+
+    targets.jankyborders.enable = false;
   };
 }

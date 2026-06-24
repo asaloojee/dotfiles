@@ -1,0 +1,21 @@
+return {
+	bg = 0xff111111,
+	surface = 0xff1a1b26,
+	fg = 0xffc0caf5,
+	fg_secondary = 0xff7f87b8,
+	muted = 0xff565f89,
+	accent = 0xff9d7cd8,
+	accent_bright = 0xffbb9af7,
+	purple = 0xffbb9af7,
+	blue = 0xff7aa2f7,
+	orange = 0xffff9e64,
+	cyan = 0xff7dcfff,
+	green = 0xff9ece6a,
+	warning = 0xffe0af68,
+	danger = 0xfff7768e,
+	transparent = 0x00000000,
+	popup = {
+		bg = 0xee1a1b26,
+		border = 0xff414868,
+	},
+}

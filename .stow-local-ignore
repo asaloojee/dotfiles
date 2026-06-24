@@ -16,3 +16,4 @@ justfile
 
 # Ignore pi config (managed declaratively via home-manager)
 \.pi
+\.pi-lens.*

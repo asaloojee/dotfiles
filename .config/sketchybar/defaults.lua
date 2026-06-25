@@ -9,7 +9,7 @@ sbar.default({
 		padding_right = 0,
 	},
 	label = {
-		font = "JetBrainsMono Nerd Font:Bold:14.0",
+		font = "JetBrains Mono:SemiBold:16.0",
 		color = colors.fg,
 		padding_left = 0,
 		padding_right = 0,

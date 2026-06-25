@@ -4,11 +4,16 @@
   "defaultThinkingLevel": "high",
   "packages": [
     "npm:@ifi/oh-pi-themes",
-    "npm:pi-lens"
+    "npm:pi-lens",
+    "npm:@hypabolic/pi-hypa",
+    "npm:pi-web-access",
+    "npm:@juicesharp/rpiv-ask-user-question"
   ],
   "theme": "tokyo-night",
   "collapseChangelog": true,
   "installTelemetry": false,
   "hideThinkingBlock": true,
-  "lastChangelogVersion": "0.79.10"
+  "quietStartup": true,
+  "lastChangelogVersion": "0.80.2"
 }
+

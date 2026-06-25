@@ -60,9 +60,9 @@ local front_app = sbar.add("item", "front_app", {
 		padding_right = 16,
 	},
 	label = {
-		color = colors.fg,
+		color = colors.fg_muted,
 		padding_left = 0,
-		padding_right = 0,
+		padding_right = 2,
 	},
 })
 

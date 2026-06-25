@@ -15,11 +15,11 @@ in {
 
   services.jankyborders = {
     enable = true;
-    width = 3.0;
+    width = 2.0;
     style = "round";
     order = "below";
     hidpi = true;
-    active_color = "0xff7aa2f7";
+    active_color = "0xfff5f5f5";
     inactive_color = "0x00000000";
   };
 }

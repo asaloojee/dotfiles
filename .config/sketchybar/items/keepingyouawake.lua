@@ -12,7 +12,7 @@ local keepingyouawake = sbar.add("item", "keepingyouawake", {
 	padding_right = 24,
 	icon = {
 		string = icons.keepingyouawake.inactive_icon,
-		color = colors.accent,
+		color = colors.fg_secondary,
 		padding_left = 0,
 		padding_right = 3,
 	},
@@ -23,7 +23,7 @@ local function set_status(active)
 	keepingyouawake:set({
 		icon = {
 			string = active and icons.keepingyouawake.active_icon or icons.keepingyouawake.inactive_icon,
-			color = colors.accent,
+			color = active and colors.accent or colors.fg_secondary,
 		},
 	})
 end

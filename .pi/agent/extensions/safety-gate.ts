@@ -2,7 +2,7 @@
  * Safety Gate Extension
  *
  * Adds confirmations for dangerous shell commands and sensitive file edits.
- * - Confirms before bash commands like rm, mv, sudo, chmod/chown, dd, mkfs, install/build commands, etc.
+ * - Confirms before bash/hypa_shell commands like rm, mv, sudo, chmod/chown, dd, mkfs, install/build commands, etc.
  * - Confirms before git commands that can change the current working tree (revert/reset/checkout/restore/etc.).
  * - Allows read-only git inspection commands (diff/log/show/status) without prompting.
  * - Confirms before edit/write on sensitive paths (.env, .git, .ssh, keys, etc.)
@@ -106,7 +106,7 @@ export default function (pi: ExtensionAPI) {
 	];
 
 	pi.on("tool_call", async (event, ctx) => {
-		if (event.toolName === "bash") {
+		if (event.toolName === "bash" || event.toolName === "hypa_shell") {
 			const command = String(event.input.command ?? "");
 			const dangerousMatches = dangerousCommandRules.filter((r) =>
 				r.pattern.test(command),
@@ -126,7 +126,7 @@ export default function (pi: ExtensionAPI) {
 
 			const confirmed = await ctx.ui.confirm(
 				"Allow command requiring confirmation?",
-				`Command:\n\n${command}\n\nMatched rules: ${matches.map((m) => m.name).join(", ")}`,
+				`Tool: ${event.toolName}\n\nCommand:\n\n${command}\n\nMatched rules: ${matches.map((m) => m.name).join(", ")}`,
 			);
 			if (!confirmed) {
 				return { block: true, reason: "Blocked by user" };

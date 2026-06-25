@@ -5,7 +5,6 @@ local popup_open = false
 
 local apple = sbar.add("item", "apple", {
 	position = "left",
-	font = "JetBrainsMono Nerd Font:Medium:20.0",
 	padding_left = 0,
 	padding_right = 16,
 	icon = {

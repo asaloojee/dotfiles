@@ -28,7 +28,7 @@ for sid = 1, workspace_count do
 		position = "left",
 		icon = {
 			string = tostring(workspace),
-			font = "JetBrainsMono Nerd Font:Bold:16.0",
+			font = "JetBrains Mono:Bold:16.0",
 			padding_left = 8,
 			padding_right = 8,
 		},

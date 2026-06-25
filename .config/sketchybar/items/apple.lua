@@ -5,29 +5,23 @@ local popup_open = false
 
 local apple = sbar.add("item", "apple", {
 	position = "left",
-	font = "JetBrainsMono Nerd Font:Bold:20.0",
+	font = "JetBrainsMono Nerd Font:Medium:20.0",
 	padding_left = 0,
-	padding_right = 8,
+	padding_right = 16,
 	icon = {
 		string = icons.apple,
-		color = colors.danger,
-		padding_left = 12,
-		padding_right = 12,
+		color = colors.accent,
+		padding_left = 0,
+		padding_right = 0,
 	},
 	label = { drawing = false },
-	background = {
-		drawing = true,
-		color = colors.surface,
-		corner_radius = 8,
-		height = 24,
-	},
 	popup = {
 		height = 34,
 		background = {
 			color = colors.popup.bg,
 			border_color = colors.popup.border,
 			border_width = 1,
-			corner_radius = 8,
+			corner_radius = 10,
 		},
 	},
 })
@@ -44,8 +38,8 @@ local function add_menu_item(name, label, command)
 		label = {
 			string = label,
 			color = colors.fg,
-			padding_left = 10,
-			padding_right = 10,
+			padding_left = 12,
+			padding_right = 12,
 		},
 	})
 

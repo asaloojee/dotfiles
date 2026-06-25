@@ -5,23 +5,17 @@ local battery = sbar.add("item", "battery", {
 	position = "right",
 	update_freq = 120,
 	padding_left = 0,
-	padding_right = 8,
+	padding_right = 24,
 	icon = {
 		string = icons.battery.levels[0],
-		color = colors.green,
-		padding_left = 12,
-		padding_right = 4,
+		color = colors.accent,
+		padding_left = 0,
+		padding_right = 8,
 	},
 	label = {
 		color = colors.fg,
-		padding_left = 4,
-		padding_right = 12,
-	},
-	background = {
-		drawing = true,
-		color = colors.surface,
-		corner_radius = 8,
-		height = 24,
+		padding_left = 0,
+		padding_right = 0,
 	},
 })
 
@@ -30,12 +24,16 @@ local function battery_level(percent)
 	return math.min(100, math.max(0, rounded))
 end
 
-local function battery_icon(percent)
-	return icons.battery.levels[battery_level(percent)] or ""
+local function is_charging(result)
+	return (result or ""):match(";%s*charging;") ~= nil
 end
 
-local function battery_color(percent)
-	return percent < 20 and colors.danger or colors.green
+local function battery_icon(percent, charging)
+	if charging then
+		return icons.battery.charging
+	end
+
+	return icons.battery.levels[battery_level(percent)] or ""
 end
 
 local function update()
@@ -44,11 +42,11 @@ local function update()
 
 		battery:set({
 			icon = {
-				string = battery_icon(percent),
-				color = battery_color(percent),
+				string = battery_icon(percent, is_charging(result)),
+				color = colors.accent,
 			},
 			label = {
-				string = tostring(percent),
+				string = tostring(percent) .. "%",
 				color = colors.fg,
 			},
 		})

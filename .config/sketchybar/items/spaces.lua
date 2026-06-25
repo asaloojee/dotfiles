@@ -8,14 +8,9 @@ local workspace_count = 5
 local function style_space(item, active)
 	item:set({
 		icon = {
-			color = active and colors.bg or colors.fg_secondary,
+			color = active and colors.accent or colors.fg_secondary,
 		},
-		background = {
-			drawing = active,
-			color = colors.blue,
-			corner_radius = 8,
-			height = 24,
-		},
+		background = { drawing = false },
 	})
 end
 
@@ -27,29 +22,19 @@ local function update_spaces(focused_workspace)
 	end
 end
 
-local left_spacer = sbar.add("item", "spaces.left_spacer", {
-	position = "left",
-	width = 4,
-	icon = { drawing = false },
-	label = { drawing = false },
-	padding_left = 0,
-	padding_right = 0,
-})
-
-space_names[#space_names + 1] = left_spacer.name
-
 for sid = 1, workspace_count do
 	local workspace = sid
 	local space = sbar.add("item", "space." .. workspace, {
 		position = "left",
 		icon = {
 			string = tostring(workspace),
+			font = "JetBrainsMono Nerd Font:Bold:16.0",
 			padding_left = 8,
 			padding_right = 8,
 		},
 		label = { drawing = false },
-		padding_left = 3,
-		padding_right = 3,
+		padding_left = 0,
+		padding_right = 0,
 	})
 
 	spaces[workspace] = space
@@ -66,18 +51,18 @@ end
 
 local front_app = sbar.add("item", "front_app", {
 	position = "left",
-	padding_left = 4,
-	padding_right = 6,
+	padding_left = 8,
+	padding_right = 16,
 	icon = {
 		string = icons.front_app.chevron,
-		color = colors.orange,
-		padding_left = 2,
-		padding_right = 8,
+		color = colors.accent,
+		padding_left = 0,
+		padding_right = 16,
 	},
 	label = {
 		color = colors.fg,
-		padding_left = 4,
-		padding_right = 12,
+		padding_left = 0,
+		padding_right = 0,
 	},
 })
 
@@ -99,14 +84,6 @@ sbar.exec(
 	[[lsappinfo info -only name "$(lsappinfo front)" 2>/dev/null | awk -F'"' '/LSDisplayName/ {print $4; exit}']],
 	set_front_app
 )
-
-sbar.add("bracket", "spaces.pill", space_names, {
-	background = {
-		color = colors.surface,
-		corner_radius = 8,
-		height = 24,
-	},
-})
 
 sbar.exec("aerospace list-workspaces --focused", function(focused_workspace)
 	update_spaces((focused_workspace or ""):match("%S+"))

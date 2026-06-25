@@ -2,10 +2,10 @@
  * Safety Gate Extension
  *
  * Adds confirmations for dangerous shell commands and sensitive file edits.
- * - Confirms before bash/hypa_shell commands like rm, mv, sudo, chmod/chown, dd, mkfs, install/build commands, etc.
+ * - Confirms before bash/hypa_shell commands like rm, mv, launchctl mutations, sudo, chmod/chown, dd, mkfs, install/build commands, etc.
  * - Confirms before git commands that can change the current working tree (revert/reset/checkout/restore/etc.).
- * - Allows read-only git inspection commands (diff/log/show/status) without prompting.
- * - Confirms before edit/write on sensitive paths (.env, .git, .ssh, keys, etc.)
+ * - Catches direct, namespaced, and nested multi_tool_use tool calls.
+ * - Confirms before edit/write and apply=true mutation tools.
  * - In non-interactive mode, blocks these actions by default.
  */
 
@@ -26,11 +26,74 @@ type ExtensionAPI = {
 };
 
 type Rule = { name: string; pattern: RegExp };
+type ToolCheck = { toolName: string; input: Record<string, unknown>; source: string };
+
+type NestedToolUse = {
+	recipient_name?: unknown;
+	name?: unknown;
+	parameters?: unknown;
+	arguments?: unknown;
+};
+
+const getToolBaseName = (toolName: string) => toolName.split(".").pop() ?? toolName;
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+	typeof value === "object" && value !== null && !Array.isArray(value);
+
+const getToolInput = (value: unknown): Record<string, unknown> =>
+	isRecord(value) ? value : {};
+
+const isToolNamed = (toolName: string, names: string[]) => {
+	const baseName = getToolBaseName(toolName);
+	return names.includes(toolName) || names.includes(baseName);
+};
+
+const getCommand = (input: Record<string, unknown>) => {
+	for (const key of ["command", "cmd", "script"]) {
+		const value = input[key];
+		if (typeof value === "string") return value;
+	}
+	return "";
+};
+
+const collectToolChecks = (
+	event: ToolCallEvent,
+	matchesTool: (toolName: string) => boolean,
+): ToolCheck[] => {
+	const checks: ToolCheck[] = [];
+	if (matchesTool(event.toolName)) {
+		checks.push({ toolName: event.toolName, input: event.input, source: "direct" });
+	}
+
+	const nestedTools = event.input.tool_uses;
+	if (!Array.isArray(nestedTools)) return checks;
+
+	for (const nestedTool of nestedTools) {
+		if (!isRecord(nestedTool)) continue;
+		const toolUse = nestedTool as NestedToolUse;
+		const toolName = String(toolUse.recipient_name ?? toolUse.name ?? "");
+		if (!toolName || !matchesTool(toolName)) continue;
+
+		checks.push({
+			toolName,
+			input: getToolInput(toolUse.parameters ?? toolUse.arguments),
+			source: `${event.toolName} nested`,
+		});
+	}
+
+	return checks;
+};
 
 export default function (pi: ExtensionAPI) {
 	const dangerousCommandRules: Rule[] = [
 		{ name: "remove files (rm)", pattern: /(^|\s)rm\s+/i },
+		{ name: "remove files (unlink/rmdir)", pattern: /(^|\s)(unlink|rmdir)\s+/i },
 		{ name: "move/rename files (mv)", pattern: /(^|\s)mv\s+/i },
+		{ name: "copy files (cp)", pattern: /(^|\s)cp\s+/i },
+		{ name: "create/link files", pattern: /(^|\s)(touch|mkdir|ln)\s+/i },
+		{ name: "shell redirection write", pattern: /(^|\s)(>|>>)|\s(>|>>)\s*[^&]/i },
+		{ name: "write through tee", pattern: /(^|\s)tee\s+/i },
+		{ name: "truncate files", pattern: /(^|\s)truncate\s+/i },
 		{ name: "sudo", pattern: /(^|\s)sudo\s+/i },
 		{ name: "chmod", pattern: /(^|\s)chmod\s+/i },
 		{ name: "chown", pattern: /(^|\s)chown\s+/i },
@@ -40,12 +103,25 @@ export default function (pi: ExtensionAPI) {
 			pattern: /(^|\s)(mkfs|fdisk|parted|diskutil\s+eraseDisk)\b/i,
 		},
 		{
+			name: "launchd service mutation",
+			pattern:
+				/\blaunchctl\s+(bootstrap|bootout|kickstart|enable|disable|load|unload|remove|submit|asuser)\b/i,
+		},
+		{
+			name: "macOS defaults mutation",
+			pattern: /\bdefaults\s+(write|delete|rename|import)\b/i,
+		},
+		{
 			name: "recursive delete flags",
 			pattern: /\brm\b[^\n]*\s(-r|-rf|-fr|--recursive)\b/i,
 		},
 		{
 			name: "force overwrite flags",
 			pattern: /\b(mv|cp)\b[^\n]*\s(-f|--force)\b/i,
+		},
+		{
+			name: "in-place shell edit",
+			pattern: /\b(sed\s+-i|perl\s+-pi|ruby\s+-pi)\b/i,
 		},
 		{
 			name: "package manager install commands",
@@ -106,8 +182,11 @@ export default function (pi: ExtensionAPI) {
 	];
 
 	pi.on("tool_call", async (event, ctx) => {
-		if (event.toolName === "bash" || event.toolName === "hypa_shell") {
-			const command = String(event.input.command ?? "");
+		const shellChecks = collectToolChecks(event, (toolName) =>
+			isToolNamed(toolName, ["bash", "hypa_shell"]),
+		);
+		const riskyShellChecks = shellChecks.flatMap((check) => {
+			const command = getCommand(check.input);
 			const dangerousMatches = dangerousCommandRules.filter((r) =>
 				r.pattern.test(command),
 			);
@@ -115,18 +194,30 @@ export default function (pi: ExtensionAPI) {
 				r.pattern.test(command),
 			);
 			const matches = [...dangerousMatches, ...gitChangeMatches];
-			if (matches.length === 0) return undefined;
+			return matches.length > 0 ? [{ ...check, command, matches }] : [];
+		});
+
+		if (riskyShellChecks.length > 0) {
+			const matchedRules = riskyShellChecks
+				.flatMap((check) => check.matches.map((match) => match.name))
+				.join(", ");
 
 			if (!ctx.hasUI) {
 				return {
 					block: true,
-					reason: `Blocked command requiring confirmation (no UI): ${matches.map((m) => m.name).join(", ")}`,
+					reason: `Blocked command requiring confirmation (no UI): ${matchedRules}`,
 				};
 			}
 
+			const commandSummary = riskyShellChecks
+				.map(
+					(check) =>
+						`Tool: ${check.toolName} (${check.source})\nCommand:\n\n${check.command}\n\nMatched rules: ${check.matches.map((match) => match.name).join(", ")}`,
+				)
+				.join("\n\n---\n\n");
 			const confirmed = await ctx.ui.confirm(
 				"Allow command requiring confirmation?",
-				`Tool: ${event.toolName}\n\nCommand:\n\n${command}\n\nMatched rules: ${matches.map((m) => m.name).join(", ")}`,
+				commandSummary,
 			);
 			if (!confirmed) {
 				return { block: true, reason: "Blocked by user" };
@@ -134,25 +225,61 @@ export default function (pi: ExtensionAPI) {
 			return undefined;
 		}
 
-		if (event.toolName === "write" || event.toolName === "edit") {
-			const path = String(event.input.path ?? "");
-			const matches = sensitivePathPatterns.filter((r) => r.pattern.test(path));
-			const matchedRules =
-				matches.length > 0 ? matches.map((m) => m.name).join(", ") : "none";
+		const fileMutationChecks = collectToolChecks(event, (toolName) =>
+			isToolNamed(toolName, ["write", "edit"]),
+		);
+		if (fileMutationChecks.length > 0) {
+			const mutationSummary = fileMutationChecks
+				.map((check) => {
+					const path = String(check.input.path ?? "");
+					const matches = sensitivePathPatterns.filter((r) => r.pattern.test(path));
+					const matchedRules =
+						matches.length > 0
+							? matches.map((match) => match.name).join(", ")
+							: "none";
+					return `Tool: ${check.toolName} (${check.source})\nPath: ${path}\nMatched sensitive rules: ${matchedRules}`;
+				})
+				.join("\n\n---\n\n");
 
 			if (!ctx.hasUI) {
 				return {
 					block: true,
-					reason: `Blocked ${event.toolName} (no UI): ${path}`,
+					reason: `Blocked file mutation tool (no UI): ${fileMutationChecks.map((check) => check.toolName).join(", ")}`,
 				};
 			}
 
 			const confirmed = await ctx.ui.confirm(
-				`Allow ${event.toolName} operation?`,
-				`Path: ${path}\n\nMatched sensitive rules: ${matchedRules}`,
+				"Allow file mutation operation?",
+				mutationSummary,
 			);
 			if (!confirmed) {
-				return { block: true, reason: `Blocked ${event.toolName}: ${path}` };
+				return { block: true, reason: "Blocked file mutation by user" };
+			}
+		}
+
+		const applyMutationChecks = collectToolChecks(event, (toolName) =>
+			isToolNamed(toolName, ["ast_grep_replace", "lsp_navigation"]),
+		).filter((check) => check.input.apply === true);
+		if (applyMutationChecks.length > 0) {
+			const mutationSummary = applyMutationChecks
+				.map((check) =>
+					`Tool: ${check.toolName} (${check.source})\nInput:\n\n${JSON.stringify(check.input, null, 2)}`,
+				)
+				.join("\n\n---\n\n");
+
+			if (!ctx.hasUI) {
+				return {
+					block: true,
+					reason: `Blocked apply=true mutation tool (no UI): ${applyMutationChecks.map((check) => check.toolName).join(", ")}`,
+				};
+			}
+
+			const confirmed = await ctx.ui.confirm(
+				"Allow apply=true mutation operation?",
+				mutationSummary,
+			);
+			if (!confirmed) {
+				return { block: true, reason: "Blocked apply=true mutation by user" };
 			}
 		}
 

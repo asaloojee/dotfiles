@@ -18,10 +18,10 @@ local wifi = sbar.add("item", "wifi", {
 	position = "right",
 	update_freq = 2,
 	padding_left = 0,
-	padding_right = 24,
+	padding_right = 16,
 	icon = {
 		string = icons.wifi.icon,
-		color = colors.accent,
+		color = colors.secondary,
 		padding_left = 0,
 		padding_right = 0,
 	},
@@ -42,7 +42,7 @@ local speed = sbar.add("item", "wifi.speed", {
 	icon = { drawing = false },
 	label = {
 		string = "Sampling",
-		color = colors.fg,
+		color = colors.secondary,
 		padding_left = 12,
 		padding_right = 12,
 	},
@@ -62,7 +62,7 @@ local function set_connection_style(connected)
 	wifi:set({
 		icon = {
 			string = icons.wifi.icon,
-			color = connected and colors.accent or colors.fg_secondary,
+			color = connected and colors.primary or colors.secondary,
 		},
 	})
 end

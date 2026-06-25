@@ -6,10 +6,10 @@ local popup_open = false
 local apple = sbar.add("item", "apple", {
 	position = "left",
 	padding_left = 0,
-	padding_right = 16,
+	padding_right = 18,
 	icon = {
 		string = icons.apple,
-		color = colors.accent,
+		color = colors.primary,
 		padding_left = 0,
 		padding_right = 0,
 	},
@@ -36,7 +36,7 @@ local function add_menu_item(name, label, command)
 		icon = { drawing = false },
 		label = {
 			string = label,
-			color = colors.fg,
+			color = colors.secondary,
 			padding_left = 12,
 			padding_right = 12,
 		},

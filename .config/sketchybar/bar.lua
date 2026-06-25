@@ -3,10 +3,13 @@ local colors = require("colors")
 sbar.bar({
 	position = "top",
 	height = 34,
-	color = colors.transparent,
+	color = colors.bar_bg,
+	corner_radius = 0,
+	blur_radius = 20,
 	shadow = false,
 	sticky = true,
-	padding_left = 12,
-	padding_right = 12,
-	margin = 0,
+	padding_left = 16,
+	padding_right = 16,
+	-- margin = 12,
+	-- y_offset = 4,
 })

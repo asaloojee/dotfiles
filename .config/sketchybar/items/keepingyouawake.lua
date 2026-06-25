@@ -9,27 +9,21 @@ local keepingyouawake = sbar.add("item", "keepingyouawake", {
 	position = "right",
 	update_freq = 5,
 	padding_left = 0,
-	padding_right = 8,
+	padding_right = 24,
 	icon = {
-		string = icons.keepingyouawake.icon,
-		color = colors.fg_secondary,
-		padding_left = 12,
-		padding_right = 12,
+		string = icons.keepingyouawake.inactive_icon,
+		color = colors.accent,
+		padding_left = 0,
+		padding_right = 3,
 	},
 	label = { drawing = false },
-	background = {
-		drawing = true,
-		color = colors.surface,
-		corner_radius = 8,
-		height = 24,
-	},
 })
 
 local function set_status(active)
 	keepingyouawake:set({
 		icon = {
-			string = icons.keepingyouawake.icon,
-			color = active and colors.warning or colors.fg_secondary,
+			string = active and icons.keepingyouawake.active_icon or icons.keepingyouawake.inactive_icon,
+			color = colors.accent,
 		},
 	})
 end

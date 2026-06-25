@@ -1,24 +1,26 @@
 -- Paste Nerd Font glyphs here.
 return {
-	apple = "",
+	apple = "􀣺",
 	front_app = {
-		chevron = "",
+		chevron = "􀯻",
 	},
 	keepingyouawake = {
-		icon = "",
+		active_icon = "􀸙",
+		inactive_icon = "􀸘",
 	},
 	wifi = {
 		-- One icon for connected and disconnected states; color carries the state.
-		icon = "",
+		icon = "􀙇",
 	},
-	calendar = "",
+	calendar = "􀉉",
 	battery = {
+		charging = "􀢋",
 		levels = {
-			[0] = "",
-			[25] = "",
-			[50] = "",
-			[75] = "",
-			[100] = "",
+			[0] = "􀛪",
+			[25] = "􀛩",
+			[50] = "􀺶",
+			[75] = "􀺸",
+			[100] = "􀛨",
 		},
 	},
 }

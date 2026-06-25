@@ -2,7 +2,7 @@
 return {
 	apple = "􀣺",
 	front_app = {
-		chevron = "􀯻",
+		chevron = "􀆊",
 	},
 	keepingyouawake = {
 		active_icon = "􀸙",

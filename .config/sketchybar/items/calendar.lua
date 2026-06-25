@@ -13,7 +13,7 @@ local calendar = sbar.add("item", "calendar", {
 		padding_right = 8,
 	},
 	label = {
-		color = colors.fg,
+		color = colors.fg_muted,
 		padding_left = 0,
 		padding_right = 0,
 	},

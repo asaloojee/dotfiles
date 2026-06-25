@@ -21,7 +21,7 @@ local wifi = sbar.add("item", "wifi", {
 	padding_right = 24,
 	icon = {
 		string = icons.wifi.icon,
-		color = colors.fg_secondary,
+		color = colors.accent,
 		padding_left = 0,
 		padding_right = 0,
 	},

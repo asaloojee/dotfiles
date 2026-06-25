@@ -13,7 +13,7 @@ local battery = sbar.add("item", "battery", {
 		padding_right = 8,
 	},
 	label = {
-		color = colors.fg,
+		color = colors.fg_muted,
 		padding_left = 0,
 		padding_right = 0,
 	},
@@ -39,15 +39,16 @@ end
 local function update()
 	sbar.exec("pmset -g batt", function(result)
 		local percent = tonumber((result or ""):match("(%d+)%%")) or 0
+		local charging = is_charging(result)
 
 		battery:set({
 			icon = {
-				string = battery_icon(percent, is_charging(result)),
+				string = battery_icon(percent, charging),
 				color = colors.accent,
 			},
 			label = {
 				string = tostring(percent) .. "%",
-				color = colors.fg,
+				color = colors.fg_muted,
 			},
 		})
 	end)

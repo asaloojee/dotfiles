@@ -5,15 +5,15 @@ local battery = sbar.add("item", "battery", {
 	position = "right",
 	update_freq = 120,
 	padding_left = 0,
-	padding_right = 24,
+	padding_right = 16,
 	icon = {
 		string = icons.battery.levels[0],
-		color = colors.accent,
+		color = colors.primary,
 		padding_left = 0,
 		padding_right = 8,
 	},
 	label = {
-		color = colors.fg_muted,
+		color = colors.secondary,
 		padding_left = 0,
 		padding_right = 0,
 	},
@@ -44,11 +44,11 @@ local function update()
 		battery:set({
 			icon = {
 				string = battery_icon(percent, charging),
-				color = colors.accent,
+				color = colors.primary,
 			},
 			label = {
 				string = tostring(percent) .. "%",
-				color = colors.fg_muted,
+				color = colors.secondary,
 			},
 		})
 	end)

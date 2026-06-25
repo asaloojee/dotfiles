@@ -19,5 +19,13 @@ in {
       source = liveLink ".pi/agent/skills";
       force = true;
     };
+    ".local/bin/hypa" = {
+      executable = true;
+      text = ''
+        #!/usr/bin/env sh
+        set -eu
+        exec "$HOME/.pi/agent/npm/node_modules/.bin/hypa" "$@"
+      '';
+    };
   };
 }

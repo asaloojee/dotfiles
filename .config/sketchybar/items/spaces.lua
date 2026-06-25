@@ -8,9 +8,19 @@ local workspace_count = 5
 local function style_space(item, active)
 	item:set({
 		icon = {
-			color = active and colors.accent or colors.fg_secondary,
+			color = active and colors.primary or colors.secondary,
+			font = active and "JetBrains Mono:ExtraBold:16.0" or "JetBrains Mono:SemiBold:16.0",
 		},
-		background = { drawing = false },
+		-- background = {
+		-- 	drawing = active,
+		-- 	color = colors.primary,
+		-- 	height = 2,
+		-- 	corner_radius = 2,
+		-- 	y_offset = -10,
+		-- },
+		background = {
+			drawing = false,
+		},
 	})
 end
 
@@ -28,9 +38,8 @@ for sid = 1, workspace_count do
 		position = "left",
 		icon = {
 			string = tostring(workspace),
-			font = "JetBrains Mono:Bold:16.0",
-			padding_left = 8,
-			padding_right = 8,
+			padding_left = 6,
+			padding_right = 6,
 		},
 		label = { drawing = false },
 		padding_left = 0,
@@ -51,16 +60,16 @@ end
 
 local front_app = sbar.add("item", "front_app", {
 	position = "left",
-	padding_left = 8,
+	padding_left = 18,
 	padding_right = 16,
 	icon = {
 		string = icons.front_app.chevron,
-		color = colors.accent,
+		color = colors.primary,
 		padding_left = 0,
 		padding_right = 16,
 	},
 	label = {
-		color = colors.fg_muted,
+		color = colors.secondary,
 		padding_left = 0,
 		padding_right = 2,
 	},

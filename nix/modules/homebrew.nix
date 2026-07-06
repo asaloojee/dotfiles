@@ -19,6 +19,7 @@
       "figma"
       "alacritty"
       # "ollama"
+      "clickup"
       "obsidian"
       "handbrake-app"
       "helium-browser"

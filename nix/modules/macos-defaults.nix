@@ -5,7 +5,7 @@
     dock.tilesize = 16;
     finder.ShowPathbar = true;
     finder.NewWindowTarget = "Documents";
-    menuExtraClock.ShowSeconds = true;
+    menuExtraClock.ShowSeconds = false;
     finder.FXPreferredViewStyle = "clmv";
     loginwindow.GuestEnabled = false;
     NSGlobalDomain.AppleInterfaceStyle = "Dark";

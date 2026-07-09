@@ -13,7 +13,6 @@
       # GUI/macOS apps
       "adobe-creative-cloud"
       "blender"
-      "claude"
       "discord"
       "docker-desktop"
       "figma"
@@ -50,7 +49,13 @@
       # "PDFgear" = 6469021132;
     };
 
-    onActivation.cleanup = "zap";
+    onActivation = {
+      cleanup = "none";
+      extraFlags = [
+        "--cleanup"
+        "--zap"
+      ];
+    };
     onActivation.autoUpdate = true;
     onActivation.upgrade = true;
   };

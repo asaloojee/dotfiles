@@ -27,18 +27,20 @@ When proposing or completing changes, include a brief summary with:
 - If the user asks exploratory questions or requests recommendations (e.g., "how would this work", "how would you", "what’s the approach", "can you outline", "what do you recommend"), respond with explanation, advice, or a concise plan only. Do not initiate file edits, writes, or other mutating commands.
 - If the user gives a direct edit or implementation request (e.g., "do X", "implement Y", "change this", "fix it", "make the edit"), initiate the requested edit/write through the approved tool path so the safety gate extension can intercept it for approval.
 - Under no circumstances bypass the safety gate extension for mutations. Do not mutate files or project state through shell scripts, shell redirection, install/remove commands, migrations, deletes, or other state-changing commands unless that action is explicitly expected to be caught by the safety gate. Project-standard formatter CLI commands are an allowed exception when they are explicitly requested or clearly part of the requested implementation workflow.
-- Permanently banned mutation paths: `python`/`node`/`ruby`/similar scripts that write files, shell redirection (`>`/`>>`), in-place shell edits (`sed -i`, `perl -pi`, etc.), `mv`/`cp` over source files, temp-file replacement workflows, and full-file rewrites for small edits unless explicitly approved.
+- Mutation paths such as `python`/`node`/`ruby`/similar scripts that write files, shell redirection (`>`/`>>`), in-place shell edits (`sed -i`, `perl -pi`, etc.), `mv`/`cp` over source files, temp-file replacement workflows, and full-file rewrites are allowed only when they are the proper, efficient tool for the task and are routed through the safety gate as write commands requiring explicit permission.
 - For files owned by the configured formatter (for example oxfmt via `vp fmt`/Neovim Conform), do not introduce or preserve non-canonical formatting such as tab indentation to minimize a diff. If formatting churn is likely because the committed file is not formatter-canonical, call that out before editing.
 - No implicit mutation: for informational/planning requests, read-only tools may be used to gather context, but do not perform mutating actions unless the user explicitly asks for an edit/implementation.
 - Continue to follow safety/approval gates: if the request is ambiguous, risky, destructive, or conflicts with higher-priority instructions, pause and confirm before proceeding.
+- If the user prompt contains definitive instructions as well as questions, address the questions first before moving onto the direct command.
 
 ## Tooling preferences
 
-- Prefer `pnpm` for JavaScript/TypeScript workflows and command suggestions.
+- Prefer `pnpm` for JavaScript/TypeScript workflows and command suggestions. Only use `yarn` in `~/dev/pre-script/` projects.
 - Only suggest `npm` when required for compatibility or when a tool explicitly requires npm semantics.
 - Prefer `uv` over `pip` for Python package installation workflows and command suggestions.
 - Only suggest `pip` when required for compatibility or when a tool explicitly requires pip semantics.
 - For pi package management, use `pi install` / `pi update` / `pi remove` commands as the primary interface.
+- For `vp` projects or commands, prefer the global binary over local `pnpm exec` commands.
 
 ## Formatting parity with Neovim
 

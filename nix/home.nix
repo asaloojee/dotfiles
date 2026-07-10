@@ -31,6 +31,7 @@
     EDITOR = "nvim";
     VISUAL = "nvim";
     NODE_ENV = "development";
+    COREPACK_ENABLE_AUTO_PIN = "0";
     PNPM_HOME = "$HOME/.local/share/pnpm";
     PNPM_CONFIG_STORE_DIR = "$HOME/.local/share/pnpm/store";
     COMPOSER_PHAR_PATH = "/run/current-system/sw/bin/composer";

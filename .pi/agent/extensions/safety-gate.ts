@@ -26,7 +26,11 @@ type ExtensionAPI = {
 };
 
 type Rule = { name: string; pattern: RegExp };
-type ToolCheck = { toolName: string; input: Record<string, unknown>; source: string };
+type ToolCheck = {
+	toolName: string;
+	input: Record<string, unknown>;
+	source: string;
+};
 
 type NestedToolUse = {
 	recipient_name?: unknown;
@@ -35,7 +39,8 @@ type NestedToolUse = {
 	arguments?: unknown;
 };
 
-const getToolBaseName = (toolName: string) => toolName.split(".").pop() ?? toolName;
+const getToolBaseName = (toolName: string) =>
+	toolName.split(".").pop() ?? toolName;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
 	typeof value === "object" && value !== null && !Array.isArray(value);
@@ -62,7 +67,11 @@ const collectToolChecks = (
 ): ToolCheck[] => {
 	const checks: ToolCheck[] = [];
 	if (matchesTool(event.toolName)) {
-		checks.push({ toolName: event.toolName, input: event.input, source: "direct" });
+		checks.push({
+			toolName: event.toolName,
+			input: event.input,
+			source: "direct",
+		});
 	}
 
 	const nestedTools = event.input.tool_uses;
@@ -87,11 +96,17 @@ const collectToolChecks = (
 export default function (pi: ExtensionAPI) {
 	const dangerousCommandRules: Rule[] = [
 		{ name: "remove files (rm)", pattern: /(^|\s)rm\s+/i },
-		{ name: "remove files (unlink/rmdir)", pattern: /(^|\s)(unlink|rmdir)\s+/i },
+		{
+			name: "remove files (unlink/rmdir)",
+			pattern: /(^|\s)(unlink|rmdir)\s+/i,
+		},
 		{ name: "move/rename files (mv)", pattern: /(^|\s)mv\s+/i },
 		{ name: "copy files (cp)", pattern: /(^|\s)cp\s+/i },
 		{ name: "create/link files", pattern: /(^|\s)(touch|mkdir|ln)\s+/i },
-		{ name: "shell redirection write", pattern: /(^|\s)(>|>>)|\s(>|>>)\s*[^&]/i },
+		{
+			name: "shell redirection write",
+			pattern: /(^|\s)(>|>>)|\s(>|>>)\s*[^&]/i,
+		},
 		{ name: "write through tee", pattern: /(^|\s)tee\s+/i },
 		{ name: "truncate files", pattern: /(^|\s)truncate\s+/i },
 		{ name: "sudo", pattern: /(^|\s)sudo\s+/i },
@@ -122,6 +137,15 @@ export default function (pi: ExtensionAPI) {
 		{
 			name: "in-place shell edit",
 			pattern: /\b(sed\s+-i|perl\s+-pi|ruby\s+-pi)\b/i,
+		},
+		{
+			name: "scripted file mutation command",
+			pattern: /(^|\s)(?:[^\s]+\/)?(python\d*|node|ruby|perl|php|bun|deno)\b/i,
+		},
+		{
+			name: "temp-file replacement workflow",
+			pattern:
+				/\b(mktemp|tempfile)\b|\b(mv|cp)\b[^\n]*(\/tmp\/|\.tmp\b|\.temp\b)|(?:\/tmp\/|\.tmp\b|\.temp\b)[^\n]*\b(mv|cp)\b/i,
 		},
 		{
 			name: "package manager install commands",
@@ -205,7 +229,7 @@ export default function (pi: ExtensionAPI) {
 			if (!ctx.hasUI) {
 				return {
 					block: true,
-					reason: `Blocked command requiring confirmation (no UI): ${matchedRules}`,
+					reason: `Blocked write/risky command requiring confirmation (no UI): ${matchedRules}`,
 				};
 			}
 
@@ -216,7 +240,7 @@ export default function (pi: ExtensionAPI) {
 				)
 				.join("\n\n---\n\n");
 			const confirmed = await ctx.ui.confirm(
-				"Allow command requiring confirmation?",
+				"Allow write/risky command requiring confirmation?",
 				commandSummary,
 			);
 			if (!confirmed) {
@@ -232,7 +256,9 @@ export default function (pi: ExtensionAPI) {
 			const mutationSummary = fileMutationChecks
 				.map((check) => {
 					const path = String(check.input.path ?? "");
-					const matches = sensitivePathPatterns.filter((r) => r.pattern.test(path));
+					const matches = sensitivePathPatterns.filter((r) =>
+						r.pattern.test(path),
+					);
 					const matchedRules =
 						matches.length > 0
 							? matches.map((match) => match.name).join(", ")
@@ -262,8 +288,9 @@ export default function (pi: ExtensionAPI) {
 		).filter((check) => check.input.apply === true);
 		if (applyMutationChecks.length > 0) {
 			const mutationSummary = applyMutationChecks
-				.map((check) =>
-					`Tool: ${check.toolName} (${check.source})\nInput:\n\n${JSON.stringify(check.input, null, 2)}`,
+				.map(
+					(check) =>
+						`Tool: ${check.toolName} (${check.source})\nInput:\n\n${JSON.stringify(check.input, null, 2)}`,
 				)
 				.join("\n\n---\n\n");
 

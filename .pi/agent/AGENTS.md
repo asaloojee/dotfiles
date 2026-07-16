@@ -20,6 +20,7 @@ When proposing or completing changes, include a brief summary with:
 - Assume the user will review/approve only after understanding the diff.
 - If a change is non-obvious, call it out explicitly before or after editing.
 - If requirements, specs, or direction are ambiguous, ask concise clarifying questions before making broad edits.
+- Adhere to the instructions rigorously. Do not run builds or implement responsive styling unless explicitly instructed.
 
 ## Execution mode: advice vs edits
 
@@ -35,7 +36,7 @@ When proposing or completing changes, include a brief summary with:
 
 ## Tooling preferences
 
-- Prefer `pnpm` for JavaScript/TypeScript workflows and command suggestions. Only use `yarn` in `~/dev/pre-script/` projects.
+- Prefer `vp` with `pnpm` for JavaScript/TypeScript workflows and command suggestions. Only use `yarn` in `~/dev/pre-script/` projects.
 - Only suggest `npm` when required for compatibility or when a tool explicitly requires npm semantics.
 - Prefer `uv` over `pip` for Python package installation workflows and command suggestions.
 - Only suggest `pip` when required for compatibility or when a tool explicitly requires pip semantics.
@@ -68,9 +69,6 @@ When proposing or completing changes, include a brief summary with:
 
 ## Apply/verify workflow for global changes
 
-- Prefer these commands when relevant:
-  - `just stow` for stow-managed symlinks.
-  - `just diff` to inspect closure differences before/after.
 - Prefer dry-run/preview/diff-style validation before mutating changes when practical.
 - Never run commands that require `sudo` or may trigger a password prompt.
 - For any privileged step (including rebuilds, rollback, gc, deleting generations, or nix/darwin commands requiring sudo), hand off to the user with the exact command(s) to run.

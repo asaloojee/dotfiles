@@ -13,6 +13,7 @@
       # GUI/macOS apps
       "adobe-creative-cloud"
       "blender"
+      "chatgpt"
       "discord"
       "docker-desktop"
       "figma"

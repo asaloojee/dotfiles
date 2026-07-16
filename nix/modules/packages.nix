@@ -43,6 +43,7 @@
     pkgs.rust-analyzer
     pkgs.rustfmt
     pkgs.rustup
+    pkgs.shopify-cli
     pkgs.stylua
     pkgs.stow
     pkgs.tmuxinator

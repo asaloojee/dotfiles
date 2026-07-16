@@ -9,7 +9,7 @@ windows:
       layout: even-horizontal
       panes:
         -  # empty pane for commands
-        - vp dev
+        -  # dev server
   - editor:
       panes:
         - nvim

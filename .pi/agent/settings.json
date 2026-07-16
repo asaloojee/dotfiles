@@ -7,12 +7,14 @@
     "npm:pi-lens",
     "npm:@hypabolic/pi-hypa",
     "npm:pi-web-access",
-    "npm:@juicesharp/rpiv-ask-user-question"
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:@juicesharp/rpiv-todo",
+    "npm:pi-simplify"
   ],
   "theme": "tokyo-night",
   "collapseChangelog": true,
   "installTelemetry": false,
   "hideThinkingBlock": true,
   "quietStartup": true,
-  "lastChangelogVersion": "0.80.5"
+  "lastChangelogVersion": "0.80.6"
 }

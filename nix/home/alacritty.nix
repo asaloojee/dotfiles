@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   enable = true;
+  package = null;
 
   settings = {
     env.TERM = "xterm-256color";

@@ -2,14 +2,11 @@
   enable = true;
   launchd.enable = true;
   settings = {
+    config-version = 2;
+    persistent-workspaces = ["1" "2" "3" "4" "5"];
+
     after-login-command = [];
     after-startup-command = [];
-    exec-on-workspace-change = [
-      "/bin/bash"
-      "-c"
-      "/run/current-system/sw/bin/sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE"
-    ];
-
     start-at-login = true;
 
     enable-normalization-flatten-containers = true;

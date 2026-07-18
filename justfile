@@ -11,15 +11,21 @@ rebuild:
 
 # Symlink stow-managed configs into ~/.config
 stow:
-    stow .
+    stow --target "$HOME/.config" .config
 
-# Install utility scripts to ~/.local/bin
-install-scripts force="":
-    ./scripts/install.sh {{ if force == "force" { "--force" } else { "" } }}
-
-# Format all nix files
+# Format managed source files
 fmt:
     alejandra nix/flake.nix nix/home.nix nix/home/*.nix nix/modules/*.nix nix/packages/*.nix
+    stylua .config/nvim .config/sketchybar
+    oxfmt .pi/agent/AGENTS.md .pi/agent/extensions/safety-gate.ts .pi/agent/settings.json
+
+# Check formatting, JSON syntax, and tracked secrets
+check:
+    alejandra --check nix/flake.nix nix/home.nix nix/home/*.nix nix/modules/*.nix nix/packages/*.nix
+    stylua --check .config/nvim .config/sketchybar
+    oxfmt --check .pi/agent/AGENTS.md .pi/agent/extensions/safety-gate.ts .pi/agent/settings.json
+    git ls-files -z '*.json' | xargs -0 -n 1 sh -c 'test ! -e "$1" || jq empty "$1"' _
+    gitleaks git --redact --no-banner .
 
 # Update flake inputs
 update:

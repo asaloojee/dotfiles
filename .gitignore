@@ -6,7 +6,6 @@
 
 # Auto-generated lockfiles
 **/lazy-lock.json
-**/flake.lock
 
 # Claude Code runtime directories (keep settings.json and settings.local.json)
 .claude/debug/

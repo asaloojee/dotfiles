@@ -34,3 +34,6 @@ CLAUDE.md
 
 # Local agent skills (live-managed via ~/.pi/agent/skills symlink; not redistributed)
 .pi/agent/skills/
+
+# hunk
+.config/hunk/state.json

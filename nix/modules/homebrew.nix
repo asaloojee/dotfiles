@@ -2,7 +2,9 @@
   homebrew = {
     enable = true;
     brews = [
+      "hunk"
       "mas"
+      "mole"
       "pi-coding-agent"
       "vite-plus"
     ];
@@ -13,23 +15,23 @@
     casks = [
       # GUI/macOS apps
       "adobe-creative-cloud"
+      "alacritty"
       "blender"
+      "brave-origin"
       "chatgpt"
+      "clickup"
       "discord"
       "docker-desktop"
       "figma"
-      "alacritty"
-      # "ollama"
-      "clickup"
-      "obsidian"
       "handbrake-app"
-      "helium-browser"
       "jordanbaird-ice"
       "karabiner-elements" # Needs stable paths for macOS permissions
       "keepingyouawake"
       "leader-key"
       "maccy"
       "mos"
+      "obsidian"
+      # "ollama"
       "proton-drive"
       "proton-mail"
       "proton-pass"

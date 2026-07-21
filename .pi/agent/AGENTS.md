@@ -73,3 +73,4 @@ When proposing or completing changes, include a brief summary with:
 - Never run commands that require `sudo` or may trigger a password prompt.
 - For any privileged step (including rebuilds, rollback, gc, deleting generations, or nix/darwin commands requiring sudo), hand off to the user with the exact command(s) to run.
 - The agent may run non-privileged verification commands, but must clearly label any user-run privileged follow-up.
+- When making changes, use the built-in read tool to read relevant files and lines before writing the changes.

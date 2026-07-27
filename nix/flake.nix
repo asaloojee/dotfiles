@@ -9,8 +9,6 @@
     nix-homebrew.inputs.brew-src.url = "github:Homebrew/brew/5.1.10";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    stylix.url = "github:nix-community/stylix";
-    stylix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ {
@@ -19,7 +17,6 @@
     nixpkgs,
     nix-homebrew,
     home-manager,
-    stylix,
     ...
   }: {
     formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
@@ -31,7 +28,6 @@
         ./modules/macos-defaults.nix
         ./modules/fonts.nix
         ./modules/sketchybar.nix
-        ./modules/stylix.nix
         ({pkgs, ...}: {
           nixpkgs.config.allowUnfree = true;
           nix.settings.warn-dirty = false;
@@ -52,7 +48,6 @@
           system.configurationRevision = self.rev or self.dirtyRev or null;
           system.stateVersion = 6;
         })
-        stylix.darwinModules.stylix
         nix-homebrew.darwinModules.nix-homebrew
         {
           nix-homebrew = {

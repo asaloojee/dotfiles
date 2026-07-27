@@ -3,8 +3,8 @@
   # Keep Homebrew font casks only for explicit exceptions.
   fonts.packages = [
     pkgs.fira
-    pkgs.iosevka-comfy.comfy
-    pkgs.iosevka-comfy.comfy-duo
+    # pkgs.iosevka-comfy.comfy
+    # pkgs.iosevka-comfy.comfy-duo
     pkgs.maple-mono.NF-unhinted
     pkgs.maple-mono.truetype
     pkgs.nerd-fonts.hack
@@ -13,6 +13,6 @@
     pkgs.nerd-fonts.meslo-lg
     pkgs.nerd-fonts.monaspace
     pkgs.noto-fonts
-    pkgs.sketchybar-app-font
+    # pkgs.sketchybar-app-font
   ];
 }

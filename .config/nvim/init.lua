@@ -1,5 +1,4 @@
 vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
 
 -- Options
 vim.opt.number = true
@@ -8,12 +7,20 @@ vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
 vim.opt.signcolumn = "yes"
 vim.opt.clipboard = "unnamedplus"
-vim.opt.hidden = true
 
 -- Buffer navigation
 vim.keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })
 vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete buffer" })
+
+-- Search literally for the current visual selection without changing a register.
+vim.keymap.set("x", "//", function()
+	local lines = vim.fn.getregion(vim.fn.getpos("v"), vim.fn.getpos("."), { type = vim.fn.mode() })
+	local selection = table.concat(lines, "\n")
+	local pattern = vim.fn.escape(selection, "\\"):gsub("\n", "\\n")
+	vim.fn.setreg("/", "\\V" .. pattern)
+	vim.cmd("normal! n")
+end, { desc = "Search visual selection" })
 
 -- Docker Compose files get a dedicated filetype so compose-specific LSPs can attach.
 vim.filetype.add({

@@ -26,7 +26,7 @@
     directory = {
       style = "blue";
       read_only = " 󱌃";
-      home_symbol = "󰜥 ";
+      home_symbol = "~";
       truncation_length = 4;
       truncate_to_repo = false;
       truncation_symbol = ".../";

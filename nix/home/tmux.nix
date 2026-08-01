@@ -31,7 +31,7 @@
   extraConfig = ''
     # Terminal overrides
     set-option -sa terminal-overrides ",xterm*:Tc"
-    set -as terminal-features ",xterm-256color:RGB"
+    set -as terminal-features ",xterm-256color:RGB:extkeys"
     set -as terminal-features ",xterm-ghostty:RGB"
     set -as terminal-features ",tmux-256color:RGB"
 

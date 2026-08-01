@@ -1,7 +1,9 @@
 {
   config,
+  homeDirectory,
   pkgs,
   lib,
+  username,
   ...
 }: {
   imports = [
@@ -10,8 +12,8 @@
     ./home/delta.nix
     ./home/pi-agent.nix
   ];
-  home.username = "asaloojee";
-  home.homeDirectory = "/Users/asaloojee";
+  home.username = username;
+  home.homeDirectory = homeDirectory;
   home.stateVersion = "24.11";
   xdg.enable = true;
 
@@ -25,7 +27,6 @@
     LANG = "en_CA.UTF-8";
     EDITOR = "nvim";
     VISUAL = "nvim";
-    NODE_ENV = "development";
     COREPACK_ENABLE_AUTO_PIN = "0";
     PNPM_HOME = "$HOME/.local/share/pnpm";
     PNPM_CONFIG_STORE_DIR = "$HOME/.local/share/pnpm/store";
@@ -46,6 +47,7 @@
     eza = import ./home/eza.nix {inherit pkgs;};
     fzf = import ./home/fzf.nix {inherit pkgs;};
     alacritty = import ./home/alacritty.nix {inherit pkgs;};
+    ghostty = import ./home/ghostty.nix;
     git = import ./home/git.nix {inherit pkgs;};
     tmux = import ./home/tmux.nix {inherit pkgs;};
     zoxide = import ./home/zoxide.nix {inherit pkgs;};

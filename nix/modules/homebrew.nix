@@ -15,7 +15,7 @@
     casks = [
       # GUI/macOS apps
       "adobe-creative-cloud"
-      "alacritty"
+      # "alacritty"
       "blender"
       "brave-origin"
       "chatgpt"
@@ -23,6 +23,7 @@
       "discord"
       "docker-desktop"
       "figma"
+      "ghostty"
       "handbrake-app"
       "jordanbaird-ice"
       "karabiner-elements" # Needs stable paths for macOS permissions
@@ -54,13 +55,9 @@
     };
 
     onActivation = {
-      cleanup = "none";
-      extraFlags = [
-        "--cleanup"
-        "--zap"
-      ];
+      autoUpdate = true;
+      cleanup = "zap";
+      upgrade = true;
     };
-    onActivation.autoUpdate = true;
-    onActivation.upgrade = true;
   };
 }

@@ -5,7 +5,6 @@
   "packages": [
     "npm:@ifi/oh-pi-themes",
     "npm:pi-lens",
-    "npm:@hypabolic/pi-hypa",
     "npm:pi-web-access",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:@juicesharp/rpiv-todo",
@@ -16,5 +15,5 @@
   "installTelemetry": false,
   "hideThinkingBlock": true,
   "quietStartup": true,
-  "lastChangelogVersion": "0.81.1"
+  "lastChangelogVersion": "0.83.0"
 }

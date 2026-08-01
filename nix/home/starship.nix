@@ -34,7 +34,7 @@
 
     character = {
       format = "$symbol ";
-      success_symbol = "[❯](magenta)";
+      success_symbol = "[❯](#bb9af7)";
       error_symbol = "[❯](red)";
     };
 

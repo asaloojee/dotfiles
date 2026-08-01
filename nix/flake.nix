@@ -6,7 +6,8 @@
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
-    nix-homebrew.inputs.brew-src.url = "github:Homebrew/brew/5.1.10";
+    # Track Brew main because rolling cask definitions can require newer DSL features.
+    nix-homebrew.inputs.brew-src.url = "github:Homebrew/brew";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -18,10 +19,17 @@
     nix-homebrew,
     home-manager,
     ...
-  }: {
-    formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
+  }: let
+    configurationName = "mac";
+    homeDirectory = "/Users/${username}";
+    hostName = "omnx-mac";
+    platform = "aarch64-darwin";
+    username = "asaloojee";
+  in {
+    formatter.${platform} = nixpkgs.legacyPackages.${platform}.alejandra;
 
-    darwinConfigurations."mac" = nix-darwin.lib.darwinSystem {
+    darwinConfigurations.${configurationName} = nix-darwin.lib.darwinSystem {
+      specialArgs = {inherit homeDirectory hostName username;};
       modules = [
         ./modules/packages.nix
         ./modules/homebrew.nix
@@ -29,21 +37,39 @@
         ./modules/fonts.nix
         ./modules/sketchybar.nix
         ({pkgs, ...}: {
-          nixpkgs.config.allowUnfree = true;
-          nix.settings.warn-dirty = false;
-          nix.settings.experimental-features = "nix-command flakes";
-          nixpkgs.hostPlatform = "aarch64-darwin";
+          nix = {
+            gc = {
+              automatic = true;
+              interval = {
+                Hour = 3;
+                Minute = 15;
+                Weekday = 7;
+              };
+              options = "--delete-older-than 30d";
+            };
+            optimise.automatic = true;
+            registry.nixpkgs.flake = nixpkgs;
+            settings = {
+              experimental-features = "nix-command flakes";
+              warn-dirty = false;
+            };
+          };
+          networking = {
+            computerName = hostName;
+            hostName = hostName;
+            localHostName = hostName;
+          };
+          nixpkgs.hostPlatform = platform;
 
-          system.primaryUser = "asaloojee";
-          users.users.asaloojee = {
-            name = "asaloojee";
-            home = "/Users/asaloojee";
+          system.primaryUser = username;
+          users.users.${username} = {
+            name = username;
+            home = homeDirectory;
             shell = pkgs.zsh;
           };
 
           programs.zsh.enable = true;
-
-          nix.optimise.automatic = true;
+          security.pam.services.sudo_local.touchIdAuth = true;
 
           system.configurationRevision = self.rev or self.dirtyRev or null;
           system.stateVersion = 6;
@@ -53,14 +79,17 @@
           nix-homebrew = {
             enable = true;
             enableRosetta = true;
-            user = "asaloojee";
+            user = username;
           };
         }
         home-manager.darwinModules.home-manager
         {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.asaloojee = import ./home.nix;
+          home-manager = {
+            extraSpecialArgs = {inherit homeDirectory username;};
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            users.${username} = import ./home.nix;
+          };
         }
       ];
     };

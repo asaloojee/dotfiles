@@ -1,6 +1,10 @@
-{pkgs, ...}: let
+{
+  homeDirectory,
+  pkgs,
+  ...
+}: let
   sbarlua = pkgs.callPackage ../packages/sbarlua.nix {};
-  sketchybarConfigDir = "/Users/asaloojee/.config/sketchybar";
+  sketchybarConfigDir = "${homeDirectory}/.config/sketchybar";
 in {
   services.sketchybar = {
     enable = false;

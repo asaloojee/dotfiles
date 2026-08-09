@@ -45,11 +45,6 @@
       hide_when_typing = true;
     };
 
-    terminal.shell = {
-      program = "/bin/zsh";
-      args = ["-l"];
-    };
-
     # Theme import (Tokyo Night)
     general.import = ["${pkgs.alacritty-theme}/share/alacritty-theme/tokyo_night.toml"];
   };

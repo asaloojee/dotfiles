@@ -1,5 +1,4 @@
 {
-  config,
   homeDirectory,
   pkgs,
   lib,
@@ -45,6 +44,7 @@
     aerospace = import ./home/aerospace.nix {inherit pkgs;};
     bat = import ./home/bat.nix {inherit pkgs;};
     eza = import ./home/eza.nix {inherit pkgs;};
+    fish = import ./home/fish.nix {inherit lib;};
     fzf = import ./home/fzf.nix {inherit pkgs;};
     alacritty = import ./home/alacritty.nix {inherit pkgs;};
     ghostty = import ./home/ghostty.nix;
@@ -52,11 +52,10 @@
     tmux = import ./home/tmux.nix {inherit pkgs;};
     zoxide = import ./home/zoxide.nix {inherit pkgs;};
     starship = import ./home/starship.nix {inherit pkgs lib;};
-    zsh = import ./home/zsh.nix {inherit config pkgs lib;};
 
     direnv = {
       enable = true;
-      enableZshIntegration = true;
+      enableFishIntegration = true;
       nix-direnv.enable = true;
     };
   };

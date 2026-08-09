@@ -9,7 +9,7 @@
   secureSocket = true;
   shortcut = "Space";
   terminal = "tmux-256color";
-  shell = "${pkgs.zsh}/bin/zsh";
+  shell = "${pkgs.fish}/bin/fish";
 
   plugins = with pkgs.tmuxPlugins; [
     sensible

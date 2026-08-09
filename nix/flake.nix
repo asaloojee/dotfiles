@@ -65,10 +65,10 @@
           users.users.${username} = {
             name = username;
             home = homeDirectory;
-            shell = pkgs.zsh;
+            shell = pkgs.fish;
           };
 
-          programs.zsh.enable = true;
+          programs.fish.enable = true;
           security.pam.services.sudo_local.touchIdAuth = true;
 
           system.configurationRevision = self.rev or self.dirtyRev or null;

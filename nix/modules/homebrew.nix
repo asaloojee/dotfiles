@@ -18,9 +18,7 @@
       # "alacritty"
       "blender"
       "brave-origin"
-      "chatgpt"
       "clickup"
-      "discord"
       "docker-desktop"
       "figma"
       "ghostty"
@@ -40,7 +38,6 @@
       "sf-symbols"
       "slack"
       "tailscale-app"
-      "zoom"
 
       # Font exceptions kept in Homebrew (not managed by nixpkgs)
       "font-martel"

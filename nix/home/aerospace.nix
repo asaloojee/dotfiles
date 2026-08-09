@@ -90,11 +90,6 @@
         run = "layout floating";
       }
       {
-        "if".app-id = "net.imput.helium";
-        "if".window-title-regex-substring = "DevTools";
-        run = "layout floating";
-      }
-      {
         "if".app-id = "com.brave.Browser.origin";
         run = "move-node-to-workspace 1";
       }
@@ -125,10 +120,6 @@
       {
         "if".app-id = "ch.protonmail.desktop";
         run = "move-node-to-workspace 1";
-      }
-      {
-        "if".app-id = "com.tinyspeck.slackmacgap";
-        run = "layout floating";
       }
     ];
   };

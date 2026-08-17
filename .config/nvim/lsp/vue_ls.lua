@@ -1,22 +1,4 @@
-local function get_tsdk()
-	local local_tsdk = vim.fs.joinpath(vim.fn.getcwd(), "node_modules", "typescript", "lib")
-	if vim.uv.fs_stat(local_tsdk) then
-		return local_tsdk
-	end
-
-	local tsserver = vim.fn.exepath("tsserver")
-	if tsserver ~= "" then
-		return vim.fs.joinpath(
-			vim.fn.fnamemodify(vim.uv.fs_realpath(tsserver), ":h:h"),
-			"lib",
-			"node_modules",
-			"typescript",
-			"lib"
-		)
-	end
-
-	return local_tsdk
-end
+local typescript = require("config.typescript")
 
 return {
 	cmd = { "vue-language-server", "--stdio" },
@@ -25,7 +7,7 @@ return {
 	single_file_support = true,
 	init_options = {
 		typescript = {
-			tsdk = get_tsdk(),
+			tsdk = typescript.get_tsdk(),
 		},
 	},
 }

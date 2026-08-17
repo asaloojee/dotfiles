@@ -16,6 +16,3 @@ windows:
   - agent:
       panes:
         - pi
-  - diff:
-      panes:
-        - hunk diff

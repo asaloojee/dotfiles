@@ -7,6 +7,9 @@ vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
 vim.opt.signcolumn = "yes"
 vim.opt.clipboard = "unnamedplus"
+vim.opt.undofile = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
 
 -- Buffer navigation
 vim.keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
@@ -89,6 +92,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 -- Enable LSP servers (configs in lsp/*.lua)
 vim.lsp.enable({
+	"lua_ls",
+	"nil_ls",
 	"rust_analyzer",
 	"vtsls",
 	"cssls",

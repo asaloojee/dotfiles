@@ -2,7 +2,6 @@
   homebrew = {
     enable = true;
     brews = [
-      "hunk"
       "mas"
       "mole"
       "pi-coding-agent"

@@ -4,9 +4,6 @@
 
 .config/tmux/plugins/
 
-# Auto-generated lockfiles
-**/lazy-lock.json
-
 # Claude Code runtime directories (keep settings.json and settings.local.json)
 .claude/debug/
 .claude/file-history/

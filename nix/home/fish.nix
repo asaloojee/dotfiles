@@ -1,12 +1,14 @@
 {lib, ...}: {
   enable = true;
 
-  shellAbbrs = {
+  shellAliases = {
     g = "gitui";
     ff = "fastfetch";
     mux = "tmuxinator";
     rebuild = "sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac";
+  };
 
+  shellAbbrs = {
     NE = {
       position = "anywhere";
       expansion = "2>/dev/null";
@@ -69,12 +71,13 @@
   interactiveShellInit = lib.mkOrder 100 ''
     fish_vi_key_bindings
 
-    set --global fish_cursor_default underscore
+    set --global fish_cursor_default block
     set --global fish_cursor_insert block
     set --global fish_cursor_replace_one underscore
     set --global fish_cursor_visual block
 
     set --global fish_color_command 9ece6a
+    set --global fish_color_param normal
     set --global fish_color_error f7768e --bold
 
     bind --mode insert \e\[3~ delete-char

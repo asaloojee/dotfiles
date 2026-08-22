@@ -2,75 +2,77 @@
 
 ## Review-first workflow
 
-- Optimize all code changes for human review and understanding.
-- Keep diffs small, scoped, and easy to read.
-- Avoid unrelated refactors/format churn unless explicitly requested.
-- Prefer incremental edits over large rewrites when possible.
+- Optimize changes for human review.
+- Keep diffs small, scoped, and readable.
+- Avoid unrelated refactors and formatting churn.
+- Prefer incremental edits to broad rewrites.
+- Explain non-obvious changes.
+- Ask concise questions before broad work when requirements are unclear.
+- Do not run builds or implement responsive styling unless explicitly requested.
 
-## Explain every change concisely
+## Change summaries
 
-When proposing or completing changes, include a brief summary with:
+When proposing or completing changes, briefly state:
 
-1. **Why**: the reason for the change.
-2. **What**: files touched and key behavior/code changes.
-3. **Impact**: risks, tradeoffs, and how to verify.
+1. **Why**: reason for the change.
+2. **What**: files and behavior changed.
+3. **Impact**: risks, tradeoffs, and verification steps.
 
-## Approval mindset
+## Advice vs. edits
 
-- Assume the user will review/approve only after understanding the diff.
-- If a change is non-obvious, call it out explicitly before or after editing.
-- If requirements, specs, or direction are ambiguous, ask concise clarifying questions before making broad edits.
-- Adhere to the instructions rigorously. Do not run builds or implement responsive styling unless explicitly instructed.
+- Infer intent from the user's phrasing.
+- For exploratory questions or recommendations, provide advice or a plan only; do not mutate files or project state.
+- For direct implementation requests, use approved mutation tools so the safety gate can request permission.
+- If a prompt contains questions and implementation instructions, answer the questions before editing.
+- Pause for confirmation when a request is ambiguous, risky, destructive, or conflicts with higher-priority instructions.
 
-## Execution mode: advice vs edits
+## Safe mutations
 
-- Detect user intent from phrasing before acting.
-- If the user asks exploratory questions or requests recommendations (e.g., "how would this work", "how would you", "what’s the approach", "can you outline", "what do you recommend"), respond with explanation, advice, or a concise plan only. Do not initiate file edits, writes, or other mutating commands.
-- If the user gives a direct edit or implementation request (e.g., "do X", "implement Y", "change this", "fix it", "make the edit"), initiate the requested edit/write through the approved tool path so the safety gate extension can intercept it for approval.
-- Under no circumstances bypass the safety gate extension for mutations. Do not mutate files or project state through shell scripts, shell redirection, install/remove commands, migrations, deletes, or other state-changing commands unless that action is explicitly expected to be caught by the safety gate. Project-standard formatter CLI commands are an allowed exception when they are explicitly requested or clearly part of the requested implementation workflow.
-- Mutation paths such as `python`/`node`/`ruby`/similar scripts that write files, shell redirection (`>`/`>>`), in-place shell edits (`sed -i`, `perl -pi`, etc.), `mv`/`cp` over source files, temp-file replacement workflows, and full-file rewrites are allowed only when they are the proper, efficient tool for the task and are routed through the safety gate as write commands requiring explicit permission.
-- For files owned by the configured formatter (for example oxfmt via `vp fmt`/Neovim Conform), do not introduce or preserve non-canonical formatting such as tab indentation to minimize a diff. If formatting churn is likely because the committed file is not formatter-canonical, call that out before editing.
-- No implicit mutation: for informational/planning requests, read-only tools may be used to gather context, but do not perform mutating actions unless the user explicitly asks for an edit/implementation.
-- Continue to follow safety/approval gates: if the request is ambiguous, risky, destructive, or conflicts with higher-priority instructions, pause and confirm before proceeding.
-- If the user prompt contains definitive instructions as well as questions, address the questions first before moving onto the direct command.
+- Never bypass the safety gate.
+- Do not mutate files or project state through shell scripts, redirection, in-place shell edits, migrations, deletes, installs, or similar commands unless the safety gate will request explicit permission.
+- Use script-based writes, file replacement, or full rewrites only when they are the appropriate approach and are routed through the safety gate.
+- Project-standard formatter commands are allowed when explicitly requested or clearly required by the implementation.
 
 ## Tooling preferences
 
-- Prefer `vp` with `pnpm` for JavaScript/TypeScript workflows and command suggestions. Only use `yarn` in `~/dev/pre-script/` projects.
-- Only suggest `npm` when required for compatibility or when a tool explicitly requires npm semantics.
-- Prefer `uv` over `pip` for Python package installation workflows and command suggestions.
-- Only suggest `pip` when required for compatibility or when a tool explicitly requires pip semantics.
-- For pi package management, use `pi install` / `pi update` / `pi remove` commands as the primary interface.
-- For `vp` projects or commands, prefer the global binary over local `pnpm exec` commands.
+- Prefer global `vp` with `pnpm` for JavaScript and TypeScript. Use `yarn` only in `~/dev/pre-script/` projects.
+- Use `npm` only when compatibility or required semantics demand it.
+- Prefer `uv` over `pip`; use `pip` only when required.
+- Manage pi packages with `pi install`, `pi update`, and `pi remove`.
+- Prefer global `vp` commands to local `pnpm exec` equivalents.
 
-## Formatting parity with Neovim
+## Formatting
 
-- When editing code, match my Neovim Conform formatter setup from `~/dotfiles/.config/nvim/lua/plugins/conform.lua`.
-- Do not use Prettier unless the project explicitly configures Prettier.
-- Where applicable, prefer the project's formatter command over a raw formatter binary; for Vite Plus projects, use `vp fmt`.
-- For JS, TS, CSS, HTML, JSON, YAML, Markdown, and similar web files, oxfmt via `vp fmt` / Neovim Conform is the canonical formatter when `vite-plus` / `vp` is available; otherwise use the formatter selected by Conform.
-- Formatter write commands are allowed when they use the project-standard formatter that is already available in the repo/toolchain. Prefer `vp fmt` / `oxfmt` for web files in Vite Plus projects, and use standard ecosystem formatters such as `rustfmt` for Rust projects when appropriate.
-- Do not use pi-specific formatting tools for source files unless explicitly requested; they may use different whitespace standards than Neovim/Conform and can create noisy diffs.
-- For Svelte files, remember that Neovim uses Svelte LSP formatting rather than `oxfmt`.
+- Match the Neovim Conform configuration at `~/dotfiles/.config/nvim/lua/plugins/conform.lua`.
+- Prefer the project's formatter command over a raw formatter binary.
+- Do not use Prettier unless the project configures it.
+- In Vite Plus projects, use `vp fmt`/oxfmt for supported web files; otherwise use the formatter selected by Conform.
+- Use standard ecosystem formatters where appropriate, such as `rustfmt` for Rust.
+- Use Svelte LSP formatting for Svelte files.
+- Do not use pi-specific source formatters unless explicitly requested.
+- Do not preserve non-canonical formatting to minimize a diff. Warn before editing if canonical formatting may create substantial churn.
 
-## Editing configs
+## Configuration changes
 
-- Treat `~/dotfiles` as the primary source of truth for system/user configuration.
-- For config-change requests, inspect `~/dotfiles` first to determine whether the change should be global or local.
-- Default bias: prefer global changes in `~/dotfiles` unless the user explicitly requests repository-local scope.
-- If asked from another repository to make a global config change, check `~/dotfiles` first and proceed based on context and user intent.
-- Avoid editing generated or deployed targets in `$HOME` directly (e.g., files materialized by nix-darwin/home-manager/stow) unless explicitly requested.
-- Scope lock: do not expand to unrelated files or directories without user approval.
+- Treat `~/dotfiles` as the source of truth for user and system configuration.
+- Inspect `~/dotfiles` before changing configuration, even when working in another repository.
+- Prefer global changes in `~/dotfiles` unless the user requests repository-local scope.
+- Do not edit generated or deployed files in `$HOME` unless explicitly requested.
+- Do not expand the scope beyond related files or directories without approval.
 
-## Dotfiles setup awareness (nix-darwin + home-manager + stow)
+## Dotfiles layout
 
-- Primary system config lives under `~/dotfiles/nix` (flake-based nix-darwin + home-manager modules).
-- Stow-managed config files live directly in `~/dotfiles` (for example, `~/dotfiles/.config/...`) and are linked into `$HOME`.
+- System configuration lives in `~/dotfiles/nix` and uses flake-based nix-darwin and home-manager modules.
+- Stow-managed files live under `~/dotfiles` and are linked into `$HOME`.
 
-## Apply/verify workflow for global changes
+## Applying global changes
 
-- Prefer dry-run/preview/diff-style validation before mutating changes when practical.
-- Never run commands that require `sudo` or may trigger a password prompt.
-- For any privileged step (including rebuilds, rollback, gc, deleting generations, or nix/darwin commands requiring sudo), hand off to the user with the exact command(s) to run.
-- The agent may run non-privileged verification commands, but must clearly label any user-run privileged follow-up.
-- When making changes, use the built-in read tool to read relevant files and lines before writing the changes.
+- Prefer dry runs, previews, or diffs before mutation when practical.
+- Never run commands that require `sudo` or may prompt for a password.
+- Give the user exact commands for privileged operations, including rebuilds, rollbacks, garbage collection, generation deletion, and privileged nix/darwin commands.
+- Clearly label privileged commands as user-run follow-up steps.
+- Use the built-in read tool before editing relevant files.
+
+## Response Style
+
+- Always respond to the user in plain language in the ISO 24495-1:2023 standard.

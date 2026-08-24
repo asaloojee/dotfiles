@@ -1,0 +1,316 @@
+{
+  "actions" : [
+    {
+      "key" : "b",
+      "type" : "application",
+      "value" : "/Applications/Brave Origin.app"
+    },
+    {
+      "key" : "c",
+      "type" : "application",
+      "value" : "/Applications/ClickUp.app"
+    },
+    {
+      "key" : "f",
+      "label" : "Figma",
+      "type" : "application",
+      "value" : "/Applications/Figma.app"
+    },
+    {
+      "key" : "t",
+      "label" : "Ghostty",
+      "type" : "application",
+      "value" : "/Applications/Ghostty.app"
+    },
+    {
+      "key" : "s",
+      "label" : "Slack",
+      "type" : "application",
+      "value" : "/Applications/Slack.app"
+    },
+    {
+      "actions" : [
+        {
+          "key" : "/",
+          "label" : "Root",
+          "type" : "folder",
+          "value" : "/Users/asaloojee"
+        },
+        {
+          "iconPath" : "folder",
+          "key" : "0",
+          "label" : "Financial",
+          "type" : "application",
+          "value" : "/Users/asaloojee/Library/CloudStorage/ProtonDrive-asaloojee@omniwerx.io-folder/00-financial"
+        },
+        {
+          "key" : "1",
+          "label" : "omniwerx",
+          "type" : "folder",
+          "value" : "/Users/asaloojee/Documents/Documents - omniwerx-mac/01-omniwerx"
+        },
+        {
+          "key" : "2",
+          "label" : "Pre-Script",
+          "type" : "folder",
+          "value" : "/Users/asaloojee/Documents/Documents - omniwerx-mac/02-pre-script"
+        },
+        {
+          "key" : "3",
+          "label" : "Main",
+          "type" : "folder",
+          "value" : "/Users/asaloojee/Documents/Documents - omniwerx-mac/03-main"
+        },
+        {
+          "key" : "a",
+          "label" : "Apps",
+          "type" : "folder",
+          "value" : "/Applications"
+        },
+        {
+          "key" : "d",
+          "label" : "dev",
+          "type" : "folder",
+          "value" : "/Users/asaloojee/dev"
+        },
+        {
+          "iconPath" : "folder",
+          "key" : "D",
+          "label" : "Downloads",
+          "type" : "folder",
+          "value" : "/Users/asaloojee/Downloads"
+        },
+        {
+          "iconPath" : "folder",
+          "key" : "p",
+          "label" : "Proton Drive",
+          "type" : "folder",
+          "value" : "/Users/asaloojee/Library/CloudStorage/ProtonDrive-asaloojee@omniwerx.io-folder"
+        },
+        {
+          "key" : "s",
+          "label" : "Screenshots",
+          "type" : "folder",
+          "value" : "/Users/asaloojee/Documents/Documents - omniwerx-mac/03-main/screenshots"
+        }
+      ],
+      "iconPath" : "internaldrive.fill",
+      "key" : "/",
+      "label" : "Finder",
+      "type" : "group"
+    },
+    {
+      "actions" : [
+        {
+          "actions" : [
+            {
+              "key" : "a",
+              "label" : "App Store",
+              "type" : "application",
+              "value" : "/System/Applications/App Store.app"
+            },
+            {
+              "key" : "b",
+              "type" : "application",
+              "value" : "/System/Applications/Font Book.app"
+            },
+            {
+              "key" : "c",
+              "label" : "Calendar",
+              "type" : "application",
+              "value" : "/System/Applications/Calendar.app"
+            },
+            {
+              "key" : "f",
+              "label" : "SF Symbols",
+              "type" : "application",
+              "value" : "/Applications/SF Symbols.app"
+            },
+            {
+              "key" : "i",
+              "label" : "Music",
+              "type" : "application",
+              "value" : "/System/Applications/Music.app"
+            },
+            {
+              "key" : "m",
+              "label" : "Activity Monitor",
+              "type" : "application",
+              "value" : "/System/Applications/Utilities/Activity Monitor.app"
+            },
+            {
+              "key" : "p",
+              "type" : "application",
+              "value" : "/System/Applications/System Settings.app"
+            },
+            {
+              "key" : "s",
+              "label" : "Safari",
+              "type" : "application",
+              "value" : "/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app"
+            },
+            {
+              "key" : "t",
+              "type" : "application",
+              "value" : "/System/Applications/Utilities/Terminal.app"
+            },
+            {
+              "key" : "=",
+              "label" : "Calculator",
+              "type" : "application",
+              "value" : "/System/Applications/Calculator.app"
+            }
+          ],
+          "iconPath" : "apple.logo",
+          "key" : "a",
+          "label" : "Apple",
+          "type" : "group"
+        },
+        {
+          "actions" : [
+            {
+              "key" : "m",
+              "label" : "Messages",
+              "type" : "application",
+              "value" : "/System/Applications/Messages.app"
+            }
+          ],
+          "iconPath" : "message.fill",
+          "key" : "m",
+          "label" : "Messaging",
+          "type" : "group"
+        },
+        {
+          "actions" : [
+            {
+              "key" : "b",
+              "label" : "Blender",
+              "type" : "application",
+              "value" : "/Applications/Blender.app"
+            },
+            {
+              "key" : "c",
+              "label" : "Caffeinate",
+              "type" : "application",
+              "value" : "/Applications/KeepingYouAwake.app"
+            },
+            {
+              "key" : "i",
+              "label" : "Ice",
+              "type" : "application",
+              "value" : "/Applications/Ice.app"
+            },
+            {
+              "key" : "k",
+              "label" : "Karabiner Elements",
+              "type" : "application",
+              "value" : "/Applications/Karabiner-Elements.app"
+            },
+            {
+              "key" : "v",
+              "label" : "Karabiner Viewer",
+              "type" : "application",
+              "value" : "/Applications/Karabiner-EventViewer.app"
+            },
+            {
+              "key" : "p",
+              "label" : "PDFGear",
+              "type" : "application",
+              "value" : "/Applications/PDFgear.app"
+            }
+          ],
+          "iconPath" : "circle.grid.2x2.fill",
+          "key" : "o",
+          "label" : "Other",
+          "type" : "group"
+        },
+        {
+          "actions" : [
+            {
+              "key" : "d",
+              "label" : "Proton Drive",
+              "type" : "application",
+              "value" : "/Applications/Proton Drive.app"
+            },
+            {
+              "key" : "m",
+              "label" : "Proton Mail",
+              "type" : "application",
+              "value" : "/Applications/Proton Mail.app"
+            },
+            {
+              "key" : "p",
+              "label" : "Proton Pass",
+              "type" : "application",
+              "value" : "/Applications/Proton Pass.app"
+            },
+            {
+              "key" : "v",
+              "label" : "Proton VPN",
+              "type" : "application",
+              "value" : "/Applications/ProtonVPN.app"
+            }
+          ],
+          "iconPath" : "diamond.fill",
+          "key" : "p",
+          "label" : "Proton",
+          "type" : "group"
+        },
+        {
+          "actions" : [
+            {
+              "key" : "d",
+              "label" : "Docker",
+              "type" : "application",
+              "value" : "/Applications/Docker.app"
+            },
+            {
+              "key" : "h",
+              "label" : "Handbrake",
+              "type" : "application",
+              "value" : "/Applications/HandBrake.app"
+            },
+            {
+              "key" : "o",
+              "label" : "Obsidian",
+              "type" : "application",
+              "value" : "/Applications/Obsidian.app"
+            },
+            {
+              "key" : "p",
+              "type" : "application",
+              "value" : "/Applications/Adobe Photoshop 2026/Adobe Photoshop 2026.app"
+            },
+            {
+              "key" : "t",
+              "type" : "application",
+              "value" : "/Applications/Tailscale.app"
+            }
+          ],
+          "iconPath" : "briefcase.fill",
+          "key" : "w",
+          "label" : "Work",
+          "type" : "group"
+        }
+      ],
+      "iconPath" : "folder.fill",
+      "key" : "a",
+      "label" : "Apps",
+      "type" : "group"
+    },
+    {
+      "key" : "C",
+      "label" : "Clipboard",
+      "type" : "application",
+      "value" : "/Applications/Maccy.app"
+    },
+    {
+      "iconPath" : "arrow.clockwise",
+      "key" : "r",
+      "label" : "Reload Config",
+      "type" : "command",
+      "value" : "open \"leaderkey://config-reload\""
+    }
+  ],
+  "type" : "group"
+}

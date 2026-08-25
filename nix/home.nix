@@ -30,6 +30,10 @@
     PNPM_HOME = "$HOME/.local/share/pnpm";
     PNPM_CONFIG_STORE_DIR = "$HOME/.local/share/pnpm/store";
     COMPOSER_PHAR_PATH = "/run/current-system/sw/bin/composer";
+
+    # Keep the Node-based SDK available to embedded-language servers while
+    # TypeScript 7 provides the system `tsc` executable.
+    TYPESCRIPT_SDK = "${pkgs.typescript}/lib/node_modules/typescript/lib";
   };
 
   home.sessionPath = [

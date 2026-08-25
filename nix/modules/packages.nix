@@ -28,7 +28,7 @@
     pkgs.lua-language-server
     pkgs.nil
     pkgs.svelte-language-server
-    pkgs.typescript
+    pkgs.typescript-go
     pkgs.vue-language-server
     pkgs.vscode-langservers-extracted
     pkgs.vtsls

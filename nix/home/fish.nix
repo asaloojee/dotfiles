@@ -7,6 +7,7 @@
     mux = "tmuxinator";
     rebuild = "sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac";
     n = "nvim";
+    ga = "git add .";
   };
 
   shellAbbrs = {
@@ -67,6 +68,17 @@
     };
 
     starship_transient_prompt_func = "starship module character";
+
+    gc = {
+      description = "Commit with message";
+      body = ''
+        if test (count $argv) -eq 0
+             echo "Usage: gc <message>"
+             return 1                                                                                                             end
+
+           git commit -m (string join " " -- $argv)
+      '';
+    };
   };
 
   interactiveShellInit = lib.mkOrder 100 ''

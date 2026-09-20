@@ -28,7 +28,7 @@
     pkgs.lua-language-server
     pkgs.nil
     pkgs.svelte-language-server
-    pkgs.typescript-go
+    pkgs.typescript
     pkgs.vue-language-server
     pkgs.vscode-langservers-extracted
     pkgs.vtsls
@@ -52,6 +52,7 @@
     pkgs.tree
     pkgs.tree-sitter
     pkgs.uv
+    pkgs.yazi
     pkgs.yubikey-manager
   ];
 }

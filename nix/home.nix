@@ -54,6 +54,7 @@
     ghostty = import ./home/ghostty.nix;
     git = import ./home/git.nix {inherit pkgs;};
     tmux = import ./home/tmux.nix {inherit pkgs;};
+    yazi = import ./home/yazi.nix {inherit pkgs;};
     zoxide = import ./home/zoxide.nix {inherit pkgs;};
     starship = import ./home/starship.nix {inherit pkgs lib;};
 

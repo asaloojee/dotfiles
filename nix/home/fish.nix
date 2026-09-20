@@ -6,6 +6,7 @@
     ff = "fastfetch";
     mux = "tmuxinator";
     rebuild = "sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac";
+    n = "nvim";
   };
 
   shellAbbrs = {

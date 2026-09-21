@@ -31,9 +31,9 @@
     PNPM_CONFIG_STORE_DIR = "$HOME/.local/share/pnpm/store";
     COMPOSER_PHAR_PATH = "/run/current-system/sw/bin/composer";
 
-    # Keep the Node-based SDK available to embedded-language servers while
-    # TypeScript 7 provides the system `tsc` executable.
-    TYPESCRIPT_SDK = "${pkgs.typescript}/lib/node_modules/typescript/lib";
+    # Reuse vtsls's bundled TypeScript 5 SDK for embedded-language servers;
+    # the system TypeScript 7 package does not include the JavaScript SDK.
+    TYPESCRIPT_SDK = "${pkgs.vtsls}/lib/vtsls-language-server/node_modules/typescript/lib";
   };
 
   home.sessionPath = [

@@ -25,6 +25,7 @@
     pkgs.astro-language-server
     pkgs.docker-compose-language-service
     pkgs.dockerfile-language-server
+    pkgs.emmet-language-server
     pkgs.lua-language-server
     pkgs.nil
     pkgs.svelte-language-server

@@ -103,6 +103,7 @@ vim.lsp.enable({
 	"cssls",
 	"html",
 	"astro",
+	"emmet_language_server",
 	"svelte",
 	"vue_ls",
 	"oxlint",

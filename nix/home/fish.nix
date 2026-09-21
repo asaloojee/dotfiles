@@ -73,10 +73,11 @@
       description = "Commit with message";
       body = ''
         if test (count $argv) -eq 0
-             echo "Usage: gc <message>"
-             return 1                                                                                                             end
+          echo "Usage: gc <message>"
+          return 1
+        end
 
-           git commit -m (string join " " -- $argv)
+        git commit -m (string join " " -- $argv)
       '';
     };
   };

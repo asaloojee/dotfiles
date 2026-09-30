@@ -41,7 +41,17 @@ return {
 				lsp = { fallbacks = {} },
 				path = { fallbacks = {}, score_offset = 0 },
 				snippets = { min_keyword_length = 0, score_offset = 0 },
-				buffer = { score_offset = 0 },
+				buffer = {
+					score_offset = function()
+						local lsp_first = {
+							astro = true,
+							html = true,
+							css = true,
+						}
+
+						return lsp_first[vim.bo.filetype] and -3 or 0
+					end,
+				},
 			},
 		},
 	},

@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  piNix,
+  ...
+}: {
   environment.systemPackages = [
     pkgs.alejandra
     pkgs.ast-grep
@@ -20,6 +24,7 @@
     pkgs.just
     pkgs.lazydocker
     pkgs.neovim
+    piNix.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     # LSP servers
     pkgs.astro-language-server

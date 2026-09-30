@@ -4,7 +4,6 @@
     brews = [
       "mas"
       "mole"
-      "pi-coding-agent"
       "vite-plus"
     ];
 
@@ -17,7 +16,6 @@
       # "alacritty"
       "blender"
       "brave-origin"
-      "clickup"
       "docker-desktop"
       "figma"
       "ghostty"

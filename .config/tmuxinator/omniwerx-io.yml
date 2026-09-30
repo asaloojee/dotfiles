@@ -6,10 +6,8 @@ root: ~/dev/omniwerx-io/
 
 windows:
   - terminal:
-      layout: even-horizontal
       panes:
         -  # empty pane for commands
-        -  # dev server
   - editor:
       panes:
         - nvim

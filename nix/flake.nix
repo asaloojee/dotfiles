@@ -8,6 +8,7 @@
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     # Track Brew main because rolling cask definitions can require newer DSL features.
     nix-homebrew.inputs.brew-src.url = "github:Homebrew/brew";
+    pi-nix.url = "github:sadjow/pi-nix";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -29,7 +30,10 @@
     formatter.${platform} = nixpkgs.legacyPackages.${platform}.alejandra;
 
     darwinConfigurations.${configurationName} = nix-darwin.lib.darwinSystem {
-      specialArgs = {inherit homeDirectory hostName username;};
+      specialArgs = {
+        inherit homeDirectory hostName username;
+        piNix = inputs.pi-nix;
+      };
       modules = [
         ./modules/packages.nix
         ./modules/homebrew.nix

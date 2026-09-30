@@ -4,7 +4,7 @@
 
   settings = {
     term = "xterm-256color";
-    theme = "TokyoNight";
+    theme = "TokyoNight Night";
 
     font-family = "JetBrainsMono Nerd Font";
     font-family-bold = "JetBrainsMono Nerd Font Propo";

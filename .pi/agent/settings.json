@@ -2,13 +2,9 @@
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-6-sol",
   "defaultThinkingLevel": "medium",
-  "packages": [
-    "npm:pi-lens",
-    "npm:@juicesharp/rpiv-ask-user-question",
-    "npm:@juicesharp/rpiv-todo",
-    "npm:pi-web-access",
-    "npm:pi-goal-x"
-  ],
+  "theme": "fish-night",
+  "themes": ["~/dotfiles/.pi/agent/themes"],
+  "packages": ["npm:pi-lens", "npm:pi-web-access", "npm:pi-goal-x"],
   "collapseChangelog": true,
   "installTelemetry": false,
   "hideThinkingBlock": true,

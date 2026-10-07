@@ -4,9 +4,10 @@ return {
 	version = "*",
 	opts = {
 		keymap = {
+			["<C-e>"] = {}, -- Keep the global end-of-line shortcut.
 			["<CR>"] = { "accept", "fallback" },
-			["<Tab>"] = { "select_next", "fallback" },
-			["<S-Tab>"] = { "select_prev", "fallback" },
+			["<Tab>"] = { "snippet_forward", "select_next", "fallback" },
+			["<S-Tab>"] = { "snippet_backward", "select_prev", "fallback" },
 			["<C-b>"] = { "scroll_documentation_up", "fallback" },
 			["<C-f>"] = { "scroll_documentation_down", "fallback" },
 		},
@@ -47,6 +48,7 @@ return {
 							astro = true,
 							html = true,
 							css = true,
+							rust = true,
 						}
 
 						return lsp_first[vim.bo.filetype] and -3 or 0

@@ -1,13 +1,20 @@
 {
-  "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-6-sol",
+  "defaultProvider": "openai",
+  "defaultModel": "gpt-6.1-sol",
   "defaultThinkingLevel": "medium",
   "theme": "fish-night",
-  "themes": ["~/dotfiles/.pi/agent/themes"],
-  "packages": ["npm:pi-lens", "npm:pi-web-access", "npm:pi-goal-x"],
+  "themes": [
+    "~/dotfiles/.pi/agent/themes"
+  ],
+  "packages": [
+    "npm:pi-lens",
+    "npm:pi-web-access",
+    "npm:pi-goal-x"
+  ],
   "collapseChangelog": true,
   "installTelemetry": false,
   "hideThinkingBlock": true,
   "quietStartup": true,
-  "lastChangelogVersion": "0.99.1"
+  "lastChangelogVersion": "1.0.1",
+  "deviceId": "cb97121f-bbb4-4e70-99b6-f792c3fd06f9"
 }

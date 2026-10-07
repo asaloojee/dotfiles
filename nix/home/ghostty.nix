@@ -7,12 +7,12 @@
     theme = "TokyoNight Night";
 
     font-family = "JetBrainsMono Nerd Font";
-    font-family-bold = "JetBrainsMono Nerd Font Propo";
-    font-family-italic = "JetBrainsMono Nerd Font Propo";
+    font-family-bold = "JetBrainsMono Nerd Font";
+    font-family-italic = "JetBrainsMono Nerd Font";
     font-style = "Regular";
     font-style-bold = "Bold";
     font-style-italic = "Italic";
-    font-size = 20.0;
+    font-size = 18.0;
     font-feature = "-calt, -liga, -dlig";
 
     cursor-style = "block";

@@ -11,6 +11,18 @@ vim.opt.undofile = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
+-- Do not continue comments with o/O, including after filetype settings load.
+vim.opt.formatoptions:remove("o")
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("NoOpenLineComment", { clear = true }),
+	callback = function()
+		vim.opt_local.formatoptions:remove("o")
+	end,
+})
+
+-- Insert-mode navigation
+vim.keymap.set("i", "<C-e>", "<End>", { desc = "Go to end of line" })
+
 -- Buffer navigation
 vim.keymap.set("n", "[b", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "Next buffer" })

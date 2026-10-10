@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    rust-overlay.url = "github:oxalica/rust-overlay";
+    rust-overlay.inputs.nixpkgs.follows = "nixpkgs";
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
@@ -36,6 +38,7 @@
       };
       modules = [
         ./modules/packages.nix
+        ./modules/rust.nix
         ./modules/homebrew.nix
         ./modules/macos-defaults.nix
         ./modules/fonts.nix
@@ -64,6 +67,7 @@
             localHostName = hostName;
           };
           nixpkgs.hostPlatform = platform;
+          nixpkgs.overlays = [inputs.rust-overlay.overlays.default];
 
           system.primaryUser = username;
           users.users.${username} = {

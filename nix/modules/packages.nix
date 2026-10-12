@@ -13,7 +13,6 @@
     pkgs.gh
     pkgs.git-filter-repo
     pkgs.gitleaks
-    pkgs.gitui
     pkgs.gnupg
     pkgs.go
 

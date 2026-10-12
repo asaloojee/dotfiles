@@ -2,13 +2,14 @@
   homebrew = {
     enable = true;
     brews = [
+      "hunk"
       "mas"
       "mole"
       "vite-plus"
     ];
 
     # Ownership rule:
-    # - Nix owns CLI/dev tooling and open fonts
+    # - Nix owns CLI/dev tooling and open fonts, except Hunk (Homebrew)
     # - Homebrew owns GUI/macOS apps + proprietary font exceptions
     casks = [
       # GUI/macOS apps

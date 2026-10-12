@@ -11,80 +11,109 @@
       "$username"
       "$hostname"
       "$directory"
-      "\${custom.jj}"
-      "\${custom.jj_added}"
-      "\${custom.jj_removed}"
-      "\${custom.git_branch}"
-      "\${custom.git_state}"
-      "\${custom.git_status}"
-      "\${custom.git_metrics}"
+      "\${custom.vcs}"
       "$fill"
-      "$nodejs"
-      "$cmd_duration $jobs $time"
+      "$cmd_duration"
       "$line_break"
       "$character"
     ];
 
-    # Keep the existing Git modules, but only render them outside jj workspaces.
-    custom =
-      lib.genAttrs ["git_branch" "git_state" "git_status" "git_metrics"] (module: {
-        command = "${pkgs.starship}/bin/starship module ${module}";
-        when = "! ${pkgs.jujutsu}/bin/jj root --ignore-working-copy >/dev/null 2>&1";
-        shell = ["${pkgs.bash}/bin/bash" "--noprofile" "--norc"];
-        format = "$output";
-        # Preserve the built-in modules' ANSI colors.
-        unsafe_no_escape = true;
-      })
-      // lib.genAttrs ["jj_added" "jj_removed"] (module: let
-        added = module == "jj_added";
-        metric =
-          if added
-          then "total_added"
-          else "total_removed";
-      in {
-        description = "Jujutsu lines ${
-          if added
-          then "added"
-          else "removed"
-        }";
-        when = "${pkgs.jujutsu}/bin/jj root --ignore-working-copy >/dev/null 2>&1";
-        shell = ["${pkgs.bash}/bin/bash" "--noprofile" "--norc"];
-        command = ''
-          ${pkgs.jujutsu}/bin/jj log --no-graph --color=never -r @ -T '
-            if(diff.stat().${metric}() > 0, diff.stat().${metric}())
-          '
+    custom.vcs = {
+      description = "Branch or jj bookmark with shared status markers";
+      command = lib.getExe (pkgs.writeShellApplication {
+        name = "starship-vcs";
+        runtimeInputs = [pkgs.git pkgs.jujutsu];
+        # Status probes legitimately return nonzero for absent refs/markers.
+        bashOptions = [];
+        text = ''
+          export LC_ALL=C
+          export GIT_OPTIONAL_LOCKS=0
+
+          names=()
+          dirty=
+          staged=
+          conflict=
+          divergent=
+          ahead=
+          behind=
+
+          if jj root --ignore-working-copy >/dev/null 2>&1; then
+            # Snapshot once for up-to-date working-copy markers.
+            markers=$(jj log --no-graph --color=never -r @ -T \
+              'if(!empty, "*") ++ if(conflict, "!")' 2>/dev/null) || exit 0
+            [[ $markers == *'*'* ]] && dirty='*'
+            [[ $markers == *'!'* ]] && conflict='!'
+
+            # Use the current bookmark or the closest bookmarked ancestors.
+            context='heads(::@ & bookmarks())'
+            while IFS=$'\t' read -r name bookmark_conflict; do
+              [[ -n $name ]] || continue
+              names+=("$name")
+              [[ $bookmark_conflict == true ]] && divergent='?'
+            done < <(jj bookmark list --ignore-working-copy --color=never -r "$context" \
+              -T 'name ++ "\t" ++ conflict ++ "\n"' 2>/dev/null)
+
+            # jj reports tracking counts from the remote's perspective.
+            while IFS=$'\t' read -r remote_ahead remote_behind; do
+              [[ $remote_ahead == true ]] && behind=1
+              [[ $remote_behind == true ]] && ahead=1
+            done < <(jj bookmark list --ignore-working-copy --color=never --tracked \
+              -r "$context" -T \
+              'if(remote, !tracking_ahead_count.zero() ++ "\t" ++ !tracking_behind_count.zero() ++ "\n")' \
+              2>/dev/null)
+
+            ((''${#names[@]})) || names=(unbookmarked)
+          elif git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+            branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null) || branch=detached
+            names=("$branch")
+            while IFS= read -r entry; do
+              index=''${entry:0:1}
+              worktree=''${entry:1:1}
+              case "$index$worktree" in
+                DD|AU|UD|UA|DU|AA|UU) conflict='!'; dirty='*' ;;
+                '??') dirty='*' ;;
+                *)
+                  [[ $index != ' ' ]] && staged='~'
+                  [[ $worktree != ' ' ]] && dirty='*'
+                  ;;
+              esac
+            done < <(git status --porcelain=v1 --untracked-files=normal 2>/dev/null)
+
+            # Prefer the upstream, falling back to the same-name origin branch.
+            upstream=$(git rev-parse --verify --symbolic-full-name '@{upstream}' 2>/dev/null) || upstream=
+            if [[ -z $upstream && $branch != detached ]]; then
+              upstream=$(git rev-parse --verify --symbolic-full-name "refs/remotes/origin/$branch" 2>/dev/null) || upstream=
+            fi
+            if [[ -n $upstream ]]; then
+              read -r local_count remote_count < <(git rev-list --left-right --count "HEAD...$upstream" 2>/dev/null)
+              [[ ''${local_count:-0} -gt 0 ]] && ahead=1
+              [[ ''${remote_count:-0} -gt 0 ]] && behind=1
+            fi
+          else
+            exit 0
+          fi
+
+          separator=
+          for name in "''${names[@]}"; do
+            printf '%s%s' "$separator" "$name"
+            separator=,
+          done
+          printf '%s' "$dirty$staged$conflict$divergent"
+          if [[ -n $ahead && -n $behind ]]; then
+            printf ' ±'
+          elif [[ -n $ahead ]]; then
+            printf ' +'
+          elif [[ -n $behind ]]; then
+            printf ' −'
+          fi
+          printf '\n'
         '';
-        style =
-          if added
-          then "green"
-          else "red";
-        format = "[${
-          if added
-          then "+"
-          else "-"
-        }$output]($style) ";
-      })
-      // {
-        jj = {
-          description = "Jujutsu change, bookmarks, and working-copy status";
-          when = "${pkgs.jujutsu}/bin/jj root --ignore-working-copy >/dev/null 2>&1";
-          shell = ["${pkgs.bash}/bin/bash" "--noprofile" "--norc"];
-          command = ''
-            ${pkgs.jujutsu}/bin/jj log --no-graph --color=never -r @ -T '
-              separate(" ",
-                change_id.shortest(8),
-                bookmarks,
-                if(conflict, "[󰅖]"),
-                if(!empty, "[!]"),
-                if(empty, "[∅]")
-              )
-            '
-          '';
-          symbol = "󰘬 ";
-          style = "bright-black";
-          format = "[$symbol$output]($style) ";
-        };
-      };
+      });
+      when = "${pkgs.jujutsu}/bin/jj root --ignore-working-copy >/dev/null 2>&1 || ${pkgs.git}/bin/git rev-parse --is-inside-work-tree >/dev/null 2>&1";
+      shell = ["${pkgs.bash}/bin/bash" "--noprofile" "--norc"];
+      style = "bright-black";
+      format = "[$output]($style) ";
+    };
 
     fill.symbol = " ";
 
@@ -103,64 +132,9 @@
       error_symbol = "[❯](red)";
     };
 
-    git_branch = {
-      symbol = "󰘬 ";
-      format = "[$symbol$branch]($style) ";
-      style = "bright-black";
-    };
-
-    jobs = {
-      symbol = "󰒓 ";
-      style = "bold red";
-      number_threshold = 1;
-      format = "[$symbol]($style)";
-    };
-
-    git_status = {
-      format = "([\\[$all_status$ahead_behind\\]]($style) )";
-      style = "bright-black";
-      ahead = "󰁝";
-      behind = "󰁅";
-      diverged = "󰹹";
-      conflicted = "󰅖";
-      deleted = "󰍴";
-      renamed = "󰄾";
-      modified = "!";
-      staged = "+";
-      untracked = "?";
-      stashed = "";
-    };
-
-    git_state = {
-      format = "\\([$state( $progress_current/$progress_total)]($style)\\) ";
-      style = "bright-black";
-    };
-
-    git_metrics = {
-      disabled = false;
-      added_style = "green";
-      deleted_style = "red";
-    };
-
     cmd_duration = {
+      min_time = 5001;
       format = "[$duration]($style)";
-      style = "yellow";
-    };
-
-    memory_usage.symbol = "󰍛 ";
-
-    nodejs = {
-      symbol = " ";
-      format = "[$symbol($version )]($style)";
-      style = "green";
-      detect_extensions = [];
-      detect_files = ["pnpm-lock.yaml" "package-lock.json" "yarn.lock"];
-      detect_folders = [];
-    };
-
-    python = {
-      symbol = " ";
-      format = "[$symbol($version )]($style)";
       style = "yellow";
     };
   };

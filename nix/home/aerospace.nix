@@ -77,6 +77,10 @@
 
     on-window-detected = [
       {
+        "if".app-id = "com.mitchellh.ghostty";
+        run = ["layout floating" "fullscreen on --no-outer-gaps"];
+      }
+      {
         "if".app-id = "com.figma.Desktop";
         run = "move-node-to-workspace 3";
       }

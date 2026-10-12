@@ -9,7 +9,11 @@
     };
 
     git.colocate = true;
-    ui.editor = "nvim";
+    ui = {
+      editor = "nvim";
+      pager = ["hunk" "pager"];
+      diff-formatter = ":git";
+    };
 
     "--scope" = [
       {
@@ -17,18 +21,6 @@
         user = {
           name = "a-saloojee-ps";
           email = "asaloojee@pre-script.com";
-        };
-      }
-      {
-        "--when".commands = ["diff" "show"];
-        ui = {
-          diff-formatter = ":git";
-          pager = [
-            "${pkgs.delta}/bin/delta"
-            "--line-numbers"
-            "--navigate"
-            "--side-by-side"
-          ];
         };
       }
     ];

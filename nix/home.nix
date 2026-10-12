@@ -7,8 +7,6 @@
 }: {
   imports = [
     ./home/fastfetch.nix
-    ./home/gitui.nix
-    ./home/delta.nix
     ./home/pi-agent.nix
   ];
   home.username = username;

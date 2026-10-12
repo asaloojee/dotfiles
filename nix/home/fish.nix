@@ -2,12 +2,10 @@
   enable = true;
 
   shellAliases = {
-    g = "gitui";
     ff = "fastfetch";
     mux = "tmuxinator";
     rebuild = "sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac";
     n = "nvim";
-    ga = "git add .";
   };
 
   shellAbbrs = {
@@ -42,44 +40,7 @@
       '';
     };
 
-    gp = {
-      description = "Commit all changes and push";
-      body = ''
-        set --local message update
-        if test (count $argv) -gt 0
-          set message (string join " " -- $argv)
-        end
-
-        git add -A && git commit -m "$message" && git push
-      '';
-    };
-
-    gr = {
-      description = "Change to the current Git repository root";
-      body = ''
-        set --local root (command git rev-parse --show-toplevel 2>/dev/null)
-        if test $status -ne 0
-          echo "Not in a git repository"
-          return 1
-        end
-
-        builtin cd "$root"
-      '';
-    };
-
     starship_transient_prompt_func = "starship module character";
-
-    gc = {
-      description = "Commit with message";
-      body = ''
-        if test (count $argv) -eq 0
-          echo "Usage: gc <message>"
-          return 1
-        end
-
-        git commit -m (string join " " -- $argv)
-      '';
-    };
   };
 
   interactiveShellInit = lib.mkOrder 100 ''

@@ -11,16 +11,80 @@
       "$username"
       "$hostname"
       "$directory"
-      "$git_branch"
-      "$git_state"
-      "$git_status"
-      "$git_metrics"
+      "\${custom.jj}"
+      "\${custom.jj_added}"
+      "\${custom.jj_removed}"
+      "\${custom.git_branch}"
+      "\${custom.git_state}"
+      "\${custom.git_status}"
+      "\${custom.git_metrics}"
       "$fill"
       "$nodejs"
       "$cmd_duration $jobs $time"
       "$line_break"
       "$character"
     ];
+
+    # Keep the existing Git modules, but only render them outside jj workspaces.
+    custom =
+      lib.genAttrs ["git_branch" "git_state" "git_status" "git_metrics"] (module: {
+        command = "${pkgs.starship}/bin/starship module ${module}";
+        when = "! ${pkgs.jujutsu}/bin/jj root --ignore-working-copy >/dev/null 2>&1";
+        shell = ["${pkgs.bash}/bin/bash" "--noprofile" "--norc"];
+        format = "$output";
+        # Preserve the built-in modules' ANSI colors.
+        unsafe_no_escape = true;
+      })
+      // lib.genAttrs ["jj_added" "jj_removed"] (module: let
+        added = module == "jj_added";
+        metric =
+          if added
+          then "total_added"
+          else "total_removed";
+      in {
+        description = "Jujutsu lines ${
+          if added
+          then "added"
+          else "removed"
+        }";
+        when = "${pkgs.jujutsu}/bin/jj root --ignore-working-copy >/dev/null 2>&1";
+        shell = ["${pkgs.bash}/bin/bash" "--noprofile" "--norc"];
+        command = ''
+          ${pkgs.jujutsu}/bin/jj log --no-graph --color=never -r @ -T '
+            if(diff.stat().${metric}() > 0, diff.stat().${metric}())
+          '
+        '';
+        style =
+          if added
+          then "green"
+          else "red";
+        format = "[${
+          if added
+          then "+"
+          else "-"
+        }$output]($style) ";
+      })
+      // {
+        jj = {
+          description = "Jujutsu change, bookmarks, and working-copy status";
+          when = "${pkgs.jujutsu}/bin/jj root --ignore-working-copy >/dev/null 2>&1";
+          shell = ["${pkgs.bash}/bin/bash" "--noprofile" "--norc"];
+          command = ''
+            ${pkgs.jujutsu}/bin/jj log --no-graph --color=never -r @ -T '
+              separate(" ",
+                change_id.shortest(8),
+                bookmarks,
+                if(conflict, "[󰅖]"),
+                if(!empty, "[!]"),
+                if(empty, "[∅]")
+              )
+            '
+          '';
+          symbol = "󰘬 ";
+          style = "bright-black";
+          format = "[$symbol$output]($style) ";
+        };
+      };
 
     fill.symbol = " ";
 

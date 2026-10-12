@@ -53,6 +53,7 @@
     alacritty = import ./home/alacritty.nix {inherit pkgs;};
     ghostty = import ./home/ghostty.nix;
     git = import ./home/git.nix {inherit pkgs;};
+    jujutsu = import ./home/jujutsu.nix {inherit pkgs;};
     tmux = import ./home/tmux.nix {inherit pkgs;};
     yazi = import ./home/yazi.nix {inherit pkgs;};
     zoxide = import ./home/zoxide.nix {inherit pkgs;};

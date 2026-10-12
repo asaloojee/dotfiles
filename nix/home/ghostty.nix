@@ -20,9 +20,9 @@
     mouse-hide-while-typing = true;
     shell-integration-features = "no-cursor";
 
-    window-padding-x = 12;
-    window-padding-y = 12;
-    window-padding-balance = false;
+    window-padding-x = 8;
+    window-padding-y = 8;
+    window-padding-balance = true;
     macos-option-as-alt = true;
     macos-titlebar-style = "hidden";
     background-opacity = 0.9;

@@ -3,6 +3,10 @@
   liveLink = path: config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${path}";
 in {
   home.file = {
+    ".pi-lens/config.json" = {
+      source = liveLink ".pi/agent/pi-lens-config.json";
+      force = true;
+    };
     ".pi/agent/settings.json" = {
       source = liveLink ".pi/agent/settings.json";
       force = true;

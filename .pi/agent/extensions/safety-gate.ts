@@ -5,6 +5,9 @@
  * - Confirms before bash/hypa_shell commands like rm, mv, launchctl mutations, sudo, chmod/chown, dd, mkfs, install/build commands, etc.
  * - Confirms before git commands that can change the current working tree (revert/reset/checkout/restore/etc.).
  * - Catches direct, namespaced, and nested multi_tool_use tool calls.
+ * - Allows interpreter version checks and inline scripts without detected mutation APIs.
+ * - Allows output disposal (/dev/null) and file-descriptor duplication.
+ * - These checks are heuristics, not a security sandbox for arbitrary code.
  * - Confirms before edit/write and apply=true mutation tools.
  * - In non-interactive mode, blocks these actions by default.
  */
@@ -91,6 +94,62 @@ const collectToolChecks = (
   return checks;
 };
 
+// Keep opaque scripts/modules gated, but do not treat every interpreter invocation as a write.
+// Inline code is checked for common write APIs and indirect execution below.
+const getScriptRisk = (command: string): string | undefined => {
+  const interpreters =
+    /(?:^|[\s;|&()])(?:[^\s]+\/)?(python[\d.]*|node|ruby|perl|php|bun|deno)\b([^\n;|&]*)/gi;
+  for (const match of command.matchAll(interpreters)) {
+    const args = match[2].trim();
+    if (/^(?:--version|-V|-v)(?:\s*$)/.test(args.replace(/\s+\d*>.*$/, ""))) continue;
+    const inline = args.match(/^(?:-c|-e|-r|--eval(?:=|\s)|eval\s)\s*(['"])/);
+    if (!inline) return "script/module execution requiring review";
+    if (inline[1] === '"' && /\$|`/.test(args)) {
+      return "dynamically generated script requiring review";
+    }
+
+    // stdout/stderr writes are output, not file mutation.
+    const code = command.replace(/\b(?:sys|process)\.(?:stdout|stderr)\.write\s*\(/g, "print(");
+    if (
+      /\b(?:write_text|write_bytes|writeFile(?:Sync)?|appendFile(?:Sync)?|createWriteStream|write|writelines|truncate|rename(?:Sync)?|unlink(?:Sync)?|rmdir(?:Sync)?|mkdir(?:Sync)?|makedirs|remove|rmtree|copy(?:file|tree|2|File(?:Sync)?)?|chmod(?:Sync)?|chown(?:Sync)?|touch)\s*\(/i.test(
+        code,
+      ) ||
+      /\b(?:open(?:Sync)?|fdopen)\s*\([\s\S]*?["'](?:[wax][bt+]*|r[bt]*\+[bt]*)["']/i.test(code) ||
+      /\bO_(?:WRONLY|RDWR|CREAT|TRUNC|APPEND)\b/.test(code) ||
+      /\b(?:os\.replace|Path\([^\n]*\)\.replace)\s*\(/.test(code) ||
+      /\bopen\s+[^\n]*["'][>+]/.test(code) ||
+      /\b(?:exec|eval|execSync|execFile(?:Sync)?|spawn(?:Sync)?|system|popen|subprocess|__import__|importlib|require|import)\s*\(/i.test(
+        code,
+      ) ||
+      /\b(?:subprocess|child_process|shutil)\b/.test(code)
+    ) {
+      return "scripted file mutation or indirect execution";
+    }
+  }
+  return undefined;
+};
+
+const hasFileRedirection = (command: string): boolean => {
+  // Ignore quoted text (for example, rg 'a > b'), but inspect double-quoted
+  // command substitutions conservatively because they execute shell code.
+  const executesQuotedCode = /\b(?:bash|sh|zsh|ksh|dash)\s+(?:-\S+\s+)*-\S*c\b|\beval\s/.test(
+    command,
+  );
+  const shell = executesQuotedCode
+    ? command
+    : command.replace(/'[^']*'|"(?:\\.|[^"\\])*"/g, (quoted) => {
+        if (quoted.startsWith('"') && /\$\(|`/.test(quoted)) return quoted;
+        if (quoted.slice(1, -1) === "/dev/null") return "/dev/null";
+        return "__quoted__";
+      });
+  const redirects = shell.matchAll(/(?:\d*|&)(>>?|<>|>\|)\s*([^\s;|)]+)/g);
+  for (const [, , target] of redirects) {
+    if (/^&(?:\d+|-)$/.test(target) || target === "/dev/null") continue;
+    return true;
+  }
+  return false;
+};
+
 export default function (pi: ExtensionAPI) {
   const dangerousCommandRules: Rule[] = [
     { name: "remove files (rm)", pattern: /(^|\s)rm\s+/i },
@@ -101,10 +160,6 @@ export default function (pi: ExtensionAPI) {
     { name: "move/rename files (mv)", pattern: /(^|\s)mv\s+/i },
     { name: "copy files (cp)", pattern: /(^|\s)cp\s+/i },
     { name: "create/link files", pattern: /(^|\s)(touch|mkdir|ln)\s+/i },
-    {
-      name: "shell redirection write",
-      pattern: /(^|\s)(>|>>)|\s(>|>>)\s*[^&]/i,
-    },
     { name: "write through tee", pattern: /(^|\s)tee\s+/i },
     { name: "truncate files", pattern: /(^|\s)truncate\s+/i },
     { name: "sudo", pattern: /(^|\s)sudo\s+/i },
@@ -135,10 +190,6 @@ export default function (pi: ExtensionAPI) {
     {
       name: "in-place shell edit",
       pattern: /\b(sed\s+-i|perl\s+-pi|ruby\s+-pi)\b/i,
-    },
-    {
-      name: "scripted file mutation command",
-      pattern: /(^|\s)(?:[^\s]+\/)?(python\d*|node|ruby|perl|php|bun|deno)\b/i,
     },
     {
       name: "temp-file replacement workflow",
@@ -209,7 +260,10 @@ export default function (pi: ExtensionAPI) {
       const command = getCommand(check.input);
       const dangerousMatches = dangerousCommandRules.filter((r) => r.pattern.test(command));
       const gitChangeMatches = gitCodeChangeRules.filter((r) => r.pattern.test(command));
-      const matches = [...dangerousMatches, ...gitChangeMatches];
+      const scriptRisk = getScriptRisk(command);
+      const matches: { name: string }[] = [...dangerousMatches, ...gitChangeMatches];
+      if (hasFileRedirection(command)) matches.push({ name: "shell redirection write" });
+      if (scriptRisk) matches.push({ name: scriptRisk });
       return matches.length > 0 ? [{ ...check, command, matches }] : [];
     });
 

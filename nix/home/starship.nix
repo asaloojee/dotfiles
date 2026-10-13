@@ -29,28 +29,35 @@
           export LC_ALL=C
           export GIT_OPTIONAL_LOCKS=0
 
-          names=()
+          branch=
           dirty=
           staged=
           conflict=
           divergent=
           ahead=
           behind=
+          added=
+          removed=
 
           if jj root --ignore-working-copy >/dev/null 2>&1; then
             # Snapshot once for up-to-date working-copy markers.
             markers=$(jj log --no-graph --color=never -r @ -T \
-              'if(!empty, "*") ++ if(conflict, "!")' 2>/dev/null) || exit 0
+              'if(!empty, "*") ++ if(conflict, "!") ++ if(diff.stat().total_added() > 0, "+") ++ if(diff.stat().total_removed() > 0, "-")' \
+              2>/dev/null) || exit 0
             [[ $markers == *'*'* ]] && dirty='*'
             [[ $markers == *'!'* ]] && conflict='!'
+            [[ $markers == *'+'* ]] && added=1
+            [[ $markers == *'-'* ]] && removed=1
 
-            # Use the current bookmark or the closest bookmarked ancestors.
+            # Prefer current bookmarks, then closest bookmarked ancestors.
+            # Pick one alphabetically when several qualify for a stable prompt.
             context='heads(::@ & bookmarks())'
             while IFS=$'\t' read -r name bookmark_conflict; do
               [[ -n $name ]] || continue
-              names+=("$name")
+              branch=$name
               [[ $bookmark_conflict == true ]] && divergent='?'
-            done < <(jj bookmark list --ignore-working-copy --color=never -r "$context" \
+              break
+            done < <(jj bookmark list --ignore-working-copy --color=never --sort name -r "$context" \
               -T 'name ++ "\t" ++ conflict ++ "\n"' 2>/dev/null)
 
             # jj reports tracking counts from the remote's perspective.
@@ -58,14 +65,13 @@
               [[ $remote_ahead == true ]] && behind=1
               [[ $remote_behind == true ]] && ahead=1
             done < <(jj bookmark list --ignore-working-copy --color=never --tracked \
-              -r "$context" -T \
+              -r "$context" "exact:$branch" -T \
               'if(remote, !tracking_ahead_count.zero() ++ "\t" ++ !tracking_behind_count.zero() ++ "\n")' \
               2>/dev/null)
 
-            ((''${#names[@]})) || names=(unbookmarked)
+            [[ -n $branch ]] || branch=unbookmarked
           elif git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
             branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null) || branch=detached
-            names=("$branch")
             while IFS= read -r entry; do
               index=''${entry:0:1}
               worktree=''${entry:1:1}
@@ -78,6 +84,12 @@
                   ;;
               esac
             done < <(git status --porcelain=v1 --untracked-files=normal 2>/dev/null)
+
+            # Compare tracked working-copy contents (including staged changes) to HEAD.
+            while IFS=$'\t' read -r additions deletions path; do
+              [[ $additions =~ ^[0-9]+$ && $additions -gt 0 ]] && added=1
+              [[ $deletions =~ ^[0-9]+$ && $deletions -gt 0 ]] && removed=1
+            done < <(git diff --numstat HEAD -- 2>/dev/null)
 
             # Prefer the upstream, falling back to the same-name origin branch.
             upstream=$(git rev-parse --verify --symbolic-full-name '@{upstream}' 2>/dev/null) || upstream=
@@ -93,18 +105,21 @@
             exit 0
           fi
 
-          separator=
-          for name in "''${names[@]}"; do
-            printf '%s%s' "$separator" "$name"
-            separator=,
-          done
+          printf '%s' "$branch"
           printf '%s' "$dirty$staged$conflict$divergent"
-          if [[ -n $ahead && -n $behind ]]; then
+          if [[ -n $added && -n $removed ]]; then
             printf ' ±'
-          elif [[ -n $ahead ]]; then
+          elif [[ -n $added ]]; then
             printf ' +'
-          elif [[ -n $behind ]]; then
+          elif [[ -n $removed ]]; then
             printf ' −'
+          fi
+          if [[ -n $ahead && -n $behind ]]; then
+            printf ' ↕'
+          elif [[ -n $ahead ]]; then
+            printf ' ↑'
+          elif [[ -n $behind ]]; then
+            printf ' ↓'
           fi
           printf '\n'
         '';

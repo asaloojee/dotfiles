@@ -86,7 +86,7 @@
             done < <(git status --porcelain=v1 --untracked-files=normal 2>/dev/null)
 
             # Compare tracked working-copy contents (including staged changes) to HEAD.
-            while IFS=$'\t' read -r additions deletions path; do
+            while IFS=$'\t' read -r additions deletions _; do
               [[ $additions =~ ^[0-9]+$ && $additions -gt 0 ]] && added=1
               [[ $deletions =~ ^[0-9]+$ && $deletions -gt 0 ]] && removed=1
             done < <(git diff --numstat HEAD -- 2>/dev/null)
@@ -107,19 +107,19 @@
 
           printf '%s' "$branch"
           printf '%s' "$dirty$staged$conflict$divergent"
-          if [[ -n $added && -n $removed ]]; then
-            printf ' ±'
-          elif [[ -n $added ]]; then
-            printf ' +'
-          elif [[ -n $removed ]]; then
-            printf ' −'
-          fi
           if [[ -n $ahead && -n $behind ]]; then
             printf ' ↕'
           elif [[ -n $ahead ]]; then
             printf ' ↑'
           elif [[ -n $behind ]]; then
             printf ' ↓'
+          fi
+          if [[ -n $added && -n $removed ]]; then
+            printf ' ±'
+          elif [[ -n $added ]]; then
+            printf ' +'
+          elif [[ -n $removed ]]; then
+            printf ' −'
           fi
           printf '\n'
         '';

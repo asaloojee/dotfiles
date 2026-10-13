@@ -15,7 +15,12 @@
     font-style = "Regular";
     font-style-bold = "Bold";
     font-style-italic = "Italic";
-    keybind = "super+shift+t=prompt_tab_title";
+    keybind = [
+      "super+shift+t=prompt_tab_title"
+      "ctrl+comma=new_split:right"
+      "ctrl+h=goto_split:left"
+      "ctrl+l=goto_split:right"
+    ];
     macos-option-as-alt = true;
     macos-titlebar-style = "tabs";
     macos-window-buttons = "hidden";

@@ -5,6 +5,7 @@
       "hunk"
       "mas"
       "mole"
+      "openssl@4"
       "vite-plus"
     ];
 
@@ -14,7 +15,6 @@
     casks = [
       # GUI/macOS apps
       "adobe-creative-cloud"
-      # "alacritty"
       "blender"
       "brave-origin"
       "docker-desktop"
@@ -22,10 +22,8 @@
       "ghostty"
       "handbrake-app"
       "jordanbaird-ice"
-      "karabiner-elements" # Needs stable paths for macOS permissions
+      # "karabiner-elements" # Needs stable paths for macOS permissions
       "keepingyouawake"
-      "leader-key"
-      "maccy"
       "mos"
       "obsidian"
       # "ollama"
@@ -33,6 +31,7 @@
       "proton-mail"
       "proton-pass"
       "protonvpn"
+      "raycast"
       "sf-symbols"
       "slack"
       "tailscale-app"

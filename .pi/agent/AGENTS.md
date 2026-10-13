@@ -1,78 +1,49 @@
 # Global agent directives
 
-## Review-first workflow
+## Workflow and communication
 
-- Optimize changes for human review.
-- Keep diffs small, scoped, and readable.
-- Avoid unrelated refactors and formatting churn.
-- Prefer incremental edits to broad rewrites.
-- Explain non-obvious changes.
-- Ask concise questions before broad work when requirements are unclear.
+- Keep diffs small, scoped, and readable; avoid unrelated refactors and formatting churn. Explain non-obvious changes.
+- Treat exploratory questions and recommendations as advice-only. Implement direct requests; answer any accompanying questions before editing.
+- Ask before ambiguous, broad, risky, destructive, or conflicting work. Do not expand scope without approval.
 - Do not run builds or implement responsive styling unless explicitly requested.
+- Briefly summarize **why**, **what** (files and behavior), and **impact** (risks, tradeoffs, verification).
+- Use plain language following ISO 24495-1:2023 at all times.
 
-## Change summaries
+## Safe changes
 
-When proposing or completing changes, briefly state:
+- Read relevant files with the built-in read tool before editing.
+- Never bypass the safety gate. Route all mutations—including shell writes, migrations, deletes, and installs—through approved tools and permission checks.
+- Prefer targeted edits; use scripts or full rewrites only when appropriate.
+- Prefer dry runs, previews, or diffs before mutations when practical.
+- Never run commands requiring `sudo` or a password. Provide exact privileged commands as clearly labeled user-run steps, including rebuilds, rollbacks, garbage collection, and generation deletion.
 
-1. **Why**: reason for the change.
-2. **What**: files and behavior changed.
-3. **Impact**: risks, tradeoffs, and verification steps.
+## Tooling
 
-## Advice vs. edits
-
-- Infer intent from the user's phrasing.
-- For exploratory questions or recommendations, provide advice or a plan only; do not mutate files or project state.
-- For direct implementation requests, use approved mutation tools so the safety gate can request permission.
-- If a prompt contains questions and implementation instructions, answer the questions before editing.
-- Pause for confirmation when a request is ambiguous, risky, destructive, or conflicts with higher-priority instructions.
-
-## Safe mutations
-
-- Never bypass the safety gate.
-- Do not mutate files or project state through shell scripts, redirection, in-place shell edits, migrations, deletes, installs, or similar commands unless the safety gate will request explicit permission.
-- Use script-based writes, file replacement, or full rewrites only when they are the appropriate approach and are routed through the safety gate.
-- Project-standard formatter commands are allowed when explicitly requested or clearly required by the implementation.
-
-## Tooling preferences
-
-- Prefer global `vp` with `pnpm` for JavaScript and TypeScript. Use `yarn` only in `~/dev/pre-script/` projects.
-- Use `npm` only when compatibility or required semantics demand it.
-- Prefer `uv` over `pip`; use `pip` only when required.
+- For JavaScript/TypeScript, prefer global `vp` commands and `pnpm`; prefer `vp` over local `pnpm exec` equivalents. Use `yarn` only in `~/dev/pre-script/` projects and `npm` only when required.
+- Prefer `uv`; use `pip` only when required.
 - Manage pi packages with `pi install`, `pi update`, and `pi remove`.
-- Prefer global `vp` commands to local `pnpm exec` equivalents.
 
 ## Formatting
 
-- Match the Neovim Conform configuration at `~/dotfiles/.config/nvim/lua/plugins/conform.lua`.
-- Prefer the project's formatter command over a raw formatter binary.
-- Do not use Prettier unless the project configures it.
-- In Vite Plus projects, use `vp fmt`/oxfmt for supported web files; otherwise use the formatter selected by Conform.
-- Use standard ecosystem formatters where appropriate, such as `rustfmt` for Rust.
-- Use Svelte LSP formatting for Svelte files.
-- Do not use pi-specific source formatters unless explicitly requested.
-- Do not preserve non-canonical formatting to minimize a diff. Warn before editing if canonical formatting may create substantial churn.
+- Follow `~/dotfiles/.config/nvim/lua/plugins/conform.lua`; prefer project formatter commands over raw binaries.
+- In Vite Plus projects, use `vp fmt`/oxfmt for supported web files; otherwise use Conform's formatter or the ecosystem standard (e.g., `rustfmt`). Use Svelte LSP formatting for Svelte.
+- Use Prettier only when configured by the project; use pi-specific source formatters only when explicitly requested.
+- Run formatters only when requested or clearly required. Use canonical formatting; warn before substantial formatting churn.
 
-## Configuration changes
+## Configuration
 
-- Treat `~/dotfiles` as the source of truth for user and system configuration.
-- Inspect `~/dotfiles` before changing configuration, even when working in another repository.
-- Prefer global changes in `~/dotfiles` unless the user requests repository-local scope.
+- Treat `~/dotfiles` as the source of truth. Inspect it before configuration changes, even in other repositories; prefer global changes there unless repository-local scope is requested.
 - Do not edit generated or deployed files in `$HOME` unless explicitly requested.
-- Do not expand the scope beyond related files or directories without approval.
+- System configuration: `~/dotfiles/nix` (flake-based nix-darwin and home-manager). Stow-managed files: `~/dotfiles`, linked into `$HOME`.
 
-## Dotfiles layout
+## Hunk reviews
 
-- System configuration lives in `~/dotfiles/nix` and uses flake-based nix-darwin and home-manager modules.
-- Stow-managed files live under `~/dotfiles` and are linked into `$HOME`.
-
-## Applying global changes
-
-- Prefer dry runs, previews, or diffs before mutation when practical.
-- Never run commands that require `sudo` or may prompt for a password.
-- Give the user exact commands for privileged operations, including rebuilds, rollbacks, garbage collection, generation deletion, and privileged nix/darwin commands.
-- Clearly label privileged commands as user-run follow-up steps.
-- Use the built-in read tool before editing relevant files.
-
-## Response Style
-
-- Always respond to the user in plain language in the ISO 24495-1:2023 standard.
+- Use `hunk session *` to inspect live reviews. Never launch interactive `hunk diff`/`hunk show` in the agent shell; ask the user to open Hunk in their terminal if needed.
+- Find sessions with `hunk session list --json`; confirm the repo/source with `hunk session get --repo . --json`. Use an exact session ID instead of `--repo .` when multiple sessions match; ask if unclear.
+- Read the loaded changeset with `hunk session review --repo . --json`: add `--include-notes` for notes and `--include-patch` only when raw diff text is needed. Do not assume it shows working-tree changes.
+- Read comments with `hunk session comment list --repo . --type all --json` (the default omits some types). Use `--type user` for user-only notes or `--file <path>` to filter.
+- Check diff/source context before assessing comments. Report location, author/type, and requested action; distinguish issues from questions/suggestions and verify fixes before claiming resolution.
+- Look/view/review requests are read-only: no code or comment changes, reloads, or viewport movement unless requested. For walkthroughs, use `session context` and `session navigate`; `--comment <commentId>` jumps to a note.
+- When asked to leave feedback, use `session comment add` for one note or `comment apply --stdin` for batches. Root notes need a file and exactly one old/new line; replies use `--reply-to <note-id>`. Use `--focus` only to steer the view; otherwise mention `a` if agent notes are hidden.
+- If Hunk is open but inaccessible, report possible localhost/sandbox restrictions. Never restart its daemon without approval.
+- Reference: [official Hunk review skill](https://github.com/modem-dev/hunk/blob/main/packages/hunk/skills/hunk-review/SKILL.md). Check installed `--help` for version differences; never invent flags.

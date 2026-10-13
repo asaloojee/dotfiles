@@ -6,6 +6,7 @@
     mux = "tmuxinator";
     rebuild = "sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac";
     n = "nvim";
+    h = "jj diff";
   };
 
   shellAbbrs = {

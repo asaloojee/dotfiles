@@ -94,6 +94,63 @@ const collectToolChecks = (
   return checks;
 };
 
+// Split a Python call at top-level commas without hiding nested expressions from
+// the mutation checks. Unsupported syntax is left gated rather than guessed at.
+const getCallArguments = (source: string): string[] | undefined => {
+  const stack = ["("];
+  const args: string[] = [];
+  let start = 0;
+  let quote = "";
+  for (let index = 0; index < source.length; index++) {
+    const char = source[index];
+    if (quote) {
+      if (char === "\\") index++;
+      else if (char === quote) quote = "";
+      continue;
+    }
+    if (char === "#" || char === "\\") return undefined;
+    if (char === "'" || char === '"') {
+      if (source.slice(index, index + 3) === char.repeat(3)) return undefined;
+      quote = char;
+    } else if ("([{".includes(char)) {
+      stack.push(char);
+    } else if (")]}".includes(char)) {
+      const opening = stack.pop();
+      if (opening !== { ")": "(", "]": "[", "}": "{" }[char]) return undefined;
+      if (stack.length === 0) {
+        const last = source.slice(start, index).trim();
+        if (last) args.push(last);
+        return args;
+      }
+    } else if (char === "," && stack.length === 1) {
+      args.push(source.slice(start, index).trim());
+      start = index + 1;
+    }
+  }
+  return undefined;
+};
+
+const maskBashSyntaxChecks = (code: string): string => {
+  let matched = false;
+  const masked = code.replace(/\bsubprocess\.run\s*\(/g, (callee, offset: number) => {
+    const args = getCallArguments(code.slice(offset + callee.length));
+    if (
+      args?.length !== 3 ||
+      !/^\[\s*(["'])bash\1\s*,\s*(["'])-n\2\s*\]$/.test(args[0]) ||
+      !args.slice(1).some((arg) => /^input\s*=\s*\S/.test(arg)) ||
+      !args.slice(1).some((arg) => /^text\s*=\s*True$/.test(arg))
+    )
+      return callee;
+    matched = true;
+    return "_bashSyntaxCheck(";
+  });
+  // Only the plain import is exempt. Aliases, other calls, and attribute access
+  // retain the subprocess marker and therefore still require confirmation.
+  return matched
+    ? masked.replace(/\bimport[ \t]+subprocess(?=[ \t]*(?:;|\n))/g, "import _bashSyntaxCheckModule")
+    : masked;
+};
+
 // Keep opaque scripts/modules gated, but do not treat every interpreter invocation as a write.
 // Inline code is checked for common write APIs and indirect execution below.
 const getScriptRisk = (command: string): string | undefined => {
@@ -109,7 +166,10 @@ const getScriptRisk = (command: string): string | undefined => {
     }
 
     // stdout/stderr writes are output, not file mutation.
-    const code = command.replace(/\b(?:sys|process)\.(?:stdout|stderr)\.write\s*\(/g, "print(");
+    const code = maskBashSyntaxChecks(command).replace(
+      /\b(?:sys|process)\.(?:stdout|stderr)\.write\s*\(/g,
+      "print(",
+    );
     if (
       /\b(?:write_text|write_bytes|writeFile(?:Sync)?|appendFile(?:Sync)?|createWriteStream|write|writelines|truncate|rename(?:Sync)?|unlink(?:Sync)?|rmdir(?:Sync)?|mkdir(?:Sync)?|makedirs|remove|rmtree|copy(?:file|tree|2|File(?:Sync)?)?|chmod(?:Sync)?|chown(?:Sync)?|touch)\s*\(/i.test(
         code,

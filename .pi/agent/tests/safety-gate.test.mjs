@@ -41,6 +41,10 @@ const safeCommands = [
   'git diff > "/dev/null"',
   "git diff 2>&1 | head",
   "rg 'a > b' file",
+  `python3 -c 'import subprocess; subprocess.run(["bash", "-n"], input=text, text=True)'`,
+  `python3 -c 'import subprocess; subprocess.run(["bash", "-n"], text=True, input=text)'`,
+  `git diff --check; git diff -- nix/home/starship.nix; alejandra --check nix/home/starship.nix; python3 -c 'from pathlib import Path;
+import subprocess; text = Path("nix/home/starship.nix").read_text().split("        text = " + chr(39)*2 + "\\n", 1)[1].split("\\n        " + chr(39)*2 + ";", 1)[0]; result = subprocess.run(["bash", "-n"], input=text.replace(chr(39)*2 + "\${", "\${"), text=True); raise SystemExit(result.returncode)'`,
 ];
 
 for (const command of safeCommands) {
@@ -80,6 +84,16 @@ const riskyCommands = [
   'node -e \'fs.writeFileSync("file", "text")\'',
   'node -e \'fs.openSync("file", "w")\'',
   "python3 -c 'import subprocess; subprocess.run(command)'",
+  `python3 -c 'import subprocess; subprocess.run(["bash"], input=text, text=True)'`,
+  `python3 -c 'import subprocess; subprocess.run(["bash", "-n", "file"], input=text, text=True)'`,
+  `python3 -c 'import subprocess; subprocess.run(["bash", "-n"], input=text, text=True, shell=True)'`,
+  `python3 -c 'import subprocess; subprocess.run(["bash", "-n"], input=text, text=True, executable=other)'`,
+  `python3 -c 'import subprocess; subprocess.run(["bash", "-n"], input=text, text=True, **options)'`,
+  `python3 -c 'import subprocess; subprocess.run(["bash", "-n"], input=Path("file").write_text("text"), text=True)'`,
+  `python3 -c 'import subprocess; subprocess.run(["bash", "-n"], input=text, text=True); subprocess.run(command)'`,
+  `python3 -c 'import subprocess; subprocess.run(["bash", "-n"], input=text, text=True); subprocess.Popen(command)'`,
+  `python3 -c 'import subprocess as runner; runner.run(["bash", "-n"], input=text, text=True)'`,
+  `python3 -c 'from subprocess import run; run(["bash", "-n"], input=text, text=True)'`,
   "python3 -c 'eval(code)'",
   "pnpm install",
   "mktemp",

@@ -19,7 +19,7 @@
     ];
 
     custom.vcs = {
-      description = "Branch or jj bookmark with shared status markers";
+      description = "Minimal jj change state or Git branch and status";
       command = lib.getExe (pkgs.writeShellApplication {
         name = "starship-vcs";
         runtimeInputs = [pkgs.git pkgs.jujutsu];
@@ -33,43 +33,23 @@
           dirty=
           staged=
           conflict=
-          divergent=
           ahead=
           behind=
           added=
           removed=
 
           if jj root --ignore-working-copy >/dev/null 2>&1; then
-            # Snapshot once for up-to-date working-copy markers.
-            markers=$(jj log --no-graph --color=never -r @ -T \
-              'if(!empty, "*") ++ if(conflict, "!") ++ if(diff.stat().total_added() > 0, "+") ++ if(diff.stat().total_removed() > 0, "-")' \
+            # Snapshot once so non-empty and conflict markers reflect current files.
+            state=$(jj log --no-graph --color=never -r @ -T \
+              'change_id.shortest(8) ++ if(!empty, " *") ++ if(conflict, " !")' \
               2>/dev/null) || exit 0
-            [[ $markers == *'*'* ]] && dirty='*'
-            [[ $markers == *'!'* ]] && conflict='!'
-            [[ $markers == *'+'* ]] && added=1
-            [[ $markers == *'-'* ]] && removed=1
 
-            # Prefer current bookmarks, then closest bookmarked ancestors.
-            # Pick one alphabetically when several qualify for a stable prompt.
-            context='heads(::@ & bookmarks())'
-            while IFS=$'\t' read -r name bookmark_conflict; do
-              [[ -n $name ]] || continue
-              branch=$name
-              [[ $bookmark_conflict == true ]] && divergent='?'
-              break
-            done < <(jj bookmark list --ignore-working-copy --color=never --sort name -r "$context" \
-              -T 'name ++ "\t" ++ conflict ++ "\n"' 2>/dev/null)
-
-            # jj reports tracking counts from the remote's perspective.
-            while IFS=$'\t' read -r remote_ahead remote_behind; do
-              [[ $remote_ahead == true ]] && behind=1
-              [[ $remote_behind == true ]] && ahead=1
-            done < <(jj bookmark list --ignore-working-copy --color=never --tracked \
-              -r "$context" "exact:$branch" -T \
-              'if(remote, !tracking_ahead_count.zero() ++ "\t" ++ !tracking_behind_count.zero() ++ "\n")' \
-              2>/dev/null)
-
-            [[ -n $branch ]] || branch=unbookmarked
+            # Flag unpublished work in this stack, excluding empty/immutable changes.
+            outgoing=$(jj log --ignore-working-copy --no-graph --color=never --limit 1 \
+              -r '::@ ~ immutable() ~ ::remote_bookmarks(remote=origin) ~ empty()' \
+              -T '" ↑"' 2>/dev/null)
+            printf '%s%s\n' "$state" "$outgoing"
+            exit 0
           elif git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
             branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null) || branch=detached
             while IFS= read -r entry; do
@@ -106,7 +86,7 @@
           fi
 
           printf '%s' "$branch"
-          printf '%s' "$dirty$staged$conflict$divergent"
+          printf '%s' "$dirty$staged$conflict"
           if [[ -n $ahead && -n $behind ]]; then
             printf ' ↕'
           elif [[ -n $ahead ]]; then

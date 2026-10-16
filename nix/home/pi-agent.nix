@@ -11,6 +11,10 @@ in {
       source = liveLink ".pi/agent/settings.json";
       force = true;
     };
+    ".pi/agent/mcp.json" = {
+      source = liveLink ".pi/agent/mcp.json";
+      force = true;
+    };
     ".pi/agent/AGENTS.md" = {
       source = liveLink ".pi/agent/AGENTS.md";
       force = true;

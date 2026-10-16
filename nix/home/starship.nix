@@ -7,6 +7,15 @@
   enableFishIntegration = true;
   enableTransience = true;
   settings = {
+    palette = "merino_dark";
+    palettes.merino_dark = {
+      blue = "#58a6ff";
+      purple = "#bc8cff";
+      red = "#ff7b72";
+      yellow = "#d29922";
+      gray = "#6e7681";
+    };
+
     format = lib.concatStrings [
       "$username"
       "$hostname"
@@ -106,7 +115,7 @@
       });
       when = "${pkgs.jujutsu}/bin/jj root --ignore-working-copy >/dev/null 2>&1 || ${pkgs.git}/bin/git rev-parse --is-inside-work-tree >/dev/null 2>&1";
       shell = ["${pkgs.bash}/bin/bash" "--noprofile" "--norc"];
-      style = "bright-black";
+      style = "gray";
       format = "[$output]($style) ";
     };
 
@@ -123,7 +132,7 @@
 
     character = {
       format = "$symbol ";
-      success_symbol = "[❯](#bb9af7)";
+      success_symbol = "[❯](purple)";
       error_symbol = "[❯](red)";
     };
 

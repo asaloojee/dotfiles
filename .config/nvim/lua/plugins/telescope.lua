@@ -16,6 +16,8 @@ return {
 	},
 	opts = {
 		defaults = {
+			border = true,
+			borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
 			file_ignore_patterns = { "^.git/", ".DS_Store" },
 		},
 		pickers = {

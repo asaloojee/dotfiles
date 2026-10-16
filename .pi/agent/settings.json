@@ -2,7 +2,7 @@
   "defaultProvider": "openai",
   "defaultModel": "gpt-6.1-sol",
   "defaultThinkingLevel": "medium",
-  "theme": "fish-night",
+  "theme": "system",
   "themes": [
     "~/dotfiles/.pi/agent/themes"
   ],
@@ -15,6 +15,6 @@
   "installTelemetry": false,
   "hideThinkingBlock": true,
   "quietStartup": true,
-  "lastChangelogVersion": "1.1.0",
+  "lastChangelogVersion": "1.3.0",
   "deviceId": "cb97121f-bbb4-4e70-99b6-f792c3fd06f9"
 }

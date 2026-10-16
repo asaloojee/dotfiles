@@ -35,7 +35,6 @@
     pkgs.shopify-cli
     pkgs.stylua
     pkgs.stow
-    pkgs.tmuxinator
     pkgs.tree
     pkgs.tree-sitter
     pkgs.uv

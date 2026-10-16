@@ -2,8 +2,6 @@
 
 **/.DS_Store
 
-.config/tmux/plugins/
-
 # Claude Code runtime directories (keep settings.json and settings.local.json)
 .claude/debug/
 .claude/file-history/
@@ -16,9 +14,6 @@
 .claude/statsig/
 .claude/todos/
 .config/karabiner/
-
-# Tmuxinator configs
-.config/tmuxinator/
 
 # Claude Code project instructions (local only)
 CLAUDE.md

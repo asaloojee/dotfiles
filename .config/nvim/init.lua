@@ -11,6 +11,11 @@ vim.opt.undofile = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
+-- Let the terminal provide the backdrop; keep editor chrome quiet and rounded.
+vim.opt.termguicolors = true
+vim.opt.winborder = "rounded"
+vim.opt.fillchars:append({ eob = " " })
+
 -- Do not continue comments with o/O, including after filetype settings load.
 vim.opt.formatoptions:remove("o")
 vim.api.nvim_create_autocmd("FileType", {
@@ -64,6 +69,7 @@ vim.opt.shiftwidth = 2
 
 -- Diagnostics
 vim.diagnostic.config({
+	float = { border = "rounded" },
 	severity_sort = true,
 	signs = {
 		text = {

@@ -64,9 +64,9 @@ return {
 		local float_border = vim.api.nvim_get_hl(0, { name = "FloatBorder", link = false })
 
 		vim.api.nvim_set_hl(0, "BlinkCmpMenu", { link = "Pmenu" })
-		vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { fg = menu.fg, bg = "NONE" })
+		vim.api.nvim_set_hl(0, "BlinkCmpMenuBorder", { fg = float_border.fg, bg = menu.bg })
 		vim.api.nvim_set_hl(0, "BlinkCmpMenuSelection", { link = "Visual" })
 		vim.api.nvim_set_hl(0, "BlinkCmpDoc", { link = "NormalFloat" })
-		vim.api.nvim_set_hl(0, "BlinkCmpDocBorder", { fg = float_border.fg, bg = "NONE" })
+		vim.api.nvim_set_hl(0, "BlinkCmpDocBorder", { link = "FloatBorder" })
 	end,
 }

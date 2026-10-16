@@ -23,7 +23,6 @@
       "handbrake-app"
       "jordanbaird-ice"
       # "karabiner-elements" # Needs stable paths for macOS permissions
-      "keepingyouawake"
       "mos"
       "obsidian"
       # "ollama"
@@ -34,6 +33,7 @@
       "raycast"
       "sf-symbols"
       "slack"
+      "status-trio"
       "tailscale-app"
 
       # Font exceptions kept in Homebrew (not managed by nixpkgs)

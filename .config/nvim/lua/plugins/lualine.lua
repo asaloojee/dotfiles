@@ -55,18 +55,5 @@ return {
 				{ "location", padding = { left = 1, right = 1 }, color = { gui = "bold" } },
 			},
 		},
-		tabline = {
-			lualine_a = {
-				{
-					"buffers",
-					mode = 2,
-					symbols = {
-						modified = " ●",
-						alternate_file = "",
-						directory = "",
-					},
-				},
-			},
-		},
 	},
 }

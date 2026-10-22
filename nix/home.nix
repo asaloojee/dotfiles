@@ -48,7 +48,6 @@
     eza = import ./home/eza.nix {inherit pkgs;};
     fish = import ./home/fish.nix {inherit lib;};
     fzf = import ./home/fzf.nix {inherit pkgs;};
-    alacritty = import ./home/alacritty.nix {inherit pkgs;};
     ghostty = import ./home/ghostty.nix;
     git = import ./home/git.nix {inherit pkgs;};
     jujutsu = import ./home/jujutsu.nix {inherit pkgs;};

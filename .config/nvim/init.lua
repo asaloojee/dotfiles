@@ -6,6 +6,7 @@ vim.opt.relativenumber = false
 vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
 vim.opt.signcolumn = "yes"
+vim.opt.showtabline = 0
 vim.opt.clipboard = "unnamedplus"
 vim.opt.undofile = true
 vim.opt.ignorecase = true

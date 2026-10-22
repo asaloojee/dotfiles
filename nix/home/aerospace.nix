@@ -89,12 +89,12 @@
         run = ["move-node-to-workspace 5"];
       }
       {
-        "if".app-id = "com.brave.Browser.origin";
+        "if".app-id = "com.brave.Browser.origin.nightly";
         "if".window-title-regex-substring = "DevTools";
         run = "layout floating";
       }
       {
-        "if".app-id = "com.brave.Browser.origin";
+        "if".app-id = "com.brave.Browser.origin.nightly";
         run = "move-node-to-workspace 1";
       }
       {

@@ -1,6 +1,7 @@
 {...}: {
   homebrew = {
     enable = true;
+    taps = ["anomalyco/tap"];
     brews = [
       "hunk"
       "mas"
@@ -15,8 +16,9 @@
     casks = [
       # GUI/macOS apps
       "adobe-creative-cloud"
+      "anomalyco/tap/hex"
       "blender"
-      "brave-origin"
+      "brave-origin@nightly"
       "docker-desktop"
       "figma"
       "ghostty"
@@ -37,8 +39,6 @@
       "tailscale-app"
 
       # Font exceptions kept in Homebrew (not managed by nixpkgs)
-      "font-martel"
-      "font-playfair"
       "font-sf-mono"
       "font-sf-pro"
     ];

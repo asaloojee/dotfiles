@@ -1,20 +1,15 @@
 /**
- * Safety Gate Extension
- *
- * Adds confirmations for dangerous shell commands and sensitive file edits.
- * - Confirms before bash/hypa_shell commands like rm, mv, launchctl mutations, sudo, chmod/chown, dd, mkfs, install/build commands, etc.
- * - Confirms before git commands that can change the current working tree (revert/reset/checkout/restore/etc.).
- * - Catches direct, namespaced, and nested multi_tool_use tool calls.
- * - Allows interpreter version checks and inline scripts without detected mutation APIs.
- * - Allows output disposal (/dev/null) and file-descriptor duplication.
- * - These checks are heuristics, not a security sandbox for arbitrary code.
- * - Confirms before edit/write and apply=true mutation tools.
- * - In non-interactive mode, blocks these actions by default.
+ * Allow routine workspace changes; confirm protected paths and unclear commands.
+ * Sensitive Git/jj operations are blocked, even with UI approval.
+ * Heuristic workflow guard only: arbitrary programs and aliases are not sandboxed.
  */
+import { lstatSync, readdirSync, readlinkSync, realpathSync, statSync } from "node:fs";
+import { basename, dirname, isAbsolute, relative, resolve } from "node:path";
 
 type ToolCallEvent = { toolName: string; input: Record<string, unknown> };
 type ToolCallContext = {
   hasUI: boolean;
+  cwd?: string;
   ui: { confirm(title: string, message: string): Promise<boolean> };
 };
 type ToolCallResult = { block: true; reason: string } | undefined;
@@ -29,30 +24,10 @@ type ExtensionAPI = {
 };
 
 type Rule = { name: string; pattern: RegExp };
-type ToolCheck = {
-  toolName: string;
-  input: Record<string, unknown>;
-  source: string;
-};
-
-type NestedToolUse = {
-  recipient_name?: unknown;
-  name?: unknown;
-  parameters?: unknown;
-  arguments?: unknown;
-};
-
-const getToolBaseName = (toolName: string) => toolName.split(".").pop() ?? toolName;
-
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
 const getToolInput = (value: unknown): Record<string, unknown> => (isRecord(value) ? value : {});
-
-const isToolNamed = (toolName: string, names: string[]) => {
-  const baseName = getToolBaseName(toolName);
-  return names.includes(toolName) || names.includes(baseName);
-};
 
 const getCommand = (input: Record<string, unknown>) => {
   for (const key of ["command", "cmd", "script"]) {
@@ -62,36 +37,20 @@ const getCommand = (input: Record<string, unknown>) => {
   return "";
 };
 
-const collectToolChecks = (
-  event: ToolCallEvent,
-  matchesTool: (toolName: string) => boolean,
-): ToolCheck[] => {
-  const checks: ToolCheck[] = [];
-  if (matchesTool(event.toolName)) {
-    checks.push({
-      toolName: event.toolName,
-      input: event.input,
-      source: "direct",
-    });
-  }
-
+// Flatten once, retaining the original name for approval messages.
+const collectToolCalls = (event: ToolCallEvent): (ToolCallEvent & { name: string })[] => {
+  const calls = [{ ...event, name: event.toolName.split(".").pop() ?? event.toolName }];
   const nestedTools = event.input.tool_uses;
-  if (!Array.isArray(nestedTools)) return checks;
-
-  for (const nestedTool of nestedTools) {
-    if (!isRecord(nestedTool)) continue;
-    const toolUse = nestedTool as NestedToolUse;
-    const toolName = String(toolUse.recipient_name ?? toolUse.name ?? "");
-    if (!toolName || !matchesTool(toolName)) continue;
-
-    checks.push({
+  if (!Array.isArray(nestedTools)) return calls;
+  for (const nested of nestedTools) {
+    if (!isRecord(nested)) continue;
+    const toolName = String(nested.recipient_name ?? nested.name ?? "");
+    if (toolName) calls.push(...collectToolCalls({
       toolName,
-      input: getToolInput(toolUse.parameters ?? toolUse.arguments),
-      source: `${event.toolName} nested`,
-    });
+      input: getToolInput(nested.parameters ?? nested.arguments),
+    }));
   }
-
-  return checks;
+  return calls;
 };
 
 // Split a Python call at top-level commas without hiding nested expressions from
@@ -189,226 +148,354 @@ const getScriptRisk = (command: string): string | undefined => {
   return undefined;
 };
 
-const hasFileRedirection = (command: string): boolean => {
-  // Ignore quoted text (for example, rg 'a > b'), but inspect double-quoted
-  // command substitutions conservatively because they execute shell code.
-  const executesQuotedCode = /\b(?:bash|sh|zsh|ksh|dash)\s+(?:-\S+\s+)*-\S*c\b|\beval\s/.test(
-    command,
-  );
-  const shell = executesQuotedCode
-    ? command
-    : command.replace(/'[^']*'|"(?:\\.|[^"\\])*"/g, (quoted) => {
-        if (quoted.startsWith('"') && /\$\(|`/.test(quoted)) return quoted;
-        if (quoted.slice(1, -1) === "/dev/null") return "/dev/null";
-        return "__quoted__";
-      });
-  const redirects = shell.matchAll(/(?:\d*|&)(>>?|<>|>\|)\s*([^\s;|)]+)/g);
-  for (const [, , target] of redirects) {
-    if (/^&(?:\d+|-)$/.test(target) || target === "/dev/null") continue;
-    return true;
+type Token = { value: string; operator: boolean };
+
+// Only parse ordinary shell words and operators. Dynamic shell syntax stays gated.
+// This is a workflow guard, not a sandbox for arbitrary programs or trusted aliases.
+const tokenize = (command: string): Token[] | undefined => {
+  const tokens: Token[] = [];
+  let word = "";
+  let started = false;
+  let quote = "";
+  const flush = () => {
+    if (started) tokens.push({ value: word, operator: false });
+    word = "";
+    started = false;
+  };
+  for (let i = 0; i < command.length; i++) {
+    const char = command[i];
+    if (quote) {
+      if (char === quote) quote = "";
+      else if (char === "\\" && quote === '"') {
+        const next = command[++i];
+        if (next === undefined) return undefined;
+        if (next !== "\n") word += /[$`"\\]/.test(next) ? next : "\\" + next;
+      } else {
+        if (quote === '"' && (char === "$" || char.charCodeAt(0) === 96)) return undefined;
+        word += char;
+      }
+      continue;
+    }
+    if (char === "'" || char === '"') {
+      quote = char;
+      started = true;
+    } else if (char === "\\") {
+      const next = command[++i];
+      if (next === undefined) return undefined;
+      if (next !== "\n") {
+        word += next;
+        started = true;
+      }
+    } else if (char === "$" || char.charCodeAt(0) === 96) {
+      return undefined;
+    } else if (/\s/.test(char)) {
+      flush();
+      if (char === "\n") tokens.push({ value: ";", operator: true });
+    } else if (";|&<>()".includes(char)) {
+      // A file-descriptor prefix belongs to its redirection, not the argv.
+      let prefix = "";
+      if ((char === ">" || char === "<") && /^\d+$/.test(word)) {
+        prefix = word;
+        word = "";
+        started = false;
+      }
+      flush();
+      const match = command.slice(i).match(/^(?:[<>]&(?:\d+|-)|>>|<>|>\||&&|\|\||[;|&<>()])/);
+      if (!match) return undefined;
+      tokens.push({ value: prefix + match[0], operator: true });
+      i += match[0].length - 1;
+    } else if (char === "#" && !started) {
+      while (i < command.length && command[i] !== "\n") i++;
+      tokens.push({ value: ";", operator: true });
+    } else {
+      word += char;
+      started = true;
+    }
   }
-  return false;
+  if (quote) return undefined;
+  flush();
+  return tokens;
+};
+
+// Resolve existing ancestors too, so a new file through a symlink is checked.
+const physicalPath = (path: string): string => {
+  try {
+    return realpathSync(path);
+  } catch (error) {
+    if (!["ENOENT", "ENOTDIR"].includes((error as { code?: string }).code ?? "")) throw error;
+    const parent = dirname(path);
+    if (parent === path) throw error;
+    if (lstatSync(path, { throwIfNoEntry: false })?.isSymbolicLink()) {
+      return physicalPath(resolve(parent, readlinkSync(path)));
+    }
+    return resolve(physicalPath(parent), basename(path));
+  }
+};
+
+const sensitivePath = /(^|\/)(\.git|\.jj|\.ssh|\.env(?:\.[^/]*)?|\.npmrc|\.yarnrc(?:\.yml)?|AGENTS\.md)(\/|$)|id_rsa|id_ed25519|known_hosts|authorized_keys|secret|token|credential|private[_-]?key|(^|\/)\.(zshrc|bashrc|bash_profile|profile|zprofile)$|(^|\/)\.pi\/agent(\/|$)/i;
+
+const pathRisk = (path: unknown, cwd: string): string | undefined => {
+  if (typeof path !== "string" || !path || /[$*?{}\[\]~\n]/.test(path) || path.split("/").includes("..")) return "unknown or dynamic mutation path";
+  try {
+    const root = physicalPath(resolve(cwd));
+    const lexical = resolve(cwd, path);
+    const target = physicalPath(lexical);
+    const within = relative(root, target);
+    if (!within || within === ".." || within.startsWith("../") || isAbsolute(within)) {
+      return "workspace root or outside-workspace mutation";
+    }
+    if (sensitivePath.test(lexical) || sensitivePath.test(target) || /^\/(?:etc|private\/etc)\//.test(target)) {
+      return "protected path";
+    }
+  } catch {
+    return "unresolved mutation path";
+  }
+};
+
+// Directory operations must not silently remove protected descendants. Do not
+// follow symlinks here: pathRisk checks explicit targets, and deletion unlinks them.
+const directoryRisk = (path: string): string | undefined => {
+  const pending = [path];
+  let checked = 0;
+  while (pending.length) {
+    const current = pending.pop()!;
+    try {
+      for (const entry of readdirSync(current, { withFileTypes: true })) {
+        const child = resolve(current, entry.name);
+        if (++checked > 1000) return "broad directory operation";
+        if (sensitivePath.test(child)) return "directory contains protected paths";
+        if (entry.isSymbolicLink()) return "directory contains symlinks requiring review";
+        if (entry.isDirectory()) pending.push(child);
+      }
+    } catch (error) {
+      if (!["ENOENT", "ENOTDIR"].includes((error as { code?: string }).code ?? "")) return "unreadable directory scope";
+    }
+  }
+};
+
+const gitInspection = new Set([
+  "status", "diff", "log", "show", "blame", "ls-files", "ls-tree", "rev-parse",
+  "rev-list", "describe", "shortlog", "name-rev", "merge-base", "cat-file",
+  "check-ignore", "check-attr", "for-each-ref", "show-ref", "help", "version",
+]);
+const jjInspection = new Set([
+  "status", "st", "diff", "log", "show", "evolog", "evolution-log",
+  "interdiff", "root", "help", "version",
+]);
+
+const jjSubcommands = new Map<string, string[]>([
+  ["bookmark", ["list", "l"]], ["b", ["list", "l"]], ["tag", ["list", "l"]],
+  ["operation", ["log", "show", "diff"]], ["op", ["log", "show", "diff"]],
+  ["file", ["list", "show", "annotate", "search"]],
+  ["workspace", ["list", "root"]], ["config", ["list", "get", "path"]],
+]);
+
+// Unknown commands/aliases fail closed. Known subcommands are matched as words,
+// including invocations with global options or absolute executable paths.
+const vcsBlock = (tool: string, args: string[]): string | undefined => {
+  if (args.some((arg) => /^(?:--config(?:-file|-env)?(?:=|$)|--exec-path(?:=|$)|--ignore-immutable$|-c(?:.+)?$)/.test(arg))) {
+    return tool + " configuration or safety override";
+  }
+  const valued = tool === "git"
+    ? ["-C", "--git-dir", "--work-tree", "--namespace"]
+    : ["-R", "--repository", "--at-operation", "--at-op", "--color"];
+  const standalone = tool === "git"
+    ? ["--no-pager", "--paginate", "--literal-pathspecs", "--no-optional-locks"]
+    : ["--no-pager", "--ignore-working-copy", "--quiet", "--debug"];
+  const words: string[] = [];
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (valued.includes(arg)) {
+      if (!args[++i]) return tool + " missing global option value";
+      continue;
+    }
+    if (valued.some((option) => arg.startsWith(option + "=")) ||
+        (tool === "git" && /^-C.+/.test(arg)) ||
+        (tool === "jj" && /^-R.+/.test(arg))) continue;
+    if (standalone.includes(arg)) continue;
+    words.push(...args.slice(i));
+    break;
+  }
+  const [sub, second, ...rest] = words;
+  if (!sub || sub === "--help" || sub === "-h" || sub === "--version") return undefined;
+  // Diff/inspection commands can launch external programs or write output.
+  if (words.some((arg) => /^(?:--output(?:=|$)|--ext-diff$|--textconv$|--tool(?:=|$)|--editor(?:=|$)|--exec(?:=|$)|--upload-pack(?:=|$)|--receive-pack(?:=|$)|--filters$)/.test(arg))) {
+    return tool + " external execution or file output";
+  }
+  let allowed = false;
+  if (tool === "git") {
+    allowed = gitInspection.has(sub);
+    if (sub === "fetch") allowed = !words.some((arg) => /^--(?:prune|force)|^-[^-]*[pfu]|^\+|:/.test(arg));
+    if (sub === "branch" || sub === "tag") {
+      allowed = !second || ["--list", "-l"].includes(second) ||
+        (sub === "branch" && ["-a", "-r", "--all", "--remotes", "--show-current", "-v", "-vv"].includes(second) &&
+          rest.every((arg) => ["-a", "-r", "--all", "--remotes", "-v", "-vv"].includes(arg)));
+      if (words.some((arg) => /^--(?:delete|force|move|copy|edit-description|set-upstream|unset-upstream)|^-[^-]*[dDmMcCf]/.test(arg))) allowed = false;
+    }
+    if (sub === "stash") allowed = ["list", "show"].includes(second);
+    if (sub === "reflog") allowed = !second || second === "show";
+    if (sub === "worktree") allowed = second === "list";
+    if (sub === "remote") allowed = !second || ["-v", "--verbose", "show", "get-url"].includes(second);
+    if (sub === "config") allowed = ["list", "get", "--list", "-l", "--get", "--get-all", "--get-regexp"].includes(second) &&
+      !words.some((arg) => /^(?:--(?:add|set|unset|unset-all|replace-all|rename-section|remove-section|edit)(?:=|$)|-e)$/.test(arg));
+  } else {
+    allowed = jjInspection.has(sub) || (jjSubcommands.get(sub)?.includes(second) ?? false);
+    if (sub === "git") allowed = ["fetch", "root"].includes(second) ||
+      (second === "remote" && rest[0] === "list");
+  }
+  return allowed ? undefined : "Protected or unknown " + tool + " operation: " + words.join(" ");
+};
+
+const systemRules: Rule[] = [
+  { name: "privileged or permission change", pattern: /(?:^|[\s;/])(sudo|chmod|chown)\b/ },
+  { name: "disk tooling", pattern: /(?:^|[\s;/])(dd|mkfs|fdisk|parted)\b|\bdiskutil\s+erase/ },
+  { name: "service mutation", pattern: /\blaunchctl\s+(bootstrap|bootout|kickstart|enable|disable|load|unload|remove|submit|asuser)\b/ },
+  { name: "defaults mutation", pattern: /\bdefaults\s+(write|delete|rename|import)\b/ },
+  { name: "package installation", pattern: /\b(npm|pnpm|yarn|pip3?|uv|poetry|pipx|conda|mamba|pi)\s+(install|add|sync|update|remove)\b|\bpython[\d.]*\s+-m\s+pip\s+install\b/ },
+  { name: "generated temporary path", pattern: /\b(mktemp|tempfile)\b/ },
+  { name: "build", pattern: /\b(npm|pnpm|yarn|vp)\s+(run\s+)?build\b|\b(make|just|go|cargo)\s+build\b|\bdocker\s+build/ },
+];
+const directoryCommands = new Set(["rm", "rmdir", "mv", "cp"]);
+const fileCommands = new Set([...directoryCommands, "unlink", "mkdir", "touch", "ln", "tee", "truncate"]);
+const readerCommands = new Set(["rg", "grep", "egrep", "fgrep", "echo", "printf", "cat", "head", "tail", "ls"]);
+const shellCommands = new Set(["bash", "sh", "zsh", "ksh", "dash"]);
+
+const shellRisk = (command: string, cwd: string): { blocked?: string; ask: string[] } => {
+  const ask = systemRules.filter((rule) => rule.pattern.test(command)).map((rule) => rule.name);
+  const scriptRisk = getScriptRisk(command);
+  if (scriptRisk) ask.push(scriptRisk);
+  const tokens = tokenize(command);
+  if (!tokens) {
+    if (/\b(?:git|jj)\b/.test(command)) return { blocked: "Unclear Git/jj shell invocation", ask };
+    return { ask: [...ask, "unsupported or dynamic shell syntax"] };
+  }
+  const changesDirectory = tokens.some((token) => !token.operator && ["cd", "pushd", "popd"].includes(token.value));
+  const groups: Token[][] = [[]];
+  for (const token of tokens) {
+    if (token.operator && [";", "|", "||", "&&", "&", "(", ")"].includes(token.value)) groups.push([]);
+    else groups[groups.length - 1].push(token);
+  }
+  for (const group of groups) {
+    const words: string[] = [];
+    for (let i = 0; i < group.length; i++) {
+      const token = group[i];
+      if (!token.operator) {
+        words.push(token.value);
+        continue;
+      }
+      if (/^\d*[<>]&(?:\d+|-)$/.test(token.value)) continue;
+      const target = group[++i];
+      if (!target || target.operator) {
+        ask.push("unknown redirection");
+        continue;
+      }
+      if (token.value.includes(">") && target.value !== "/dev/null") {
+        const risk = changesDirectory ? "mutation after directory change" : pathRisk(target.value, cwd);
+        if (risk) ask.push(risk);
+      }
+    }
+    const name = basename(words[0] ?? "");
+    const literalArguments = readerCommands.has(name);
+    if (name === "rg" && words.some((word) => /^--(?:pre|hostname-bin)(?:=|$)/.test(word))) {
+      ask.push("search command runs an external program");
+    }
+    // Inspect wrapped commands, but treat ordinary reader arguments as data.
+    for (let i = 0; i < words.length && !literalArguments; i++) {
+      const name = basename(words[i]);
+      if (name === "git" || name === "jj") {
+        const blocked = vcsBlock(name, words.slice(i + 1));
+        if (blocked) return { blocked, ask };
+        break;
+      }
+      if (shellCommands.has(name) && words[i + 1] !== "-n") {
+        const flag = words.findIndex((word, index) => index > i && /^-[^-]*c/.test(word));
+        if (flag >= 0 && words[flag + 1]) {
+          const nested = shellRisk(words[flag + 1], cwd);
+          if (nested.blocked) return nested;
+        }
+        ask.push("shell execution requiring review");
+      }
+      if (["eval", "source", "."].includes(name) && i === 0) {
+        if (name === "eval") {
+          const nested = shellRisk(words.slice(1).join(" "), cwd);
+          if (nested.blocked) return nested;
+        }
+        ask.push("indirect shell execution");
+      }
+    }
+    if (fileCommands.has(name)) {
+      const paths = words.slice(1).filter((word) => !word.startsWith("-"));
+      // Only familiar switches are automatic; attached path operands and options
+      // that follow symlinks need review rather than being mistaken for flags.
+      if (words.slice(1).some((word) => word.startsWith("-") && word !== "--" &&
+          !/^-[rfpivRans]+$/.test(word) &&
+          !["--recursive", "--force", "--parents", "--verbose"].includes(word))) ask.push("unreviewed file operation option");
+      if (!paths.length) ask.push("unknown file operation targets");
+      for (const path of paths) {
+        const risk = changesDirectory ? "mutation after directory change" : pathRisk(path, cwd);
+        if (risk) ask.push(risk);
+        else if (directoryCommands.has(name)) {
+          const treeRisk = directoryRisk(resolve(cwd, path));
+          if (treeRisk) ask.push(treeRisk);
+        }
+      }
+    } else if (!literalArguments && (/\b(?:rm|unlink|rmdir|mv|cp|mkdir|touch|ln|tee|truncate|sed\s+-i|perl\s+-pi|ruby\s+-pi)\b/.test(words.join(" ")) ||
+        (name === "find" && words.some((word) => ["-delete", "-exec", "-execdir", "-ok", "-okdir"].includes(word))))) {
+      ask.push("indirect or in-place file mutation");
+    }
+  }
+  return { ask };
 };
 
 export default function (pi: ExtensionAPI) {
-  const dangerousCommandRules: Rule[] = [
-    { name: "remove files (rm)", pattern: /(^|\s)rm\s+/i },
-    {
-      name: "remove files (unlink/rmdir)",
-      pattern: /(^|\s)(unlink|rmdir)\s+/i,
-    },
-    { name: "move/rename files (mv)", pattern: /(^|\s)mv\s+/i },
-    { name: "copy files (cp)", pattern: /(^|\s)cp\s+/i },
-    { name: "create/link files", pattern: /(^|\s)(touch|mkdir|ln)\s+/i },
-    { name: "write through tee", pattern: /(^|\s)tee\s+/i },
-    { name: "truncate files", pattern: /(^|\s)truncate\s+/i },
-    { name: "sudo", pattern: /(^|\s)sudo\s+/i },
-    { name: "chmod", pattern: /(^|\s)chmod\s+/i },
-    { name: "chown", pattern: /(^|\s)chown\s+/i },
-    { name: "dd (raw disk write)", pattern: /(^|\s)dd\s+/i },
-    {
-      name: "disk/filesystem tooling",
-      pattern: /(^|\s)(mkfs|fdisk|parted|diskutil\s+eraseDisk)\b/i,
-    },
-    {
-      name: "launchd service mutation",
-      pattern:
-        /\blaunchctl\s+(bootstrap|bootout|kickstart|enable|disable|load|unload|remove|submit|asuser)\b/i,
-    },
-    {
-      name: "macOS defaults mutation",
-      pattern: /\bdefaults\s+(write|delete|rename|import)\b/i,
-    },
-    {
-      name: "recursive delete flags",
-      pattern: /\brm\b[^\n]*\s(-r|-rf|-fr|--recursive)\b/i,
-    },
-    {
-      name: "force overwrite flags",
-      pattern: /\b(mv|cp)\b[^\n]*\s(-f|--force)\b/i,
-    },
-    {
-      name: "in-place shell edit",
-      pattern: /\b(sed\s+-i|perl\s+-pi|ruby\s+-pi)\b/i,
-    },
-    {
-      name: "temp-file replacement workflow",
-      pattern:
-        /\b(mktemp|tempfile)\b|\b(mv|cp)\b[^\n]*(\/tmp\/|\.tmp\b|\.temp\b)|(?:\/tmp\/|\.tmp\b|\.temp\b)[^\n]*\b(mv|cp)\b/i,
-    },
-    {
-      name: "package manager install commands",
-      pattern: /\b(npm|pnpm|yarn|pip|pip3|uv|poetry|pipx|conda|mamba)\s+(install|add|sync)\b/i,
-    },
-    {
-      name: "python module install",
-      pattern: /\bpython\d*\s+-m\s+pip\s+install\b/i,
-    },
-    {
-      name: "package manager build scripts",
-      pattern: /\b(npm|pnpm|yarn)\s+(run\s+)?build\b/i,
-    },
-    { name: "make/just build", pattern: /\b(make|just)\s+build\b/i },
-    { name: "docker build", pattern: /\bdocker\s+buildx?\b/i },
-    { name: "language/toolchain build", pattern: /\b(go|cargo)\s+build\b/i },
-  ];
-
-  const gitCodeChangeRules: Rule[] = [
-    { name: "git restore", pattern: /\bgit\s+restore\b/i },
-    { name: "git reset", pattern: /\bgit\s+reset\b/i },
-    { name: "git revert", pattern: /\bgit\s+revert\b/i },
-    { name: "git clean", pattern: /\bgit\s+clean\b/i },
-    { name: "git merge", pattern: /\bgit\s+merge\b/i },
-    { name: "git rebase", pattern: /\bgit\s+rebase\b/i },
-    { name: "git cherry-pick", pattern: /\bgit\s+cherry-pick\b/i },
-    { name: "git pull", pattern: /\bgit\s+pull\b/i },
-    { name: "git apply", pattern: /\bgit\s+apply\b/i },
-    { name: "git am", pattern: /\bgit\s+am\b/i },
-    {
-      name: "git stash apply/pop/push/branch",
-      pattern: /\bgit\s+stash\s+(apply|pop|push|branch)\b/i,
-    },
-  ];
-
-  const sensitivePathPatterns: Rule[] = [
-    { name: "dotenv secrets", pattern: /(^|\/)\.env($|\.|\/)/i },
-    { name: "git internals", pattern: /(^|\/)\.git(\/|$)/i },
-    {
-      name: "SSH config/keys",
-      pattern: /(^|\/)\.ssh(\/|$)|id_rsa|id_ed25519|known_hosts|authorized_keys/i,
-    },
-    {
-      name: "npm/yarn auth",
-      pattern: /(^|\/)\.npmrc$|(^|\/)\.yarnrc(\.yml)?$/i,
-    },
-    { name: "system config", pattern: /^\/etc\//i },
-    {
-      name: "shell profile",
-      pattern: /(^|\/)\.(zshrc|bashrc|bash_profile|profile|zprofile)$/i,
-    },
-    {
-      name: "credentials",
-      pattern: /secret|token|credential|private[_-]?key/i,
-    },
-  ];
-
   pi.on("tool_call", async (event, ctx) => {
-    const shellChecks = collectToolChecks(event, (toolName) =>
-      isToolNamed(toolName, ["bash", "hypa_shell"]),
-    );
-    const riskyShellChecks = shellChecks.flatMap((check) => {
+    const cwd = ctx.cwd ?? process.cwd();
+    const reasons: string[] = [];
+    const details: string[] = [];
+    const checks = collectToolCalls(event);
+    const shellChecks = checks.filter(({ name }) => name === "bash" || name === "hypa_shell");
+    for (const check of shellChecks) {
       const command = getCommand(check.input);
-      const dangerousMatches = dangerousCommandRules.filter((r) => r.pattern.test(command));
-      const gitChangeMatches = gitCodeChangeRules.filter((r) => r.pattern.test(command));
-      const scriptRisk = getScriptRisk(command);
-      const matches: { name: string }[] = [...dangerousMatches, ...gitChangeMatches];
-      if (hasFileRedirection(command)) matches.push({ name: "shell redirection write" });
-      if (scriptRisk) matches.push({ name: scriptRisk });
-      return matches.length > 0 ? [{ ...check, command, matches }] : [];
-    });
-
-    if (riskyShellChecks.length > 0) {
-      const matchedRules = riskyShellChecks
-        .flatMap((check) => check.matches.map((match) => match.name))
-        .join(", ");
-
-      if (!ctx.hasUI) {
-        return {
-          block: true,
-          reason: `Blocked write/risky command requiring confirmation (no UI): ${matchedRules}`,
-        };
-      }
-
-      const commandSummary = riskyShellChecks
-        .map(
-          (check) =>
-            `Tool: ${check.toolName} (${check.source})\nCommand:\n\n${check.command}\n\nMatched rules: ${check.matches.map((match) => match.name).join(", ")}`,
-        )
-        .join("\n\n---\n\n");
-      const confirmed = await ctx.ui.confirm(
-        "Allow write/risky command requiring confirmation?",
-        commandSummary,
-      );
-      if (!confirmed) {
-        return { block: true, reason: "Blocked by user" };
-      }
-      return undefined;
+      const risk = shellRisk(command, cwd);
+      if (risk.blocked) return { block: true, reason: risk.blocked + ". Run this yourself if needed." };
+      reasons.push(...risk.ask);
+      details.push(command);
     }
 
-    const fileMutationChecks = collectToolChecks(event, (toolName) =>
-      isToolNamed(toolName, ["write", "edit"]),
+    const mutations = checks.filter(({ name, input }) =>
+      name === "edit" || name === "write" ||
+      (["ast_grep_replace", "lsp_navigation"].includes(name) && input.apply === true),
     );
-    if (fileMutationChecks.length > 0) {
-      const mutationSummary = fileMutationChecks
-        .map((check) => {
-          const path = String(check.input.path ?? "");
-          const matches = sensitivePathPatterns.filter((r) => r.pattern.test(path));
-          const matchedRules =
-            matches.length > 0 ? matches.map((match) => match.name).join(", ") : "none";
-          return `Tool: ${check.toolName} (${check.source})\nPath: ${path}\nMatched sensitive rules: ${matchedRules}`;
-        })
-        .join("\n\n---\n\n");
-
-      if (!ctx.hasUI) {
-        return {
-          block: true,
-          reason: `Blocked file mutation tool (no UI): ${fileMutationChecks.map((check) => check.toolName).join(", ")}`,
-        };
+    for (const check of mutations) {
+      const input = check.input;
+      const paths = [input.path, input.newFilePath];
+      if (Array.isArray(input.paths)) paths.push(...input.paths);
+      // ast-grep uses paths; no path or broad glob means the scope needs approval.
+      const targets = paths.filter((path) => path !== undefined);
+      if (!targets.length) reasons.push("mutation tool has no explicit paths");
+      for (const path of targets) {
+        const risk = pathRisk(path, cwd);
+        if (risk) reasons.push(risk);
+        if (check.name === "ast_grep_replace" && typeof path === "string") {
+          try {
+            if (statSync(resolve(cwd, path)).isDirectory()) reasons.push("bulk replacement needs explicit file paths");
+          } catch {
+            reasons.push("unresolved bulk replacement path");
+          }
+        }
       }
-
-      const confirmed = await ctx.ui.confirm("Allow file mutation operation?", mutationSummary);
-      if (!confirmed) {
-        return { block: true, reason: "Blocked file mutation by user" };
+      if (check.name === "lsp_navigation") {
+        reasons.push("LSP edit may affect files beyond the supplied path");
       }
+      details.push(check.toolName + ": " + JSON.stringify(targets));
     }
 
-    const applyMutationChecks = collectToolChecks(event, (toolName) =>
-      isToolNamed(toolName, ["ast_grep_replace", "lsp_navigation"]),
-    ).filter((check) => check.input.apply === true);
-    if (applyMutationChecks.length > 0) {
-      const mutationSummary = applyMutationChecks
-        .map(
-          (check) =>
-            `Tool: ${check.toolName} (${check.source})\nInput:\n\n${JSON.stringify(check.input, null, 2)}`,
-        )
-        .join("\n\n---\n\n");
-
-      if (!ctx.hasUI) {
-        return {
-          block: true,
-          reason: `Blocked apply=true mutation tool (no UI): ${applyMutationChecks.map((check) => check.toolName).join(", ")}`,
-        };
-      }
-
-      const confirmed = await ctx.ui.confirm(
-        "Allow apply=true mutation operation?",
-        mutationSummary,
-      );
-      if (!confirmed) {
-        return { block: true, reason: "Blocked apply=true mutation by user" };
-      }
+    if (!reasons.length) return undefined;
+    const reason = [...new Set(reasons)].join(", ");
+    if (!ctx.hasUI) return { block: true, reason: "Approval required (no UI): " + reason };
+    if (!(await ctx.ui.confirm("Allow protected or unclear operation?", reason + "\n\n" + details.join("\n\n")))) {
+      return { block: true, reason: "Blocked by user: " + reason };
     }
-
     return undefined;
   });
 }

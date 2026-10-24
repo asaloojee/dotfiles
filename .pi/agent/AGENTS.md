@@ -4,7 +4,7 @@
 
 - Keep changes as simple, small, and scoped as possible without sacrificing robustness or security. Avoid unrelated refactors and formatting churn.
 - Questions, possibilities, recommendations, and review requests are advice-only. Explain first; edit only when instructed. An implementation request authorizes routine, task-scoped edits, moves, and deletions without per-edit approval.
-- Ask before ambiguous, broad, high-risk, or conflicting work, or expanding scope. Never bypass the safety gate or use another tool to evade a restriction.
+- Ask before ambiguous, broad, high-risk, or conflicting work, or expanding scope. Never use another tool to evade a restriction.
 - Use plain language. Explain non-obvious choices and tradeoffs even when no approval prompt is needed.
 - Do not run builds or implement responsive styling unless explicitly requested.
 

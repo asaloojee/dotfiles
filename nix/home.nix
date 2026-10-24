@@ -40,6 +40,7 @@
     "$HOME/.local/bin"
     "$HOME/.cargo/bin"
     "$HOME/google-cloud-sdk/bin"
+    "$HOME/go/bin"
   ];
 
   programs = {

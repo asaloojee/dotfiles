@@ -8,6 +8,8 @@
       email = "asaloojee@omniwerx.io";
     };
 
+    experimental-advance-branches.enabled-branches = ["main"];
+
     git.colocate = true;
     ui = {
       editor = "nvim";

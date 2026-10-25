@@ -3,43 +3,51 @@
   piNix,
   ...
 }: {
+  # Shared by the macOS workstation and the headless NixOS VM.
   environment.systemPackages = [
-    pkgs.alejandra
-    pkgs.ast-grep
+    # Terminal utilities, editor, and agent
     pkgs.btop
-    pkgs.doppler
     pkgs.fastfetch
     pkgs.fd
+    pkgs.jless
+    pkgs.jq
+    pkgs.just
+    pkgs.neovim
+    pkgs.openssh
+    pkgs.ripgrep
+    pkgs.stow
+    pkgs.tree
+    pkgs.yazi
+    piNix.packages.${pkgs.stdenv.hostPlatform.system}.default
+
+    # Version control, secrets, and containers
+    pkgs.doppler
     pkgs.gh
     pkgs.git-filter-repo
     pkgs.gitleaks
     pkgs.gnupg
-    pkgs.go
-
-    pkgs.jless
-    pkgs.jq
-    pkgs.just
     pkgs.lazydocker
-    pkgs.neovim
-    piNix.packages.${pkgs.stdenv.hostPlatform.system}.default
+    pkgs.yubikey-manager
 
-    pkgs.openssh
+    # Language runtimes and package managers (Rust is in rust.nix)
+    pkgs.go
+    pkgs.nodejs
+    pkgs.phpPackages.composer
+    pkgs.pnpm
+    pkgs.python3
+    pkgs.uv
+
+    # Formatters, linters, parsers, and specialist CLI tools
+    pkgs.alejandra
+    pkgs.ast-grep
     pkgs.oxfmt
     pkgs.oxlint
-    pkgs.pnpm
     pkgs.potrace
     pkgs.prettier
-    pkgs.phpPackages.composer
     pkgs.ruff
-    pkgs.ripgrep
     pkgs.shopify-cli
     pkgs.stylua
-    pkgs.stow
-    pkgs.tree
     pkgs.tree-sitter
-    pkgs.uv
-    pkgs.yazi
-    pkgs.yubikey-manager
 
     # LSP servers
     pkgs.astro-language-server

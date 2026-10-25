@@ -37,6 +37,7 @@
       "slack"
       "status-trio"
       "tailscale-app"
+      "utm"
 
       # Font exceptions kept in Homebrew (not managed by nixpkgs)
       "font-sf-mono"

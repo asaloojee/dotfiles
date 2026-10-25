@@ -15,7 +15,7 @@ stow:
 
 # Format managed source files
 fmt:
-    alejandra nix/flake.nix nix/home.nix nix/home/*.nix nix/modules/*.nix nix/packages/*.nix
+    alejandra nix/flake.nix nix/home.nix nix/home/*.nix nix/modules/*.nix nix/packages/*.nix nix/hosts/*/*.nix
     stylua .config/nvim .config/sketchybar
     oxfmt .pi/agent/AGENTS.md .pi/agent/settings.json
 
@@ -31,7 +31,7 @@ palette-check:
 # Check formatting, JSON syntax, and tracked secrets
 check:
     @just palette-check
-    alejandra --check nix/flake.nix nix/home.nix nix/home/*.nix nix/modules/*.nix nix/packages/*.nix
+    alejandra --check nix/flake.nix nix/home.nix nix/home/*.nix nix/modules/*.nix nix/packages/*.nix nix/hosts/*/*.nix
     stylua --check .config/nvim .config/sketchybar
     oxfmt --check .pi/agent/AGENTS.md .pi/agent/settings.json
     git ls-files -z '*.json' | xargs -0 -n 1 sh -c 'test ! -e "$1" || jq empty "$1"' _

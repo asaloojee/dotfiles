@@ -102,6 +102,10 @@
         run = "move-node-to-workspace 4";
       }
       {
+        "if".app-id = "com.utmapp.UTM";
+        run = "layout floating";
+      }
+      {
         "if".app-id = "com.apple.finder";
         run = "layout floating";
       }

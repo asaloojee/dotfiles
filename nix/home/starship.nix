@@ -119,6 +119,14 @@ in {
       format = "[$output]($style) ";
     };
 
+    # Identify the VM even in console shells or sessions without SSH metadata.
+    hostname = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+      ssh_only = false;
+      ssh_symbol = "";
+      format = "[\\[$hostname\\]]($style) ";
+      style = "bold yellow";
+    };
+
     fill.symbol = " ";
 
     directory = {

@@ -1,5 +1,5 @@
 {
-  description = "Nix-Darwin Flake";
+  description = "macOS workstation and headless NixOS development VM";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -29,16 +29,18 @@
     platform = "aarch64-darwin";
     username = "asaloojee";
   in {
-    formatter.${platform} = nixpkgs.legacyPackages.${platform}.alejandra;
+    formatter = nixpkgs.lib.genAttrs [platform "aarch64-linux"] (
+      system: nixpkgs.legacyPackages.${system}.alejandra
+    );
 
     darwinConfigurations.${configurationName} = nix-darwin.lib.darwinSystem {
       specialArgs = {
         inherit homeDirectory hostName username;
+        inherit inputs;
         piNix = inputs.pi-nix;
       };
       modules = [
-        ./modules/packages.nix
-        ./modules/rust.nix
+        ./modules/shared.nix
         ./modules/homebrew.nix
         ./modules/macos-defaults.nix
         ./modules/fonts.nix
@@ -55,11 +57,6 @@
               options = "--delete-older-than 30d";
             };
             optimise.automatic = true;
-            registry.nixpkgs.flake = nixpkgs;
-            settings = {
-              experimental-features = "nix-command flakes";
-              warn-dirty = false;
-            };
           };
           networking = {
             computerName = hostName;
@@ -67,7 +64,6 @@
             localHostName = hostName;
           };
           nixpkgs.hostPlatform = platform;
-          nixpkgs.overlays = [inputs.rust-overlay.overlays.default];
 
           system.primaryUser = username;
           users.users.${username} = {
@@ -91,14 +87,19 @@
           };
         }
         home-manager.darwinModules.home-manager
-        {
-          home-manager = {
-            extraSpecialArgs = {inherit homeDirectory username;};
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.${username} = import ./home.nix;
-          };
-        }
+      ];
+    };
+
+    nixosConfigurations.dev = nixpkgs.lib.nixosSystem {
+      specialArgs = {
+        inherit inputs username;
+        homeDirectory = "/home/${username}";
+        piNix = inputs.pi-nix;
+      };
+      modules = [
+        home-manager.nixosModules.home-manager
+        ./modules/shared.nix
+        ./hosts/dev-vm
       ];
     };
   };

@@ -1,9 +1,16 @@
-{lib, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: {
   enable = true;
 
   shellAliases = {
     ff = "fastfetch";
-    rebuild = "sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac";
+    rebuild =
+      if pkgs.stdenv.hostPlatform.isDarwin
+      then "sudo -i darwin-rebuild switch --flake ~/dotfiles/nix#mac"
+      else "sudo nixos-rebuild switch --flake ~/dotfiles/nix#dev";
     n = "nvim";
     hd = "hunk diff";
   };
@@ -32,10 +39,18 @@
     fish_mode_prompt = "";
 
     copy_command_buffer = {
-      description = "Copy the command line to the macOS clipboard";
+      description = "Copy the command line to the local clipboard (OSC 52 over SSH)";
       body = ''
         set --local buffer (commandline --current-buffer | string collect)
-        printf %s "$buffer" | pbcopy
+        ${
+          if pkgs.stdenv.hostPlatform.isDarwin
+          then ''
+            printf %s "$buffer" | pbcopy
+          ''
+          else ''
+            printf '\\e]52;c;%s\\a' (printf %s "$buffer" | base64 | string join "")
+          ''
+        }
         commandline --function repaint
       '';
     };

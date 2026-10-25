@@ -44,12 +44,12 @@
   ];
 
   programs = {
-    aerospace = import ./home/aerospace.nix {inherit pkgs;};
+    aerospace = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (import ./home/aerospace.nix {inherit pkgs;});
     bat = import ./home/bat.nix {inherit pkgs;};
     eza = import ./home/eza.nix {inherit pkgs;};
-    fish = import ./home/fish.nix {inherit lib;};
+    fish = import ./home/fish.nix {inherit lib pkgs;};
     fzf = import ./home/fzf.nix {inherit pkgs;};
-    ghostty = import ./home/ghostty.nix;
+    ghostty = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (import ./home/ghostty.nix);
     git = import ./home/git.nix {inherit pkgs;};
     jujutsu = import ./home/jujutsu.nix {inherit pkgs;};
     yazi = import ./home/yazi.nix {inherit pkgs;};

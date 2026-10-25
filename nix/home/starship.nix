@@ -2,18 +2,18 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  # Generated from themes/tokyonight-night.oklch.json; shared with Neovim and Rex.
+  colors = builtins.fromJSON (builtins.readFile ../../.config/nvim/tokyonight-night.json);
+in {
   enable = true;
   enableFishIntegration = true;
   enableTransience = true;
   settings = {
-    palette = "merino_dark";
-    palettes.merino_dark = {
-      blue = "#58a6ff";
-      purple = "#bc8cff";
-      red = "#ff7b72";
-      yellow = "#d29922";
-      gray = "#6e7681";
+    palette = "tokyonight_night";
+    palettes.tokyonight_night = {
+      inherit (colors) blue purple red yellow;
+      gray = colors.dark5;
     };
 
     format = lib.concatStrings [

@@ -19,8 +19,18 @@ fmt:
     stylua .config/nvim .config/sketchybar
     oxfmt .pi/agent/AGENTS.md .pi/agent/settings.json
 
+# Regenerate RGB files from the shared OKLCH source
+palette:
+    python3 -B scripts/generate_palette.py
+
+# Check palette conversion, aliases, gamut mapping, and generated files
+palette-check:
+    python3 -B scripts/generate_palette.py --check
+    python3 -B -m unittest discover -s scripts -p 'test_*.py'
+
 # Check formatting, JSON syntax, and tracked secrets
 check:
+    @just palette-check
     alejandra --check nix/flake.nix nix/home.nix nix/home/*.nix nix/modules/*.nix nix/packages/*.nix
     stylua --check .config/nvim .config/sketchybar
     oxfmt --check .pi/agent/AGENTS.md .pi/agent/settings.json

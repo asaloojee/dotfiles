@@ -4,6 +4,7 @@ return {
 	config = function()
 		require("tokyonight").setup({
 			style = "night",
+			cache = false,
 			transparent = false,
 			styles = {
 				sidebars = "normal",
@@ -12,6 +13,15 @@ return {
 				keywords = { italic = true, bold = true },
 				functions = { bold = true },
 			},
+			on_colors = function(colors)
+				-- Re-read the generated palette on every colorscheme reload.
+				local palette = vim.json.decode(
+					table.concat(vim.fn.readfile(vim.fn.stdpath("config") .. "/tokyonight-night.json"), "\n")
+				)
+				for name, value in pairs(palette) do
+					colors[name] = vim.deepcopy(value)
+				end
+			end,
 			on_highlights = function(hl, colors)
 				-- Keep floating cards distinct from the editor backdrop.
 				hl.FloatBorder = { fg = colors.fg_gutter, bg = colors.bg_float }

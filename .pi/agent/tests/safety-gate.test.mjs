@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { after, test } from "node:test";
 import safetyGate from "../extensions/safety-gate.ts";
 
-// No repository-changing commands under test are executed. Only fixture init is.
+// Commands under test are never executed. Only fixture Git init is executed.
 const base = mkdtempSync(join(tmpdir(), "pi-safety-gate-"));
 const repo = join(base, "repo");
 const other = join(base, "other");
@@ -49,23 +49,6 @@ async function denied(command, pattern) {
   assert.equal(prompts.length, 0, command);
 }
 
-test("ordinary Git/jj inspection and local changes don't prompt", async () => {
-  for (const command of [
-    "git status --short", "git log -5", "git diff --staged", "git ls-remote origin",
-    "git reset --hard HEAD", "git clean -fd", "git checkout -- src/file.ts",
-    "git restore --worktree src/file.ts", "git add ignored/file", "git rm src/file.ts",
-    "git branch -D old", "git tag -d old", "git remote set-url origin new-url",
-    "git stash list", "git stash show", "git stash drop", "git stash apply",
-    "git merge --abort", "git rebase --abort", "git cherry-pick --no-commit abc",
-    "git revert --no-commit abc", "git merge --no-commit --no-ff branch",
-    "jj status", "jj st", "jj log", "jj diff", "jj restore src/file.ts",
-    "jj undo", "jj op restore operation", "jj bookmark delete old", "jj file untrack file",
-    "jj git export", "jj git import", "jj git remote list",
-    "git --no-pager log", "jj --ignore-working-copy status",
-    "echo 'git push'", "printf '%s' 'jj commit'", "command -v git",
-  ]) await allowed(command);
-});
-
 test("commit-producing workflows and remote writes cannot be approved", async () => {
   for (const command of [
     "git commit -m done", "git commit --amend --no-edit", "git commit-tree tree",
@@ -91,149 +74,138 @@ test("commit-producing workflows and remote writes cannot be approved", async ()
   ]) await denied(command);
 });
 
-test("fetch/pull/clone hand off to the user without approval or retries", async () => {
-  for (const command of [
-    "git fetch", "git fetch --all", "git pull --ff-only", "git clone url",
-    "git fetch-pack url", "git remote update", "jj git fetch", "jj git clone url",
-    "git submodule update --init", "git submodule add url", "git lfs pull",
-    "bash -lc 'git pull'", "git -C . fetch origin",
-  ]) await denied(command, /user-run.*security key.*Do not retry/);
-});
 
-test("tracked, untracked, ignored, metadata and other repository files are writable", async () => {
+test("all unprotected commands follow Pi defaults without approval", async () => {
   for (const cwd of [repo, outside]) {
-    for (const path of [join(repo, "src/file.ts"), join(repo, "new/nested/file"), join(repo, "ignored/file"), join(repo, ".env"), join(repo, ".git/config"), join(repo, "literal[$file].txt"), join(other, "new/file"), join(standalone, "new/file")]) {
-      for (const toolName of ["write", "edit", "remove"]) {
-        const { result, prompts } = await check({ path, content: "new" }, { cwd, toolName });
-        assert.equal(result, undefined, `${toolName}: ${path}`);
-        assert.equal(prompts.length, 0);
-      }
-    }
+    for (const command of [
+      "node rewrite.mjs", "node --test tests.mjs", "rex whoami --json",
+      "rex run 'git push'", "python -c 'print(1)'", "./rewrite.sh",
+      "touch file", "mkdir -p dir", "mv old new", "chmod +x script",
+      "echo text > file", "echo $HOME", "echo $(pwd)", "echo 'git push'",
+      "find . -delete", "rg --pre script pattern", "powershell script",
+      "git status", "git reset --hard", "git add file",
+      "git config --global user.name Test", "git diff --output=/tmp/patch",
+      "jj git import",
+      "jj git export", "jj undo", "jj restore file", "git merge --abort",
+      "git merge --no-commit feature", "git stash apply", "command -v git",
+    ]) await allowed(command, { cwd, hasUI: true });
   }
-  await allowed(`rm -rf '${other}/new'`);
-  await allowed("touch ignored/file; mkdir -p new/dir; rm -rf src");
-  await allowed("printf '%s' text > new/file");
-  await allowed("echo text 2> ignored/log");
-  await allowed("git status 2>&1");
-  await allowed("git status >/dev/null");
 });
 
-test("outside-repository changes require per-call approval and fail closed without UI", async () => {
-  for (const input of [{ path: join(outside, "new/file"), content: "new" }, { path: "file", content: "new" }]) {
-    for (const approved of [false, true]) {
-      const { result, prompts } = await check(input, { cwd: outside, toolName: "write", hasUI: true, approved });
-      assert.equal(result?.block, approved ? undefined : true);
-      assert.equal(prompts.length, 1);
-      assert.match(prompts[0].message, /Outside a Git\/jj repository/);
-    }
-    const { result } = await check(input, { cwd: outside, toolName: "write", approved: true });
-    assert.equal(result?.block, true);
-  }
+test("all recognized remote Git/jj operations are user-run", async () => {
   for (const command of [
-    `rm -rf '${outside}/file'`, `touch '${outside}/file'`, `echo text > '${outside}/file'`,
-    `mv src/file.ts '${outside}/file'`, `cp src/file.ts '${outside}/file'`,
-    `cp --target-directory='${outside}' src/file.ts`, `cp -t'${outside}' src/file.ts`,
-    `cd '${outside}' && touch file`, `sort src/file.ts -o '${outside}/sorted'`,
-    `sort --output='${outside}/sorted' src/file.ts`, `sort -o'${outside}/sorted' src/file.ts`,
-  ]) {
-    const { result, prompts } = await check({ command }, { hasUI: true, approved: true });
-    assert.equal(result, undefined, command);
-    assert.equal(prompts.length, 1, command);
-    assert.equal((await check({ command })).result?.block, true, command);
-  }
+    "git fetch", "git pull --ff-only", "git clone url", "git ls-remote",
+    "git remote update", "git remote show origin", "git remote prune origin",
+    "git submodule update --init", "git submodule add url",
+    "git lfs pull", "git lfs fetch", "git svn fetch", "git p4 sync",
+    "git subtree pull", "jj git fetch", "jj git clone url", "jj gerrit push",
+    "git archive --remote=host HEAD",
+    "bash -lc 'git fetch'",
+  ]) await denied(command, /Remote|remote/);
 });
 
-test("symlinks, dangling targets and symlink/.. paths use physical repository scope", async () => {
-  for (const path of ["escape/file", "dangling", "dangling/new/file", "relative-dangling/new/file", "escape/../file"]) {
-    assert.equal((await check({ path }, { toolName: "write" })).result?.block, true, path);
-  }
-  for (const path of [join(outside, "into-repo/file"), join(repo, "src/../new/file")]) {
-    assert.equal((await check({ path }, { toolName: "write" })).result, undefined, path);
-  }
-  assert.equal((await check({ command: "cd escape/.. && touch file" })).result?.block, true);
-});
-
-test("Git worktree gitfiles and standalone jj roots are recognized", async () => {
-  const worktree = join(base, "worktree");
-  mkdirSync(worktree);
-  writeFileSync(join(worktree, ".git"), `gitdir: ${repo}/.git/worktrees/fixture\n`);
-  await allowed("touch new/file", { cwd: worktree });
-  await allowed("touch new/file", { cwd: standalone });
-  const bare = join(base, "bare");
-  execFileSync("git", ["init", "-q", "--bare", bare]);
-  await allowed("touch info/local-note", { cwd: bare });
-});
-
-test("directory changes and VCS repository overrides use their actual scope", async () => {
-  await allowed(`cd '${other}' && touch file`);
-  await allowed(`git -C '${other}' reset --hard`);
-  await allowed(`jj --repository '${standalone}' restore file`);
-  await allowed("git status", { cwd: outside });
-  assert.equal((await check({ command: `git --work-tree '${outside}' reset --hard` })).result?.block, true);
-  assert.equal((await check({ command: `cd '${outside}' || cd '${repo}'; touch file` })).result?.block, true);
-});
-
-test("opaque scripts, aliases and dynamic scope prompt without language-specific exceptions", async () => {
+test("all direct gh commands are blocked, including wrappers and nested shell calls", async () => {
   for (const command of [
-    "python -c 'from pathlib import Path; Path(\"file\").write_text(\"new\")'",
-    "node rewrite.mjs", "ruby rewrite.rb", "./rewrite.sh", "git custom-alias",
-    "touch $TARGET", "rm *.ts", "echo $(pwd) > file", "bash rewrite.sh",
-    "find . -delete", "find . -exec rm {} +", "find . -fls /tmp/list",
-    "rg --pre script pattern", "git diff --output=/tmp/patch", "git -c alias.test=status test",
-  ]) {
-    const { result, prompts } = await check({ command }, { hasUI: true, approved: true });
-    assert.equal(result, undefined, command);
-    assert.equal(prompts.length, 1, command);
-    assert.equal((await check({ command })).result?.block, true, command);
+    "gh --help", "gh auth status", "gh api repos/owner/repo", "gh pr view",
+    "/run/current-system/sw/bin/gh repo sync", "command gh --version",
+    "env gh auth git-credential", "timeout 5 gh api user",
+    "bash -lc 'gh pr list'",
+    "echo ok && gh --help",
+  ]) await denied(command, /gh/);
+  await allowed("echo gh api user");
+  await allowed("node script.mjs gh api user");
+  await allowed("rex run 'gh api user'");
+});
+
+test("aliases, unknown commands and configuration overrides are not inspected", async () => {
+  for (const command of [
+    "git p", "git c", "git cm done", "git unknown-external-command", "jj publish",
+    "git -c alias.p=push p", "git -calias.p=push p",
+    "git --config-env=alias.p=VALUE p", "git --exec-path=/tmp status",
+    "jj --config 'aliases.p=[\"git\",\"push\"]' p",
+    "jj --config-file /tmp/config status", "GIT_CONFIG_COUNT=1 git status",
+    "env GIT_SSH_COMMAND=custom git status", "JJ_CONFIG=/tmp/config jj status",
+    "git diff --ext-diff", "git --unknown-option status",
+    "git-upload-pack repo", "git-remote-https origin url",
+    "ssh host 'git push'", "ssh host 'gh api user'",
+  ]) await allowed(command, { hasUI: true });
+});
+
+test("rm and cp are denied outside repositories without prompting", async () => {
+  for (const command of [
+    `rm -rf '${outside}/file'`, `cp src/file.ts '${outside}/file'`,
+    `cp -t '${outside}' src/file.ts`,
+    `cp --target-directory='${outside}' src/file.ts`,
+    `cp -t'${outside}' src/file.ts`,
+    `cd '${outside}' && rm file`,
+    `cd '${outside}' && cp source target`,
+  ]) await denied(command, /Outside a Git\/jj repository/);
+  await denied("rm $TARGET", /scope/);
+  await denied("cp file $TARGET", /scope/);
+  await denied("rm *.ts", /scope/);
+  await denied("cp -S suffix source target", /option/);
+  await denied(`cd '${outside}' || cd '${repo}'; rm file`, /scope/);
+});
+
+test("rm and cp can write in any repository; cp checks destinations, not sources", async () => {
+  for (const cwd of [repo, standalone]) {
+    await allowed("rm -rf ignored/file new/file", { cwd });
+    await allowed("cp source target", { cwd });
+    await allowed("rm -- -filename", { cwd });
+    await allowed("cp -- -source -target", { cwd });
   }
+  await allowed(`cp '${outside}/file' '${repo}/new/file'`, { cwd: outside });
+  await allowed(`cp -t '${repo}/src' '${outside}/file'`);
+  await allowed(`cp --target-directory='${repo}/src' '${outside}/file'`);
+  await allowed(`cd '${other}' && rm file`);
+  await allowed(`cd '${other}' && cp source target`);
 });
 
-test("codemode delegates to nested tool_call enforcement; namespaced tools match", async () => {
-  assert.equal((await check({ code: "await tools.bash({command: 'git push'})" }, { toolName: "codemode" })).result, undefined);
-  await denied("git push");
-  const { result } = await check({ command: "git push" }, { toolName: "vendor.functions.bash", approved: true, hasUI: true });
-  assert.equal(result?.block, true);
-  assert.equal((await check({ path: join(outside, "file") }, { toolName: "functions.edit" })).result?.block, true);
-});
-
-test("batch denials take priority over approval, regardless of order or nesting", async () => {
-  const write = { recipient_name: "functions.write", parameters: { path: join(outside, "file"), content: "new" } };
-  const push = { recipient_name: "functions.bash", parameters: { command: "git push" } };
-  for (const calls of [[write, push], [push, write]]) {
-    const input = { tool_uses: [{ name: "wrapper", arguments: { tool_uses: calls } }] };
-    const { result, prompts } = await check(input, { toolName: "multi_tool_use.parallel", hasUI: true, approved: true });
-    assert.equal(result?.block, true);
-    assert.equal(prompts.length, 0);
-  }
-});
-
-test("structured AST/LSP writes check every path and rename destination", async () => {
-  for (const toolName of ["ast_grep_replace", "lsp_navigation"]) {
-    assert.equal((await check({ apply: true, paths: ["src"] }, { toolName })).result, undefined);
-    assert.equal((await check({ apply: false, paths: [outside] }, { toolName })).result, undefined);
-    assert.equal((await check({ apply: true, paths: ["src", outside] }, { toolName })).result?.block, true);
-    assert.equal((await check({ apply: true }, { toolName })).result?.block, true);
-    assert.equal((await check({ apply: true, paths: ["src/**/*.ts"] }, { toolName })).result?.block, true);
-  }
-  assert.equal((await check({ apply: true, path: "src/file.ts", newFilePath: join(outside, "file.ts") }, { toolName: "lsp_navigation" })).result?.block, true);
-});
-
-test("recursive writes inspect descendant symlinks; removals can safely unlink them", async () => {
+test("protected paths resolve symlinks and recursive copy destinations", async () => {
+  for (const command of [
+    "rm escape/file", "rm dangling", "rm relative-dangling/new/file",
+    "rm escape/../file", "cp src/file.ts escape/file",
+    "cp src/file.ts dangling", "cp -R src .",
+  ]) await denied(command);
+  await allowed(`rm '${outside}/into-repo/file'`);
   const directory = join(repo, "with-links");
   mkdirSync(directory);
   symlinkSync(outside, join(directory, "outside"));
-  assert.equal((await check({ apply: true, paths: [directory] }, { toolName: "ast_grep_replace" })).result?.block, true);
-  assert.equal((await check({ command: "cp -R src with-links" })).result?.block, true);
+  await denied("cp -R src with-links");
   await allowed("rm -rf with-links");
 });
 
-test("approval is not cached between calls", async () => {
-  let handler;
-  safetyGate({ on(_name, callback) { handler = callback; } });
-  let prompts = 0;
-  const ctx = { cwd: repo, hasUI: true, ui: { async confirm() { return ++prompts === 1; } } };
-  const call = { toolName: "write", input: { path: join(outside, "file") } };
-  assert.equal(await handler(call, ctx), undefined);
-  assert.equal((await handler(call, ctx))?.block, true);
-  assert.equal(prompts, 2);
+test("shell wrappers and command chains retain protected-command checks", async () => {
+  for (const command of [
+    "rex whoami --json && git push", "node test.mjs; jj ci",
+    "env FOO=bar git push", "command git push", "timeout 5 git push",
+    "xargs rm /tmp/outside-file", "bash -lc 'cp file /tmp/outside-file'",
+  ]) await denied(command);
+  await allowed("node script.mjs git push");
+  await allowed("rex run 'git push'");
+  await allowed("echo git push");
+  await allowed("rex whoami --json > /tmp/rex.json");
+});
+
+test("direct file tools, AST/LSP mutations, and other tools are unrestricted", async () => {
+  for (const toolName of ["write", "edit", "remove", "delete", "powershell", "ast_grep_replace", "lsp_navigation"]) {
+    const { result, prompts } = await check({
+      path: join(outside, "file"), paths: [outside], apply: true, command: "script",
+    }, { toolName, hasUI: true });
+    assert.equal(result, undefined, toolName);
+    assert.equal(prompts.length, 0, toolName);
+  }
+});
+
+test("nested calls and namespaced shell tools still enforce denials", async () => {
+  const push = { recipient_name: "functions.bash", parameters: { command: "git push" } };
+  const write = { recipient_name: "functions.write", parameters: { path: join(outside, "file") } };
+  const { result, prompts } = await check({ tool_uses: [write, push] }, {
+    toolName: "multi_tool_use.parallel", hasUI: true, approved: true,
+  });
+  assert.equal(result?.block, true);
+  assert.equal(prompts.length, 0);
+  await denied("git push");
+  assert.equal((await check({ command: "git push" }, { toolName: "functions.bash" })).result?.block, true);
+  assert.equal((await check({ code: "await tools.bash(...)" }, { toolName: "codemode" })).result, undefined);
 });

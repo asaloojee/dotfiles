@@ -21,8 +21,16 @@
     isNormalUser = true;
     home = homeDirectory;
     shell = pkgs.fish;
-    extraGroups = ["wheel" "docker"];
+    extraGroups = ["wheel" "docker" "fido"];
   };
+
+  # Allow this user to access Yubico FIDO devices without a desktop session.
+  users.groups.fido = {};
+
+  services.udev.extraRules = ''
+    SUBSYSTEM=="hidraw", ENV{ID_FIDO_TOKEN}=="1", ATTRS{idVendor}=="1050", GROUP="fido", MODE="0660"
+  '';
+
   programs.fish.enable = true;
 
   # SSH is handled by Tailscale, not sshd. Do not expose TCP 22 on the LAN.

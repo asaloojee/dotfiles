@@ -33,6 +33,9 @@
 
   programs.fish.enable = true;
 
+  # Support generic Linux executables downloaded by development tools.
+  programs.nix-ld.enable = true;
+
   # Share a local SSH agent across login sessions for the USB-passed FIDO key.
   programs.ssh.startAgent = true;
 

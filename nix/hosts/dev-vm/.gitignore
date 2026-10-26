@@ -1,2 +1,0 @@
-# Generated inside each guest; never publish a particular VM's disk configuration.
-/hardware-configuration.nix

@@ -103,7 +103,7 @@
       }
       {
         "if".app-id = "com.utmapp.UTM";
-        run = "layout floating";
+        run = ["layout floating" "move-node-to-workspace 5"];
       }
       {
         "if".app-id = "com.apple.finder";

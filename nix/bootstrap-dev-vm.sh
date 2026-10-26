@@ -142,7 +142,7 @@ configure_guest() {
     git clone "$REPOSITORY" "$checkout"
   else
     [[ "$(git -C "$checkout" rev-parse --show-toplevel)" == "$checkout" ]] || \
-      fail '~/dotfiles must be the root of a Git checkout.'
+      fail "$HOME/dotfiles must be the root of a Git checkout."
     printf 'Reusing the existing checkout without pulling, resetting, or changing remotes.\n'
     git -C "$checkout" status --short
   fi

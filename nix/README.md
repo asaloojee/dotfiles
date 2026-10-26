@@ -19,6 +19,8 @@
 - `hosts/dev-vm/default.nix`: VM identity, user, SSH policy, Docker, maintenance,
   and Linux-only packages.
 - `bootstrap-dev-vm.sh`: interactive, two-stage installer for an encrypted UTM guest.
+- `bootstrap-site/`: validated Cloudflare Pages deployment for `bootstrap.omnx.sh`;
+  see its [setup guide](bootstrap-site/README.md).
 - `hosts/dev-vm/hardware-configuration.nix`: generated inside each guest and
   Git-ignored; absent from this public repository.
 
@@ -96,7 +98,7 @@ curl -I https://github.com
 ```
 
 Fetch the script to a file and inspect it; **do not pipe a download into a root
-shell**. Once these changes are published, the following works in the live ISO:
+shell**. The GitHub URL works independently of the custom domain:
 
 ```sh
 curl --fail --show-error --location \
@@ -105,9 +107,14 @@ curl --fail --show-error --location \
 less /tmp/bootstrap-dev-vm.sh
 ```
 
-For repeatable use, replace `main` with a reviewed commit SHA. The script URL
-must reference a revision containing the script. Git availability is not required
-in the live ISO; it is included in the installed base.
+After the [Cloudflare Pages setup](bootstrap-site/README.md) is complete, the
+latest successfully deployed script is also available at
+`https://bootstrap.omnx.sh/dev-vm.sh`, with its revision and SHA-256 at
+`https://bootstrap.omnx.sh/version.json`. Use the same download/inspect procedure.
+
+For repeatable use, replace `main` in the GitHub URL with a reviewed commit SHA,
+and check out that same SHA before running the configure stage. Git availability
+is not required in the live ISO; it is included in the installed base.
 
 **Destructive command — only inside the guest, after verifying the disk:**
 
@@ -218,7 +225,9 @@ docker run --rm hello-world
 Then run `sudo reboot`, unlock the disk in UTM's serial console, reconnect from
 Rex, and repeat the service checks and `findmnt /`. This encrypted boot → flake
 activation → Tailscale SSH → Docker → reboot/reconnect path was manually verified.
-The script automates those steps but still needs a separate clean-VM test.
+The bootstrap script also passed this sequence in a separate fresh VM at commit
+`e8f4b032a9f48da37fbecefd7318e03a661fcdb2`. The domain deployment is a separate
+validation step; publishing the file does not rerun or update any VM.
 
 ### 5. Optional editor setup
 

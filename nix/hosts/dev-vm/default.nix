@@ -33,6 +33,9 @@
 
   programs.fish.enable = true;
 
+  # Share a local SSH agent across login sessions for the USB-passed FIDO key.
+  programs.ssh.startAgent = true;
+
   # SSH is handled by Tailscale, not sshd. Do not expose TCP 22 on the LAN.
   services.openssh = {
     enable = false;

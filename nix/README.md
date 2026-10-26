@@ -19,8 +19,6 @@
 - `hosts/dev-vm/default.nix`: VM identity, user, SSH policy, Docker, maintenance,
   and Linux-only packages.
 - `bootstrap-dev-vm.sh`: interactive, two-stage installer for an encrypted UTM guest.
-- `bootstrap-site/`: validated Cloudflare Pages deployment for `bootstrap.omnx.sh`;
-  see its [setup guide](bootstrap-site/README.md).
 - `hosts/dev-vm/hardware-configuration.nix`: generated inside each guest and
   Git-ignored; absent from this public repository.
 
@@ -97,8 +95,8 @@ lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS
 curl -I https://github.com
 ```
 
-Fetch the script to a file and inspect it; **do not pipe a download into a root
-shell**. The GitHub URL works independently of the custom domain:
+Fetch the latest pushed script from `main` to a file and inspect it;
+**do not pipe a download into a root shell**:
 
 ```sh
 curl --fail --show-error --location \
@@ -106,11 +104,6 @@ curl --fail --show-error --location \
   --output /tmp/bootstrap-dev-vm.sh
 less /tmp/bootstrap-dev-vm.sh
 ```
-
-After the [Cloudflare Pages setup](bootstrap-site/README.md) is complete, the
-latest successfully deployed script is also available at
-`https://bootstrap.omnx.sh/dev-vm.sh`, with its revision and SHA-256 at
-`https://bootstrap.omnx.sh/version.json`. Use the same download/inspect procedure.
 
 For repeatable use, replace `main` in the GitHub URL with a reviewed commit SHA,
 and check out that same SHA before running the configure stage. Git availability
@@ -226,8 +219,8 @@ Then run `sudo reboot`, unlock the disk in UTM's serial console, reconnect from
 Rex, and repeat the service checks and `findmnt /`. This encrypted boot → flake
 activation → Tailscale SSH → Docker → reboot/reconnect path was manually verified.
 The bootstrap script also passed this sequence in a separate fresh VM at commit
-`e8f4b032a9f48da37fbecefd7318e03a661fcdb2`. The domain deployment is a separate
-validation step; publishing the file does not rerun or update any VM.
+`e8f4b032a9f48da37fbecefd7318e03a661fcdb2`. Pushing script changes to GitHub
+does not rerun or update any existing VM.
 
 ### 5. Optional editor setup
 

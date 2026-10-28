@@ -52,7 +52,7 @@
     ghostty = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (import ./home/ghostty.nix);
     git = import ./home/git.nix {inherit pkgs;};
     jujutsu = import ./home/jujutsu.nix {inherit pkgs;};
-    yazi = import ./home/yazi.nix {inherit pkgs;};
+    superfile = import ./home/superfile.nix;
     zoxide = import ./home/zoxide.nix {inherit pkgs;};
     starship = import ./home/starship.nix {inherit pkgs lib;};
 

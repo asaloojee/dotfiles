@@ -34,7 +34,7 @@ Python runtimes are new shared additions.
 
 | Scope | Tools |
 | --- | --- |
-| Shared terminal/editor | Neovim, Pi coding agent, btop, fastfetch, fd, ripgrep, jless, jq, just, OpenSSH, Stow, tree, Yazi |
+| Shared terminal/editor | Neovim, Pi coding agent, btop, fastfetch, fd, ripgrep, jless, jq, just, OpenSSH, Stow, tree, Superfile |
 | Shared Home Manager tools | Fish, Git + Git LFS, Jujutsu, bat, eza, fzf, Starship, zoxide, direnv + nix-direnv |
 | Shared version control/secrets/containers | GitHub CLI, git-filter-repo, gitleaks, Doppler, GnuPG, YubiKey Manager, lazydocker |
 | Shared languages/package managers | Go, Node.js, pnpm, Python 3, uv, PHP Composer, nightly Rust toolchain |

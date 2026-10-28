@@ -13,6 +13,7 @@
       else "sudo nixos-rebuild switch --flake ~/dotfiles/nix#dev";
     n = "nvim";
     hd = "hunk diff";
+    spf = "superfile";
   };
 
   shellAbbrs = {

@@ -17,7 +17,7 @@
     pkgs.ripgrep
     pkgs.stow
     pkgs.tree
-    pkgs.yazi
+    pkgs.superfile
     piNix.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     # Version control, secrets, and containers

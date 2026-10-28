@@ -10,6 +10,8 @@
 
     experimental-advance-branches.enabled-branches = ["main"];
 
+    aliases.ship = ["util" "exec" "--" "sh" "-c" "jj git fetch && jj git push -b main"];
+
     git.colocate = true;
     ui = {
       editor = "nvim";

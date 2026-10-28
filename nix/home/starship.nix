@@ -40,12 +40,9 @@ in {
 
           branch=
           dirty=
-          staged=
           conflict=
           ahead=
           behind=
-          added=
-          removed=
 
           if jj root --ignore-working-copy >/dev/null 2>&1; then
             # Snapshot once so non-empty and conflict markers reflect current files.
@@ -68,17 +65,10 @@ in {
                 DD|AU|UD|UA|DU|AA|UU) conflict='!'; dirty='*' ;;
                 '??') dirty='*' ;;
                 *)
-                  [[ $index != ' ' ]] && staged='~'
-                  [[ $worktree != ' ' ]] && dirty='*'
+                  [[ $index != ' ' || $worktree != ' ' ]] && dirty='*'
                   ;;
               esac
             done < <(git status --porcelain=v1 --untracked-files=normal 2>/dev/null)
-
-            # Compare tracked working-copy contents (including staged changes) to HEAD.
-            while IFS=$'\t' read -r additions deletions _; do
-              [[ $additions =~ ^[0-9]+$ && $additions -gt 0 ]] && added=1
-              [[ $deletions =~ ^[0-9]+$ && $deletions -gt 0 ]] && removed=1
-            done < <(git diff --numstat HEAD -- 2>/dev/null)
 
             # Prefer the upstream, falling back to the same-name origin branch.
             upstream=$(git rev-parse --verify --symbolic-full-name '@{upstream}' 2>/dev/null) || upstream=
@@ -95,20 +85,14 @@ in {
           fi
 
           printf '%s' "$branch"
-          printf '%s' "$dirty$staged$conflict"
+          [[ -n $dirty ]] && printf ' %s' "$dirty"
+          [[ -n $conflict ]] && printf ' %s' "$conflict"
           if [[ -n $ahead && -n $behind ]]; then
             printf ' ↕'
           elif [[ -n $ahead ]]; then
             printf ' ↑'
           elif [[ -n $behind ]]; then
             printf ' ↓'
-          fi
-          if [[ -n $added && -n $removed ]]; then
-            printf ' ±'
-          elif [[ -n $added ]]; then
-            printf ' +'
-          elif [[ -n $removed ]]; then
-            printf ' −'
           fi
           printf '\n'
         '';
@@ -133,7 +117,7 @@ in {
       style = "blue";
       read_only = " 󱌃";
       home_symbol = "~";
-      truncation_length = 4;
+      truncation_length = 2;
       truncate_to_repo = false;
       truncation_symbol = ".../";
     };
